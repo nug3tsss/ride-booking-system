@@ -87,8 +87,7 @@ or
 python3 -m
 ```
 
-before typing the terminal command.
-Example:
+before typing the terminal command; for example:
 
 ```bash
 py -m pip install -r requirements.txt
