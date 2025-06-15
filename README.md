@@ -38,6 +38,7 @@ or
 ```bash
 python3 --version
 ```
+
 If python is **not installed**, download it from:
 https://www.python.org/downloads/
 Make sure to check **"Add Python to PATH** during installation.
@@ -69,6 +70,28 @@ pip install -r requirements.txt
 
 ```bash
 python main.py
+```
+
+### ❗ IF THE TERMINAL COMMANDS DON'T WORK
+Try typing:
+
+```bash
+py -m
+```
+or
+```bash
+python -m
+```
+or
+```bash
+python3 -m
+```
+
+before typing the terminal command.
+Example:
+
+```bash
+py -m pip install -r requirements.txt
 ```
 
 ---
