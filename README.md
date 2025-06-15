@@ -4,7 +4,13 @@ A ride booking program made with Python using OpenStreetMap, OSRM, CustomTkinter
 
 ---
 
-## ✔️ Features (WIP)
+## 🔭 Features (WIP)
+
+- Interactive map (select pick-up/drop-off locations with a click of your mouse)
+- Route display with OSRM
+- Calculate distance (km), time (m), and fare (₱).
+- Select from multiple vehicle types.
+- Book a ride and manage it (view and cancel booking).
 
 ---
 
@@ -46,7 +52,7 @@ cd ride-booking-system
 ### 3. 🖥️ Create a Virtual Environment
 
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 Activate it:
 ```bash
