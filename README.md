@@ -6,11 +6,11 @@ A ride booking program made with Python using OpenStreetMap, OSRM, CustomTkinter
 
 ## 🔭 Features (WIP)
 
-- Interactive map (select pick-up/drop-off locations with a click of your mouse)
-- Route display with OSRM
-- Calculate distance (km), time (m), and fare (₱).
-- Select from multiple vehicle types.
-- Book a ride and manage it (view and cancel booking).
+- Interactive map (select pick-up/drop-off locations with a click of your mouse)  
+- Route display with OSRM  
+- Calculate distance (km), time (m), and fare (₱).  
+- Select from multiple vehicle types.  
+- Book a ride and manage it (view and cancel booking).  
 
 ---
 
@@ -39,9 +39,9 @@ or
 python3 --version
 ```
 
-If python is **not installed**, download it from:
-https://www.python.org/downloads/
-Make sure to check **"Add Python to PATH** during installation.
+If python is **not installed**, download it from:  
+https://www.python.org/downloads/  
+Make sure to check **"Add Python to PATH"** during installation.  
 
 ### 2. 📂 Clone the GitHub repository
 
@@ -87,7 +87,8 @@ or
 python3 -m
 ```
 
-before typing the terminal command; for example:
+before typing the terminal command.  
+For example:
 
 ```bash
 py -m pip install -r requirements.txt
