@@ -1,23 +1,23 @@
-# Ride Booking System
+# 🚖 Ride Booking System
 
 A ride booking program made with Python using OpenStreetMap, OSRM, CustomTkinter, TkinterMapView, Geopy, and SQLite.
 
 ---
 
-## Features (WIP)
+## ✔️ Features (WIP)
 
 ---
 
-## Requirements
+## 📦 Requirements
 
 - Python 3.9 or newer
 - Git
 
 ---
 
-## Setup Instructions
+## 🧰 Setup Instructions
 
-### 1. Check if Python is installed and on the required version
+### 1. ✔️ Check if Python is installed and on the required version
 
 Open Command Prompt/Terminal and run:
 
@@ -36,14 +36,14 @@ If python is **not installed**, download it from:
 https://www.python.org/downloads/
 Make sure to check **"Add Python to PATH** during installation.
 
-### 2. Clone the GitHub repository
+### 2. 📂 Clone the GitHub repository
 
 ```bash
 git clone https://github.com/nug3tsss/ride-booking-system.git
 cd ride-booking-system
 ```
 
-### 3. Create a Virtual Environment
+### 3. 🖥️ Create a Virtual Environment
 
 ```bash
 python -m venv venv
@@ -53,13 +53,13 @@ Activate it:
 venv\Scripts\activate
 ```
 
-### 4. Install the Required Libraries
+### 4. 📃 Install the Required Libraries
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Run the Application
+### 5. 🏃 Run the Application
 
 ```bash
 python main.py
@@ -67,7 +67,7 @@ python main.py
 
 ---
 
-## Included Tools/Libraries
+## 📄 Included Tools/Libraries
 - CustomTkinter
 - TkinterMapView
 - Geopy
