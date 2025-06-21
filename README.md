@@ -53,11 +53,11 @@ cd ride-booking-system
 ### 3. 🖥️ Create a Virtual Environment
 
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 Activate it:
 ```bash
-venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
 ### 4. 📃 Install the Required Libraries
