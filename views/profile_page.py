@@ -1,8 +1,7 @@
 from customtkinter import *
 from components.navbar import Navbar
-# from components.booking_form import BookingForm
 
-class BookingPage(CTkFrame):
+class ProfilePage(CTkFrame):
     def __init__(self, master, app):
         super().__init__(master)
         self.app = app
@@ -12,10 +11,9 @@ class BookingPage(CTkFrame):
         self.navbar = Navbar(self, app)
         self.navbar.pack(side="top", fill="x")
 
-        # Add content to the booking page
-        self.label = CTkLabel(self, text="Welcome to the Booking Page!")
+        # Add content to the profile page
+        self.label = CTkLabel(self, text="Welcome to the Profile Page!")
         self.label.pack(pady=20)
 
-        # Example booking form (to be implemented)
-        # self.booking_form = BookingForm(self)
-        # self.booking_form.pack(pady=20)
+        # self.button = CTkButton(self, text="Go to Dashboard", command=lambda: app.show_page("dashboard"))
+        # self.button.pack(pady=20)
