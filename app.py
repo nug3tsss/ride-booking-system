@@ -39,7 +39,7 @@ class App(CTk):
     def show_page(self, page_name):
         # clear current frame
         for widget in self.container.winfo_children():
-            widget.pack_forget()
+            widget.destroy()
 
         # page routing
         if page_name == "Dashboard":
