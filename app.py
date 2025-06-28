@@ -28,9 +28,9 @@ class App(CTk):
         self.container = CTkFrame(self)
         self.container.grid(row=1, column=1, sticky="nsew")
 
-        # Sidebar (initially visible, placed on the right)
+        # Sidebar (initially hidden, placed on the right)
         self.sidebar = Sidebar(self)
-        self.sidebar.grid(row=1, column=2, sticky="nsew")
+        # Don't grid the sidebar initially - it will be shown when hamburger is clicked
 
         # Optional scrollbar inside container
         self.scrollbar = CTkScrollbar(self.container, orientation="vertical")

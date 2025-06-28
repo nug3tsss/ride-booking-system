@@ -75,5 +75,5 @@ class Navbar(CTkFrame):
         if self.app.sidebar.winfo_ismapped():
             self.app.sidebar.grid_remove()
         else:
-            self.app.sidebar.grid()
+            self.app.sidebar.grid(row=1, column=2, sticky="nsew")
             self.app.sidebar.lift()
