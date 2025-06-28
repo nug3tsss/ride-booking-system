@@ -1,5 +1,8 @@
 from customtkinter import *
 from components.navbar import Navbar
+from components.booking_map import BookingMap
+from services.booking.map_manager import MapManager
+
 # from components.booking_form import BookingForm
 
 class BookingPage(CTkFrame):
@@ -14,8 +17,15 @@ class BookingPage(CTkFrame):
 
         # Add content to the booking page
         self.label = CTkLabel(self, text="Welcome to the Booking Page!")
-        self.label.pack(pady=20)
+        self.label.pack(fill="x", pady=(10, 0), padx=15)
 
-        # Example booking form (to be implemented)
-        # self.booking_form = BookingForm(self)
-        # self.booking_form.pack(pady=20)
+        self.book_destination()
+    
+    # User will choose pick-up and drop-off locations
+    def book_destination(self):
+        self.label.configure(text="Select your destination!", anchor=W, font=("Arial", 32))
+        
+        self.booking_map = BookingMap(self)
+        self.map_manager = MapManager(self.booking_map)
+        self.map_manager.initialize_map()
+        
