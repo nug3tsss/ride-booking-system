@@ -13,15 +13,21 @@ class PinLocationManager():
             self.pickup_marker.delete()
 
         self.pickup_marker = self.booking_map.set_marker(coords[0], coords[1], text="Pick-up destination")
-        self.check_markers()
+        self.verify_markers()
     
     def add_dropoff_marker(self, coords):
         if self.dropoff_marker is not None:
             self.dropoff_marker.delete()
 
         self.dropoff_marker = self.booking_map.set_marker(coords[0], coords[1], text="Drop-off destination")
-        self.check_markers()
+        self.verify_markers()
     
-    def check_markers(self):
+    def verify_markers(self):
         if self.pickup_marker is not None and self.dropoff_marker is not None:
             self.route_lines_manager.get_marker_coords(self.pickup_marker, self.dropoff_marker)
+    
+    def get_pickup_marker_position(self):
+        return self.pickup_marker.position
+
+    def get_dropoff_marker_position(self):
+        return self.dropoff_marker.position
