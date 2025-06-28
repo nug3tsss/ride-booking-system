@@ -1,0 +1,2 @@
+def LocationInformationManager():
+    pass
