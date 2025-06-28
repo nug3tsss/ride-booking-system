@@ -1,5 +1,4 @@
 from customtkinter import *
-from components.navbar import Navbar
 from components.booking_map import BookingMap
 from services.booking.map_manager import MapManager
 
@@ -10,10 +9,6 @@ class BookingPage(CTkFrame):
         super().__init__(master)
         self.app = app
         self.pack(fill="both", expand=True)
-
-        # Set up the navbar
-        self.navbar = Navbar(self, app)
-        self.navbar.pack(side="top", fill="x")
 
         # Add content to the booking page
         self.label = CTkLabel(self, text="Welcome to the Booking Page!")

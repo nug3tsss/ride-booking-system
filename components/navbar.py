@@ -14,9 +14,10 @@ class Navbar(CTkFrame):
         self.grid_columnconfigure(1, weight=1)  # left space
         self.grid_columnconfigure(2, weight=0)  # dashboard
         self.grid_columnconfigure(3, weight=0)  # booking
-        self.grid_columnconfigure(4, weight=1)  # right space
-        self.grid_columnconfigure(5, weight=0)  # profile
-        self.grid_columnconfigure(6, weight=0)  # hamburger icon
+        self.grid_columnconfigure(4, weight=0)  # history
+        self.grid_columnconfigure(5, weight=1)
+        self.grid_columnconfigure(6, weight=0)  # profile
+        self.grid_columnconfigure(7, weight=0)  # hamburger icon
 
         # Fonts
         logo_font = CTkFont(family="Arial", size=24, weight="bold")
@@ -39,8 +40,13 @@ class Navbar(CTkFrame):
                                         command=lambda: app.show_page("Booking"),
                                         fg_color="transparent", text_color="white",
                                         hover_color="#444", corner_radius=0)
+        self.history_button = CTkButton(self, text="History", font=nav_font,
+                                        command=lambda: app.show_page("History"),
+                                        fg_color="transparent", text_color="white",
+                                        hover_color="#444", corner_radius=0)
         self.dashboard_button.grid(row=0, column=2, padx=5, sticky="nsew")
         self.booking_button.grid(row=0, column=3, padx=5, sticky="nsew")
+        self.history_button.grid(row=0, column=4, padx=5, sticky="nsew")
 
         # Profile Button with circular image
         profile_raw = Image.open("assets/profile.jpg").resize((40, 40))
@@ -55,30 +61,19 @@ class Navbar(CTkFrame):
                                         fg_color="transparent", image=profile_image,
                                         command=lambda: app.show_page("Profile"),
                                         text_color="white", hover=False, compound="right")
-        self.profile_button.grid(row=0, column=5, padx=(10, 0), sticky="nsew")
+        self.profile_button.grid(row=0, column=6, padx=(10, 0), sticky="nsew")
 
-        # Load GIF frames for hamburger icon
-        self.hamburger_frames = [
-            PhotoImage(file="assets/hamburger_icon-animated.gif", format=f"gif -index {i}")
-            for i in range(self.get_gif_frame_count("assets/hamburger_icon-animated.gif"))
-        ]
-        self.hamburger_iterator = itertools.cycle(self.hamburger_frames)
-        self.hamburger_icon_label = CTkLabel(self, text="", image=self.hamburger_frames[0])
-        self.hamburger_icon_label.grid(row=0, column=6, padx=(10, 10), pady=10, sticky="nsew")
-        self.hamburger_icon_label.bind("<Button-1>", self.animate_hamburger)
+        hamburger_image = CTkImage(Image.open("assets/hamburger_icon-default.png"), size=(30, 30))
 
-    def get_gif_frame_count(self, path):
-        from PIL import Image as PILImage
-        with PILImage.open(path) as img:
-            return getattr(img, "n_frames", 1)
-
-    def animate_hamburger(self, event=None):
-        def next_frame():
-            try:
-                frame = next(self.hamburger_iterator)
-                self.hamburger_icon_label.configure(image=frame)
-                self.after(50, next_frame)  # Adjust speed as needed
-            except StopIteration:
-                pass
-
-        next_frame()
+        self.hamburger_button = CTkButton(self, text="", image=hamburger_image,
+                                        fg_color="transparent", hover_color="#444",
+                                        width=40, height=40,
+                                        command=self.toggle_sidebar)
+        self.hamburger_button.grid(row=0, column=7, padx=(10, 10), pady=10, sticky="nsew")
+    
+    def toggle_sidebar(self):
+        if self.app.sidebar.winfo_ismapped():
+            self.app.sidebar.grid_remove()
+        else:
+            self.app.sidebar.grid()
+            self.app.sidebar.lift()
