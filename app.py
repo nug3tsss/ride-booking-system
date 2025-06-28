@@ -2,55 +2,63 @@ from customtkinter import *
 from views.dashboard import DashboardPage
 from views.booking_page import BookingPage
 from views.profile_page import ProfilePage
-# from components.navbar import Navbar 
-# from components. import
+from views.history_page import HistoryPage
+from components.navbar import Navbar
+from components.sidebar import Sidebar
+from views.about import AboutPage
+from views.contact import ContactPage
+from views.settings import SettingsPage
 
 class App(CTk):
     def __init__(self):
         super().__init__()
         self.title("Gethub")
         self.geometry("900x600")
-
-        # set icon
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
 
-        self.mainframe = CTkFrame(self)
-        self.mainframe.pack(fill="both", expand=True)
+        # Grid layout: navbar top, container left, sidebar right
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(1, weight=1)  # container fills center
 
-        # set frame for displaying different views
-        self.container = CTkFrame(self.mainframe)
-        self.container.pack(fill="both", expand=True)
+        # Add navbar on top spanning both main + sidebar
+        self.navbar = Navbar(self, app=self)
+        self.navbar.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
-        # set up pages
-        self.pages = {} 
-        self.show_page("Dashboard") # default page
+        # Main content container (center area)
+        self.container = CTkFrame(self)
+        self.container.grid(row=1, column=1, sticky="nsew")
 
-    # def fade_in(self, widget=None, alpha=0.0):
-    #     # Use window transparency for fade-in effect
-    #     if widget is None:
-    #         widget = self
-    #     if alpha < 1.0:
-    #         alpha += 0.05
-    #         widget.attributes('-alpha', alpha)
-    #         widget.after(1, lambda: self.fade_in(widget, alpha))
-    #     else:
-    #         widget.attributes('-alpha', 1.0)
+        # Sidebar (initially visible, placed on the right)
+        self.sidebar = Sidebar(self)
+        self.sidebar.grid(row=1, column=2, sticky="nsew")
+
+        # Optional scrollbar inside container
+        self.scrollbar = CTkScrollbar(self.container, orientation="vertical")
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.pages = {}
+        self.show_page("Dashboard")
 
     def show_page(self, page_name):
-        # clear current frame
         for widget in self.container.winfo_children():
-            widget.destroy()
+            widget.pack_forget()
 
-        # page routing
         if page_name == "Dashboard":
             page = DashboardPage(self.container, self)
         elif page_name == "Booking":
             page = BookingPage(self.container, self)
         elif page_name == "Profile":
             page = ProfilePage(self.container, self)
+        elif page_name == "History":
+            page = HistoryPage(self.container, self)
+        elif page_name == "About":
+            page = AboutPage(self.container, self)
+        elif page_name == "Contact":
+            page = ContactPage(self.container, self)
+        elif page_name == "Settings":
+            page = SettingsPage(self.container, self)
         else:
             raise ValueError(f"Page '{page_name}' not found.")
 
         page.pack(fill="both", expand=True)
         self.pages[page_name] = page
-        # self.fade_in()

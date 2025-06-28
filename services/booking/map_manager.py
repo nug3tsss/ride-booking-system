@@ -5,7 +5,8 @@ class MapManager():
         self.booking_map = booking_map
         self.pin_location_manager = PinLocationManager(booking_map)
 
-        self.booking_map.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)
+        # self.booking_map.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)
+        self.booking_map.set_tile_server("https://a.tile.openstreetmap.org/{z}/{x}/{y}.png")
 
     def initialize_map(self):
         
