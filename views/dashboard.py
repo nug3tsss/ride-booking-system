@@ -1,5 +1,6 @@
 from customtkinter import *
 from components.navbar import Navbar
+from PIL import Image
 
 class DashboardPage(CTkFrame):
     def __init__(self, master, app):

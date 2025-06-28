@@ -24,6 +24,8 @@ class BookingPage(CTkFrame):
     # User will choose pick-up and drop-off locations
     def book_destination(self):
         self.label.configure(text="Select your destination!", anchor=W, font=("Arial", 32))
+
+        # ADD CHANGE TILE SERVER
         
         self.booking_map = BookingMap(self)
         self.map_manager = MapManager(self.booking_map)

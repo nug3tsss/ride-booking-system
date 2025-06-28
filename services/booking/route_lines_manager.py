@@ -4,6 +4,7 @@ class RouteLinesManager():
     def __init__(self, booking_map):
         self.booking_map = booking_map
         self.route_line = None
+        # self.modes = ["driving", "cycling", "walking"]
     
     def get_marker_coords(self, pickup_marker, dropoff_marker):
         self.pickup_lat = pickup_marker.position[0]
