@@ -8,8 +8,9 @@ class BookingPage(CTkFrame):
         self.app = app
         self.pack(fill="both", expand=True)
 
-        self.label = CTkLabel(self, text="", anchor=W, font=("Arial", 32))
-        self.label.pack(side=TOP, fill="x", padx=15, pady=15)
+        # Add content to the booking page
+        self.label = CTkLabel(self, text="", font=("Arial", 32))
+        self.label.pack(fill="x", anchor="w", pady=15)
 
         self.secondary_frame = CTkFrame(self)
         self.secondary_frame.pack(fill="both", expand=True, padx=15, pady=15)
@@ -34,7 +35,7 @@ class BookingPage(CTkFrame):
         self.prompts = {}
 
         for prompt_name in self.prompt_names:
-            button = CTkButton(self.prompts_frame, text=prompt_name, anchor=W, font=("Arial", 32), command=lambda name=prompt_name: self.toggle_prompt(name))
+            button = CTkButton(self.prompts_frame, text=prompt_name, anchor="w", font=("Arial", 32), command=lambda name=prompt_name: self.toggle_prompt(name))
             button.pack(fill="x", pady=15, padx=15)
             self.buttons[prompt_name] = button
 
