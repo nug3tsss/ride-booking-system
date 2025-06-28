@@ -1,5 +1,5 @@
 from customtkinter import *
-from components.booking_map import BookingMap
+from tkintermapview import *
 from services.booking.map_manager import MapManager
 
 class BookingPage(CTkFrame):
@@ -10,7 +10,7 @@ class BookingPage(CTkFrame):
 
         # Add content to the booking page
         self.label = CTkLabel(self, text="", font=("Arial", 32))
-        self.label.pack(fill="x", anchor="w", pady=15)
+        self.label.pack(anchor="w", padx=15, pady=15)
 
         self.secondary_frame = CTkFrame(self)
         self.secondary_frame.pack(fill="both", expand=True, padx=15, pady=15)
@@ -44,7 +44,7 @@ class BookingPage(CTkFrame):
             self.prompts[prompt_name] = prompt
         
         # ----- GENERATE THE MAP -----
-        self.booking_map = BookingMap(self.map_frame)
+        self.booking_map = TkinterMapView(self.map_frame)
         self.map_manager = MapManager(self.booking_map)
         self.map_manager.initialize_map()
     
