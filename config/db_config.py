@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # It connects to the SQLite database and Initialize the database if it does not exist.
 
 import sqlite3
@@ -23,7 +23,6 @@ def get_connection():
     except sqlite3.Error as e:
         print(f"[Database ERROR] It failed to connect to the database: {e}")
         return None
-=======
 import sqlite3
 from sqlite3 import Error
 
@@ -88,4 +87,3 @@ if __name__ == '__main__':
     if conn:
         create_tables(conn)
         conn.close()
->>>>>>> 8cde258a2f4727e2402afb3d9338974a6886d51c
