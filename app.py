@@ -8,6 +8,7 @@ from components.sidebar import Sidebar
 from views.about import AboutPage
 from views.contact import ContactPage
 from views.settings import SettingsPage
+from config.db_config import create_connection, create_tables
 
 class App(CTk):
     def __init__(self):
@@ -15,6 +16,13 @@ class App(CTk):
         self.title("Gethub")
         self.geometry("900x600")
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
+
+        # Initialize database connection and create tables
+        self.db_conn = create_connection()
+        if self.db_conn:
+            create_tables(self.db_conn)
+        else:
+            print("Failed to connect to the database. Application might not function correctly.")
 
         # Grid layout: navbar top, container left, sidebar right
         self.grid_rowconfigure(1, weight=1)
@@ -62,3 +70,8 @@ class App(CTk):
 
         page.pack(fill="both", expand=True)
         self.pages[page_name] = page
+
+    def on_closing(self):
+        if self.db_conn:
+            self.db_conn.close()
+        self.destroy()
