@@ -12,10 +12,10 @@ class RouteLinesManager():
         self.dropoff_lat = dropoff_marker.position[0]
         self.dropoff_lon = dropoff_marker.position[1]
 
-        # self.min_lat = min(self.pickup_lat, self.dropoff_lat)
-        # self.max_lat = max(self.pickup_lat, self.dropoff_lat)
-        # self.min_lon = min(self.pickup_lon, self.dropoff_lon)
-        # self.max_lon = max(self.pickup_lon, self.dropoff_lon)
+        self.min_lat = min(self.pickup_lat, self.dropoff_lat)
+        self.max_lat = max(self.pickup_lat, self.dropoff_lat)
+        self.min_lon = min(self.pickup_lon, self.dropoff_lon)
+        self.max_lon = max(self.pickup_lon, self.dropoff_lon)
 
         self.initialize_osrm()
     
@@ -34,6 +34,6 @@ class RouteLinesManager():
             self.route_line.delete()
         
         self.route_line = self.booking_map.set_path(path_latlon)
-        # self.booking_map.fit_bounding_box((self.max_lat, self.min_lon), (self.min_lat, self.max_lon))
+        self.booking_map.fit_bounding_box((self.max_lat, self.min_lon), (self.min_lat, self.max_lon))
 
         

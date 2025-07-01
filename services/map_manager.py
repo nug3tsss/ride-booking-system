@@ -1,4 +1,4 @@
-from services.booking.pin_location_manager import PinLocationManager
+from services.pin_location_manager import PinLocationManager
 
 class MapManager():
     def __init__(self, booking_map):

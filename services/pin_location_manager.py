@@ -1,4 +1,4 @@
-from services.booking.route_lines_manager import RouteLinesManager
+from services.route_lines_manager import RouteLinesManager
 
 class PinLocationManager():
     def __init__(self, booking_map):
@@ -25,9 +25,3 @@ class PinLocationManager():
     def verify_markers(self):
         if self.pickup_marker is not None and self.dropoff_marker is not None:
             self.route_lines_manager.get_marker_coords(self.pickup_marker, self.dropoff_marker)
-    
-    def get_pickup_marker_position(self):
-        return self.pickup_marker.position
-
-    def get_dropoff_marker_position(self):
-        return self.dropoff_marker.position

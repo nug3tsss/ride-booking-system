@@ -1,6 +1,6 @@
 from customtkinter import *
 from tkintermapview import *
-from services.booking.map_manager import MapManager
+from services.map_manager import MapManager
 
 class BookingPage(CTkFrame):
     def __init__(self, master, app):
