@@ -19,3 +19,9 @@ class MapManager():
     def add_marker_of_type(self):
         self.booking_map.add_right_click_menu_command(label="Select destination as pick-up", command=self.pin_location_manager.add_pickup_marker, pass_coords=True)
         self.booking_map.add_right_click_menu_command(label="Select destination as drop-off", command=self.pin_location_manager.add_dropoff_marker, pass_coords=True)
+    
+    def add_marker_from_entry(self, coords):
+        self.pin_location_manager.add_pickup_marker(coords)
+    
+    def add_marker_from_dropoff(self, coords):
+        self.pin_location_manager.add_dropoff_marker(coords)

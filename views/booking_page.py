@@ -1,12 +1,15 @@
 from customtkinter import *
 from tkintermapview import *
 from services.map_manager import MapManager
+from services.booking_information_manager import BookingInformationManager
 
 class BookingPage(CTkFrame):
     def __init__(self, master, app):
         super().__init__(master)
         self.app = app
         self.pack(fill="both", expand=True)
+
+        self.booking_information_manager = BookingInformationManager()
 
         # Add content to the booking page
         self.label = CTkLabel(self, text="", font=("Arial", 32))
@@ -81,4 +84,9 @@ class BookingPage(CTkFrame):
     
     def on_entry_enter(self, entry_name, event):
         value = entry_name.get()
-        print(f"You entered: {value}")
+        location = self.booking_information_manager.get_coords_from_address(value)
+
+        if entry_name == self.select_pickup_entry:
+            self.map_manager.add_marker_from_entry([location.latitude, location.longitude])
+        elif entry_name == self.select_dropff_entry:
+            self.map_manager.add_marker_from_dropoff([location.latitude, location.longitude])

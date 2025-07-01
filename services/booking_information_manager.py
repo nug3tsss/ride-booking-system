@@ -2,9 +2,9 @@ from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
 class BookingInformationManager():
-    def __init__(self, pin_location_manager, route_lines_manager):
-        self.pin_location_manager = pin_location_manager
-        self.route_lines_manager = route_lines_manager
+    def __init__(self):
+        # self.pin_location_manager = pin_location_manager
+        # self.route_lines_manager = route_lines_manager
         self.geolocator = Nominatim(user_agent="ride-booking-system")
 
     def get_coordinates(self):
@@ -32,4 +32,8 @@ class BookingInformationManager():
             return f"Geocoding error: {e}"
         except Exception as e:
             return f"Error getting address: {e}"
+    
+    def get_coords_from_address(self, address):
+        location = self.geolocator.geocode(str(address))
+        return location
 
