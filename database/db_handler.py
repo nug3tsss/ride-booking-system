@@ -50,34 +50,6 @@ def initialize_database():
     except sqlite3.Error as e:
         print(f"[DB ERROR] Failed to initialize database: {e}")
 
-"""
-def populate_initial_vehicles():
-    try:
-        with get_connection() as conn:
-            # Check if vehicles already exist
-            cursor = conn.execute("SELECT COUNT(*) FROM vehicles;")
-            count = cursor.fetchone()[0]
-            
-            if count == 0:
-                vehicles_data = [
-                    ('Car', 'Sedan', 'ABC-123', 'Alice Smith', '09123456789', 50.0, 15.0),
-                    ('Motor', 'Scooter', 'DEF-456', 'Bob Johnson', '09234567890', 30.0, 10.0),
-                    ('Van', 'Cargo Van', 'GHI-789', 'Charlie Brown', '09345678901', 80.0, 20.0)
-                ]
-                
-                conn.executemany(
-                    "INSERT INTO vehicles (type, model, license_plate, driver_name, driver_contact, base_fare, per_km_rate) VALUES (?, ?, ?, ?, ?, ?, ?);",
-                    vehicles_data
-                )
-                conn.commit()
-                print("[DB INFO] Initial vehicle data populated.")
-            else:
-                print("[DB INFO] Vehicles already exist, skipping population.")
-                
-    except sqlite3.Error as e:
-        print(f"[DB ERROR] Failed to populate initial vehicles: {e}")
-"""
-
 def add_booking(name: str, pickup: str, destination: str, vehicle_id: int, distance_km: float = 0.0, estimated_cost: float = 0.0) -> int | None:
     """Insert a new booking record"""
     try:
