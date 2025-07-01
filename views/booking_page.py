@@ -28,13 +28,27 @@ class BookingPage(CTkFrame):
         self.prompts_frame = CTkFrame(self.secondary_frame)
         self.prompts_frame.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
 
-        # ----- CREATE THE PROMPTS -----
+        # ----- CREATE THE FORM -----
         self.is_prompt_active = False
 
-        self.select_vehicle_button = CTkButton(self.prompts_frame, text="Select a vehicle", anchor="w", font=("Arial", 32), command=self.toggle_prompt)
+        self.select_pickup_button = CTkButton(self.prompts_frame, text="Select a pickup destination", anchor="w", font=("Arial", 32), command=lambda: self.toggle_prompt(self.select_pickup_button))
+        self.select_pickup_button.pack(fill="x", pady=15, padx=15)
+
+        self.select_dropoff_button = CTkButton(self.prompts_frame, text="Select a dropoff destination", anchor="w", font=("Arial", 32), command=lambda: self.toggle_prompt(self.select_dropoff_button))
+        self.select_dropoff_button.pack(fill="x", pady=15, padx=15)
+
+        self.select_vehicle_button = CTkButton(self.prompts_frame, text="Select a vehicle", anchor="w", font=("Arial", 32), command=lambda: self.toggle_prompt(self.select_vehicle_button))
         self.select_vehicle_button.pack(fill="x", pady=15, padx=15)
 
         self.select_vehicle_frame = CTkFrame(self.prompts_frame)
+        self.select_pickup_frame = CTkFrame(self.prompts_frame)
+        self.select_dropoff_frame = CTkFrame(self.prompts_frame)
+
+        self.prompts = {
+            self.select_pickup_button: self.select_pickup_frame,
+            self.select_dropoff_button: self.select_dropoff_frame,
+            self.select_vehicle_button: self.select_vehicle_frame
+        }
 
         self.vehicle_var = IntVar(value=0)
         self.vehicle1 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 1", variable=self.vehicle_var, value=1)
@@ -49,7 +63,7 @@ class BookingPage(CTkFrame):
         self.map_manager = MapManager(self.booking_map)
         self.map_manager.initialize_map()
     
-    def toggle_prompt(self):
+    def toggle_prompt(self, prompt_name):
         if self.is_prompt_active:
             self.select_vehicle_frame.pack_forget()
             self.is_prompt_active = False
