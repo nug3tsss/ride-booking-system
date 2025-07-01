@@ -29,33 +29,28 @@ class BookingPage(CTkFrame):
         self.prompts_frame.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
 
         # ----- CREATE THE PROMPTS -----
-        self.active_prompt = None
-        self.prompt_names = ["Pick-up", "Drop-off", "Vehicle Type"]
-        self.buttons = {}
-        self.prompts = {}
+        self.is_prompt_active = False
 
-        for prompt_name in self.prompt_names:
-            button = CTkButton(self.prompts_frame, text=prompt_name, anchor="w", font=("Arial", 32), command=lambda name=prompt_name: self.toggle_prompt(name))
-            button.pack(fill="x", pady=15, padx=15)
-            self.buttons[prompt_name] = button
+        self.select_vehicle_button = CTkButton(self.prompts_frame, text="Select a vehicle", anchor="w", font=("Arial", 32), command=self.toggle_prompt)
+        self.select_vehicle_button.pack(fill="x", pady=15, padx=15)
 
-            prompt = CTkFrame(self.prompts_frame)
-            CTkLabel(prompt, text=f"{prompt_name} content here").pack(pady=15)
-            self.prompts[prompt_name] = prompt
-        
+        self.select_vehicle_frame = CTkFrame(self.prompts_frame)
+
+        self.vehicle_var = IntVar(value=0)
+        self.vehicle1 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 1", variable=self.vehicle_var, value=1)
+        self.vehicle2 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 2", variable=self.vehicle_var, value=2)
+        self.vehicle3 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 3", variable=self.vehicle_var, value=3)
+
         # ----- GENERATE THE MAP -----
         self.booking_map = TkinterMapView(self.map_frame)
         self.map_manager = MapManager(self.booking_map)
         self.map_manager.initialize_map()
     
-    def toggle_prompt(self, prompt_name):
-        if self.active_prompt:
-            self.active_prompt.pack_forget()
-            if self.active_prompt == self.prompts[prompt_name]:
-                self.active_prompt = None
-                return
-        
-        selected_prompt = self.prompts[prompt_name]
-        selected_prompt.pack(fill="x", pady=5, padx=15, after=self.buttons[prompt_name])
-        self.active_prompt = selected_prompt
+    def toggle_prompt(self):
+        if self.is_prompt_active:
+            self.select_vehicle_frame.pack_forget()
+            self.is_prompt_active = False
+        else:
+            self.select_vehicle_frame.pack(fill="x", pady=5, padx=15, after=self.select_vehicle_button)
+            self.is_prompt_active = True
         
