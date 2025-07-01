@@ -1,19 +1,18 @@
 from customtkinter import *
 
 class Sidebar(CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, styles=None):
         super().__init__(master)
-        self.configure(width=200, fg_color="#2a2a2a", corner_radius=0)
+        self.configure(width=200, fg_color=styles.sidebar_color, corner_radius=0)
 
-        # Example buttons inside the sidebar
-        self.home_btn = CTkButton(self, text="Settings", fg_color="transparent", hover_color="#444",
+        # Sidebar buttonss
+        self.settings_btn = CTkButton(self, width=200, height=50, text="Settings", font=styles.sidebar_font, fg_color="transparent", hover_color=styles.hover_color, corner_radius=0,
                                   command=lambda: master.show_page("Settings"))
-        self.booking_btn = CTkButton(self, text="About Us", fg_color="transparent", hover_color="#444",
+        self.about_btn = CTkButton(self, width=200, height=50, text="About Us", font=styles.sidebar_font, fg_color="transparent", hover_color=styles.hover_color, corner_radius=0,
                                      command=lambda: master.show_page("About"))
-        self.history_btn = CTkButton(self, text="Contact Us", fg_color="transparent", hover_color="#444",
+        self.contact_btn = CTkButton(self, width=200, height=50, text="Contact Us", font=styles.sidebar_font, fg_color="transparent", hover_color=styles.hover_color, corner_radius=0,
                                      command=lambda: master.show_page("Contact"))
 
-        # Pack or grid the widgets
-        self.home_btn.pack(padx=10, pady=10, fill="x")
-        self.booking_btn.pack(padx=10, pady=10, fill="x")
-        self.history_btn.pack(padx=10, pady=10, fill="x")
+        self.settings_btn.pack(fill="x")
+        self.about_btn.pack(fill="x")
+        self.contact_btn.pack(fill="x")

@@ -8,11 +8,13 @@ from components.sidebar import Sidebar
 from views.about import AboutPage
 from views.contact import ContactPage
 from views.settings import SettingsPage
+from config.styles import Styles
 from config.db_config import get_connection, create_tables
 
 class App(CTk):
     def __init__(self):
         super().__init__()
+        self.styles = Styles()
         self.title("Gethub")
         self.geometry("900x600")
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
@@ -29,7 +31,7 @@ class App(CTk):
         self.grid_columnconfigure(1, weight=1)  # container fills center
 
         # Add navbar on top spanning both main + sidebar
-        self.navbar = Navbar(self, app=self)
+        self.navbar = Navbar(self, app=self, styles=self.styles)
         self.navbar.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
         # Main content container (center area)
@@ -37,7 +39,7 @@ class App(CTk):
         self.container.grid(row=1, column=1, sticky="nsew")
 
         # Sidebar (initially hidden, placed on the right)
-        self.sidebar = Sidebar(self)
+        self.sidebar = Sidebar(self, styles=self.styles)
         # Don't grid the sidebar initially - it will be shown when hamburger is clicked
 
         # Optional scrollbar inside container
