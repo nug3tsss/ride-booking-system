@@ -1,92 +1,34 @@
 from customtkinter import *
 from tkintermapview import *
-from services.map_manager import MapManager
-from services.booking_information_manager import BookingInformationManager
+
+from components.booking_form import BookingForm
+from components.booking_map import BookingMap
 
 class BookingPage(CTkFrame):
-    def __init__(self, master, app):
+    def __init__(self, master, app, booking_information_manager):
+        # Initialize booking page
         super().__init__(master)
         self.app = app
+        self.booking_information_manager = booking_information_manager
         self.pack(fill="both", expand=True)
-
-        self.booking_information_manager = BookingInformationManager()
 
         # Add content to the booking page
         self.label = CTkLabel(self, text="", font=("Arial", 32))
         self.label.pack(anchor="w", padx=15, pady=15)
 
-        self.secondary_frame = CTkFrame(self)
-        self.secondary_frame.pack(fill="both", expand=True, padx=15, pady=15)
+        self.inner_frame = CTkFrame(self)
+        self.inner_frame.pack(fill="both", expand=True, padx=15, pady=15)
 
         self.display_booking_page()
     
     # User will choose pick-up and drop-off locations
     def display_booking_page(self):
-        self.label.configure(text="Select your destination!")
+        self.label.configure(text="Book your ride!")
 
-        # ----- LEFT AND RIGHT FRAMES -----
-        self.map_frame = CTkFrame(self.secondary_frame)
-        self.map_frame.pack(side=RIGHT, fill="both", expand=True, padx=15, pady=15)
+        # Create the map
+        self.booking_map = BookingMap(self.inner_frame, self.booking_information_manager)
+        self.booking_map.pack(side=RIGHT, fill="both", expand=True, padx=15, pady=15)
 
-        self.prompts_frame = CTkFrame(self.secondary_frame)
-        self.prompts_frame.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
-
-        # ----- CREATE THE FORM -----
-        self.is_prompt_active = False
-
-        self.select_pickup_button = CTkButton(self.prompts_frame, text="Select a pickup destination", anchor="w", font=("Arial", 32), command=lambda: self.toggle_prompt(self.select_pickup_button))
-        self.select_pickup_button.pack(fill="x", pady=15, padx=15)
-
-        self.select_dropoff_button = CTkButton(self.prompts_frame, text="Select a dropoff destination", anchor="w", font=("Arial", 32), command=lambda: self.toggle_prompt(self.select_dropoff_button))
-        self.select_dropoff_button.pack(fill="x", pady=15, padx=15)
-
-        self.select_vehicle_button = CTkButton(self.prompts_frame, text="Select a vehicle", anchor="w", font=("Arial", 32), command=lambda: self.toggle_prompt(self.select_vehicle_button))
-        self.select_vehicle_button.pack(fill="x", pady=15, padx=15)
-
-        self.select_vehicle_frame = CTkFrame(self.prompts_frame)
-        self.select_pickup_frame = CTkFrame(self.prompts_frame)
-        self.select_dropoff_frame = CTkFrame(self.prompts_frame)
-
-        self.prompts = {
-            self.select_pickup_button: self.select_pickup_frame,
-            self.select_dropoff_button: self.select_dropoff_frame,
-            self.select_vehicle_button: self.select_vehicle_frame
-        }
-
-        self.vehicle_var = IntVar(value=0)
-        self.vehicle1 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 1", variable=self.vehicle_var, value=1)
-        self.vehicle2 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 2", variable=self.vehicle_var, value=2)
-        self.vehicle3 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 3", variable=self.vehicle_var, value=3)
-        self.vehicle1.pack(fill="x", pady=15, padx=15)
-        self.vehicle2.pack(fill="x", pady=15, padx=15)
-        self.vehicle3.pack(fill="x", pady=15, padx=15)
-
-        self.select_pickup_entry = CTkEntry(self.select_pickup_frame, placeholder_text="Enter a pickup destination")
-        self.select_pickup_entry.pack(fill="x", pady=15, padx=15)
-        self.select_pickup_entry.bind("<Return>", lambda event: self.on_entry_enter(self.select_pickup_entry, event))
-
-        self.select_dropff_entry = CTkEntry(self.select_dropoff_frame, placeholder_text="Enter a dropoff destination")
-        self.select_dropff_entry.pack(fill="x", pady=15, padx=15)
-        self.select_dropff_entry.bind("<Return>", lambda event: self.on_entry_enter(self.select_dropff_entry, event))
-
-        # ----- GENERATE THE MAP -----
-        self.booking_map = TkinterMapView(self.map_frame)
-        self.map_manager = MapManager(self.booking_map)
-        self.map_manager.initialize_map()
-    
-    def toggle_prompt(self, prompt_name):
-        if self.is_prompt_active:
-            self.prompts[prompt_name].pack_forget()
-            self.is_prompt_active = False
-        else:
-            self.prompts[prompt_name].pack(fill="x", pady=5, padx=15, after=prompt_name)
-            self.is_prompt_active = True
-    
-    def on_entry_enter(self, entry_name, event):
-        value = entry_name.get()
-        location = self.booking_information_manager.get_coords_from_address(value)
-
-        if entry_name == self.select_pickup_entry:
-            self.map_manager.add_marker_from_entry([location.latitude, location.longitude])
-        elif entry_name == self.select_dropff_entry:
-            self.map_manager.add_marker_from_dropoff([location.latitude, location.longitude])
+        # Create the form
+        self.booking_form = BookingForm(self.inner_frame, self.booking_map.map_manager)
+        self.booking_form.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
