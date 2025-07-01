@@ -9,6 +9,7 @@ from views.about import AboutPage
 from views.contact import ContactPage
 from views.settings import SettingsPage
 from database.db_handler import initialize_database
+from services.booking_information_manager import BookingInformationManager
 
 class App(CTk):
     def __init__(self):
@@ -16,6 +17,8 @@ class App(CTk):
         self.title("Gethub")
         self.geometry("900x600")
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
+
+        self.booking_information_manager = BookingInformationManager()
         
         # Grid layout: navbar top, container left, sidebar right
         self.grid_rowconfigure(1, weight=1)
@@ -47,7 +50,7 @@ class App(CTk):
         if page_name == "Dashboard":
             page = DashboardPage(self.container, self)
         elif page_name == "Booking":
-            page = BookingPage(self.container, self)
+            page = BookingPage(self.container, self, self.booking_information_manager)
         elif page_name == "Profile":
             page = ProfilePage(self.container, self)
         elif page_name == "History":
