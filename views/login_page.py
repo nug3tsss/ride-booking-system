@@ -1,0 +1,47 @@
+from customtkinter import *
+from tkinter import messagebox
+import sqlite3
+from database.db_handler import get_connection
+
+class LoginPage(CTkFrame):
+    def __init__(self, master, app):
+        super().__init__(master)
+        self.app = app
+
+        CTkLabel(self, text="Login", font=("Arial", 24)).pack(pady=20)
+
+        self.username_entry = CTkEntry(self, placeholder_text="Username", width=250)
+        self.username_entry.pack(pady=10)
+
+        self.password_entry = CTkEntry(self, placeholder_text="Password", show="*", width=250)
+        self.password_entry.pack(pady=10)
+
+        CTkButton(self, text="Login", command=self.login_user).pack(pady=20)
+        CTkButton(self, text="Go to Register", command=lambda: app.show_page("Register")).pack(pady=5)
+
+    def login_user(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        if not username or not password:
+            messagebox.showerror("Error", "Please fill in all fields.")
+            return
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id, username, role FROM users WHERE username=? AND password=?", (username, password))
+        user = cursor.fetchone()
+
+        if user:
+            self.app.current_user = {
+                "user_id": user[0],
+                "username": user[1],
+                "role": user[2]
+            }
+            self.app.navbar.render_nav()
+            self.app.show_page("Dashboard")
+        else:
+            messagebox.showerror("Login Failed", "Incorrect username or password.")
+
+        conn.close()

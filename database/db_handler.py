@@ -1,7 +1,6 @@
 from config.db_config import get_connection
 import sqlite3
 from datetime import datetime
-import os
 
 def initialize_database():
     """Initialize database with proper schema"""
@@ -9,7 +8,20 @@ def initialize_database():
         with get_connection() as conn:
             # Enable foreign keys
             conn.execute("PRAGMA foreign_keys = ON;")
-            
+
+            # Create users table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                role TEXT NOT NULL DEFAULT 'user',
+                profile_pic TEXT DEFAULT 'assets/profile.jpg'
+            );
+            """)
+
             # Create vehicles table
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS vehicles (

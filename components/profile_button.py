@@ -2,22 +2,29 @@ from customtkinter import CTkButton, CTkImage
 from PIL import Image, ImageDraw, ImageOps
 
 class ProfileButton(CTkButton):
-    def __init__(self, master, app, **kwargs):
-        super().__init__(master, **kwargs)
+    def __init__(self, master, app, text="John Doe", image_path="assets/profile.jpg", **kwargs):
         self.app = app
-        self.configure(
-            text="John Doe",
+        self.profile_image = self.create_profile_image(image_path)
+
+        super().__init__(
+            master,
+            text=text,
             font=("Arial", 16, "bold"),
             fg_color="transparent",
-            image=self.create_profile_image(),
+            image=self.profile_image,
             command=lambda: app.show_page("Profile"),
             text_color="white",
             hover=False,
-            compound="right"
+            compound="right",
+            **kwargs
         )
 
-    def create_profile_image(self):
-        profile_raw = Image.open("assets/profile.jpg").resize((40, 40))
+    def create_profile_image(self, path):
+        try:
+            profile_raw = Image.open(path).resize((40, 40))
+        except Exception:
+            profile_raw = Image.open("assets/profile.jpg").resize((40, 40))  # fallback if missing
+
         mask = Image.new("L", profile_raw.size, 0)
         draw = ImageDraw.Draw(mask)
         draw.ellipse((0, 0) + profile_raw.size, fill=255)
