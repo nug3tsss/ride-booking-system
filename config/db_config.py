@@ -44,7 +44,7 @@ def create_tables(conn):
         # Bookings table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS bookings (
-                booking_id INTEGER PRIMARY KEY AUTOINCREMENT,,
+                booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
                 vehicle_id INTEGER NOT NULL,
                 pickup_latitude REAL NOT NULL,
