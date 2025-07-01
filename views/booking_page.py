@@ -58,6 +58,14 @@ class BookingPage(CTkFrame):
         self.vehicle2.pack(fill="x", pady=15, padx=15)
         self.vehicle3.pack(fill="x", pady=15, padx=15)
 
+        self.select_pickup_entry = CTkEntry(self.select_pickup_frame, placeholder_text="Enter a pickup destination")
+        self.select_pickup_entry.pack(fill="x", pady=15, padx=15)
+        self.select_pickup_entry.bind("<Return>", lambda event: self.on_entry_enter(self.select_pickup_entry, event))
+
+        self.select_dropff_entry = CTkEntry(self.select_dropoff_frame, placeholder_text="Enter a dropoff destination")
+        self.select_dropff_entry.pack(fill="x", pady=15, padx=15)
+        self.select_dropff_entry.bind("<Return>", lambda event: self.on_entry_enter(self.select_dropff_entry, event))
+
         # ----- GENERATE THE MAP -----
         self.booking_map = TkinterMapView(self.map_frame)
         self.map_manager = MapManager(self.booking_map)
@@ -65,9 +73,12 @@ class BookingPage(CTkFrame):
     
     def toggle_prompt(self, prompt_name):
         if self.is_prompt_active:
-            self.select_vehicle_frame.pack_forget()
+            self.prompts[prompt_name].pack_forget()
             self.is_prompt_active = False
         else:
-            self.select_vehicle_frame.pack(fill="x", pady=5, padx=15, after=self.select_vehicle_button)
+            self.prompts[prompt_name].pack(fill="x", pady=5, padx=15, after=prompt_name)
             self.is_prompt_active = True
-        
+    
+    def on_entry_enter(self, entry_name, event):
+        value = entry_name.get()
+        print(f"You entered: {value}")
