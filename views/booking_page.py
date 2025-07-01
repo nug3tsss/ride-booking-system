@@ -40,6 +40,9 @@ class BookingPage(CTkFrame):
         self.vehicle1 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 1", variable=self.vehicle_var, value=1)
         self.vehicle2 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 2", variable=self.vehicle_var, value=2)
         self.vehicle3 = CTkRadioButton(self.select_vehicle_frame, text="Vehicle 3", variable=self.vehicle_var, value=3)
+        self.vehicle1.pack(fill="x", pady=15, padx=15)
+        self.vehicle2.pack(fill="x", pady=15, padx=15)
+        self.vehicle3.pack(fill="x", pady=15, padx=15)
 
         # ----- GENERATE THE MAP -----
         self.booking_map = TkinterMapView(self.map_frame)
