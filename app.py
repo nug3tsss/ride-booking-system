@@ -8,7 +8,7 @@ from components.sidebar import Sidebar
 from views.about import AboutPage
 from views.contact import ContactPage
 from views.settings import SettingsPage
-from config.db_config import create_connection, create_tables
+from config.db_config import get_connection, create_tables
 
 class App(CTk):
     def __init__(self):
@@ -18,7 +18,7 @@ class App(CTk):
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
 
         # Initialize database connection and create tables
-        self.db_conn = create_connection()
+        self.db_conn = get_connection()
         if self.db_conn:
             create_tables(self.db_conn)
         else:

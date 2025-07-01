@@ -45,7 +45,7 @@ def initialize_database():
             print("[DB INFO] Database tables created successfully.")
             
             # Populate initial vehicle data
-            populate_initial_vehicles()
+            #populate_initial_vehicles()
             
     except sqlite3.Error as e:
         print(f"[DB ERROR] Failed to initialize database: {e}")

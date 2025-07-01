@@ -1,8 +1,8 @@
-from .db_config import create_connection
+from .db_config import get_connection
 
 class BookingService:
     def __init__(self):
-        self.conn = create_connection()
+        self.conn = get_connection
         if self.conn:
             self.cursor = self.conn.cursor()
         else:
