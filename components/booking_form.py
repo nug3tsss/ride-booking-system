@@ -1,8 +1,9 @@
 from customtkinter import *
 
 class BookingForm(CTkFrame):
-    def __init__(self, master_frame):
+    def __init__(self, master_frame, map_manager):
         super().__init__(master_frame)
+        self.map_manager = map_manager
 
         self.is_prompt_active = False
 
@@ -47,5 +48,8 @@ class BookingForm(CTkFrame):
     
     def on_entry_entered(self, form_entry_name, event):
         self.entry_input = form_entry_name.get()
-
+        if form_entry_name is self.select_pickup_entry:
+            self.map_manager.get_coords_from_address(self.entry_input, "pickup")
+        elif form_entry_name is self.select_dropoff_entry:
+            self.map_manager.get_coords_from_address(self.entry_input, "dropoff")
         # CALL BOOKING INFORMATION MANAGER TO CONVERT ADDRESS TO COORDINATES

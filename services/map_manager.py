@@ -1,10 +1,11 @@
 import requests
-from geopy import geocoders
+from geopy.geocoders import Nominatim
 
 class MapManager():
     def __init__(self, booking_map, booking_information_manager):
         self._booking_map = booking_map
         self._booking_information_manager = booking_information_manager
+        self.geolocator = Nominatim(user_agent="ride-booking-system")
 
         self._pickup_marker = None
         self._dropoff_marker = None
@@ -76,3 +77,19 @@ class MapManager():
         
         if self._booking_information_manager.dropoff_coords is not None:
             self._draw_dropoff_marker(self._booking_information_manager.dropoff_coords)
+    
+    def get_coords_from_address(self, address, marker_type):
+        location = self.geolocator.geocode(address)
+
+        if location:
+            coords = (location.latitude, location.longitude)
+
+            if marker_type == "pickup":
+                self._booking_information_manager.pickup_address = address
+                self._booking_information_manager.pickup_coords = coords
+                self._draw_pickup_marker(coords)
+
+            elif marker_type == "dropoff":
+                self._booking_information_manager.dropoff_address = address
+                self._booking_information_manager.dropoff_coords = coords
+                self._draw_dropoff_marker(coords)

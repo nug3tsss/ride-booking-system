@@ -25,10 +25,10 @@ class BookingPage(CTkFrame):
     def display_booking_page(self):
         self.label.configure(text="Book your ride!")
 
-        # Create the form
-        self.booking_form = BookingForm(self.inner_frame)
-        self.booking_form.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
-
         # Create the map
         self.booking_map = BookingMap(self.inner_frame, self.booking_information_manager)
         self.booking_map.pack(side=RIGHT, fill="both", expand=True, padx=15, pady=15)
+
+        # Create the form
+        self.booking_form = BookingForm(self.inner_frame, self.booking_map.map_manager)
+        self.booking_form.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
