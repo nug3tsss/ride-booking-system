@@ -9,7 +9,7 @@ class BookingForm(CTkFrame):
 
         self.create_form_labels()
         self.create_form_prompts()
-    
+   
     def create_form_labels(self):
         self.select_pickup_label = CTkLabel(self, text="Select a pickup destination", anchor="w", font=("Arial", 32))
         self.select_pickup_label.pack(fill="x", pady=15, padx=15)
@@ -19,7 +19,7 @@ class BookingForm(CTkFrame):
 
         self.select_vehicle_label = CTkLabel(self, text="Select a vehicle", anchor="w", font=("Arial", 32))
         self.select_vehicle_label.pack(fill="x", pady=15, padx=15)
-    
+   
     def create_form_prompts(self):
         self.select_vehicle_frame = CTkFrame(self)
         self.select_vehicle_frame.pack(fill="x", pady=5, padx=15, after=self.select_vehicle_label)
@@ -45,11 +45,10 @@ class BookingForm(CTkFrame):
         self.select_dropoff_entry = CTkEntry(self.select_dropoff_frame, placeholder_text="Enter a dropoff destination")
         self.select_dropoff_entry.pack(fill="x", pady=15, padx=15)
         self.select_dropoff_entry.bind("<Return>", lambda event: self.on_entry_entered(self.select_dropoff_entry, event))
-    
+   
     def on_entry_entered(self, form_entry_name, event):
         self.entry_input = form_entry_name.get()
         if form_entry_name is self.select_pickup_entry:
             self.map_manager.get_coords_from_address(self.entry_input, "pickup")
         elif form_entry_name is self.select_dropoff_entry:
             self.map_manager.get_coords_from_address(self.entry_input, "dropoff")
-        # CALL BOOKING INFORMATION MANAGER TO CONVERT ADDRESS TO COORDINATES
