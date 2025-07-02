@@ -1,5 +1,6 @@
 import requests
 from geopy.geocoders import Nominatim
+from utils.helpers import get_current_location
 
 class MapManager():
     """
@@ -13,13 +14,15 @@ class MapManager():
         self.__booking_map = booking_map
         self.__booking_information_manager = booking_information_manager
         self.__geolocator = Nominatim(user_agent="ride-booking-system")
+        self.__latitude, self.__longitude = get_current_location()
 
         self.__pickup_marker = None
         self.__dropoff_marker = None
         self.__route_line = None
-
+        
         self.__booking_map.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)
-        self.__booking_map.set_position(14.599036510236097, 121.00494831003196)
+        #self.__booking_map.set_position(14.599036510236097, 121.00494831003196)
+        self.__booking_map.set_position(self.__latitude, self.__longitude)
         self.__booking_map.set_zoom(16)
         self.__booking_map.add_right_click_menu_command(label="Select destination as pick-up", command=self.__draw_pickup_marker, pass_coords=True)
         self.__booking_map.add_right_click_menu_command(label="Select destination as drop-off", command=self.__draw_dropoff_marker, pass_coords=True)
