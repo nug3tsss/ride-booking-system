@@ -93,9 +93,22 @@ class MapManager():
         self.__draw_route_lines(__data)
     
     def __draw_route_lines(self, data):
+        if not data or "routes" not in data or not data["routes"]:
+            print("No route found or invalid OSRM response.")
+            self.__booking_information_manager.set_route_line([])
+            self.__booking_information_manager.set_bounding_box((), ())
+            self.__booking_information_manager.set_distance_km(0.0)
+            self.__booking_information_manager.set_estimated_time_seconds(0.0)
+            return
+        
         __coords = data["routes"][0]["geometry"]["coordinates"]
         __path_latlon = [(lat, lon) for lon, lat in __coords]
 
+        distance_meters = data["routes"][0]["distance"]
+        duration_seconds = data["routes"][0]["duration"]
+
+        distance_km = distance_meters / 1000.0
+        
         if self.__route_line is not None:
             self.__route_line.delete()
         
@@ -104,10 +117,13 @@ class MapManager():
         
         self.__route_line = self.__booking_map.set_path(__path_latlon)
         self.__booking_information_manager.set_route_line(__path_latlon)
+        self.__booking_information_manager.set_distance_km(distance_km)
+        self.__booking_information_manager.set_estimated_time_seconds(duration_seconds)
 
         self.__booking_map.fit_bounding_box(__top_left, __bottom_right)
         self.__booking_information_manager.set_bounding_box(__top_left, __bottom_right)
     
+
     def __restore_information_from_previous(self):
         __pickup = self.__booking_information_manager.get_pickup_coords()
         __dropoff = self.__booking_information_manager.get_dropoff_coords()

@@ -12,7 +12,6 @@ from components.navbar import Navbar
 from components.sidebar import Sidebar
 from components.logout_popup import LogoutPopup
 from config.styles import Styles
-from database.db_handler import initialize_database
 from utils.session_manager import load_session, clear_session
 from services.booking_information_manager import BookingInformationManager
 
