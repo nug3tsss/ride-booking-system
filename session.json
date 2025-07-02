@@ -1,1 +1,1 @@
-{"user": {"user_id": 0, "username": "admin", "role": "admin", "profile_pic": "assets/profile.jpg", "first_name": "Admin"}, "timestamp": 1751387508.7531495}
+{"user": {"user_id": 8, "username": "Test", "first_name": "Test", "last_name": "Test", "profile_pic": "assets/profile.png", "password": "Test123?", "role": "user"}, "timestamp": 0}

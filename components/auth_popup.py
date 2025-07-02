@@ -163,9 +163,11 @@ class AuthPopup(CTkToplevel):
             self.app.current_user = {
                 "user_id": 0,
                 "username": "admin",
-                "role": "admin",
+                "first_name": "Admin",
+                "last_name": "",
+                "password": "admin",
                 "profile_pic": "assets/profile.jpg",
-                "first_name": "Admin"
+                "role": "admin"
             }
             save_session(self.app.current_user, remember)
             self._post_login()
@@ -173,7 +175,7 @@ class AuthPopup(CTkToplevel):
 
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("SELECT id, username, first_name, profile_pic FROM users WHERE username=? AND password=?", (u, p))
+        cur.execute("SELECT id, username, first_name, last_name, profile_pic, password FROM users WHERE username=? AND password=?", (u, p))
         user = cur.fetchone()
         conn.close()
 
@@ -182,8 +184,10 @@ class AuthPopup(CTkToplevel):
                 "user_id": user[0],
                 "username": user[1],
                 "first_name": user[2],
-                "role": "user",
-                "profile_pic": user[3] if user[3] else "assets/profile.jpg"
+                "last_name": user[3],
+                "profile_pic": user[4] if user[4] else "assets/profile.jpg",
+                "password": user[5],
+                "role": "user"
             }
             save_session(self.app.current_user, remember)
             self._post_login()

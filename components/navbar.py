@@ -56,7 +56,7 @@ class Navbar(CTkFrame):
             self.create_nav_button("History", "History", 4)
 
             first_name = user['username'].split()[0].capitalize()
-            image_path = user.get("profile_pic", "assets/profile.jpg")
+            image_path = user.get("profile_pic", "assets/profile.png")
 
             self.profile_button = ProfileButton(
                 self, self.app,

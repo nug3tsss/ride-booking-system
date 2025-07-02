@@ -21,7 +21,7 @@ def load_session():
         with open(SESSION_FILE, "r") as f:
             data = json.load(f)
 
-        # If remember_me was False, timestamp is 0 (session invalid after closing)
+        # If remember_me was False, timestamp is 0 (session ends after closing)
         if data.get("timestamp", 0) == 0:
             return None
 
@@ -37,3 +37,20 @@ def load_session():
 def clear_session():
     if os.path.exists(SESSION_FILE):
         os.remove(SESSION_FILE)
+
+def update_session(new_user_data):
+    """Update the session without changing the timestamp."""
+    if not os.path.exists(SESSION_FILE):
+        return
+
+    try:
+        with open(SESSION_FILE, "r") as f:
+            data = json.load(f)
+
+        # Update the user data while keeping the same timestamp
+        data["user"] = new_user_data
+
+        with open(SESSION_FILE, "w") as f:
+            json.dump(data, f)
+    except:
+        pass  # Optional: log error or warning

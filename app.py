@@ -24,10 +24,10 @@ class App(CTk):
         self.geometry("900x600")
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
 
-        self.booking_information_manager = BookingInformationManager()
-
         self.current_user = None
         self.logout_popup = None
+
+        self.booking_information_manager = BookingInformationManager()
 
         # Grid layout configuration
         self.grid_rowconfigure(1, weight=1)

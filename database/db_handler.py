@@ -18,7 +18,7 @@ def initialize_database():
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
                 role TEXT NOT NULL DEFAULT 'user',
-                profile_pic TEXT DEFAULT 'assets/profile.jpg'
+                profile_pic TEXT DEFAULT 'assets/profile.png'
             );
             """)
 
