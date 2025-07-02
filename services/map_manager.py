@@ -33,7 +33,7 @@ class MapManager():
         if self.__pickup_marker is not None:
             self.__pickup_marker.delete()
         
-        self.__pickup_marker = self.__booking_map.set_marker(coords[0], coords[1], text="Pick-up destination")
+        self.__pickup_marker = self.__booking_map.set_marker(coords[0], coords[1], text="Pick-up", marker_color_circle="#4A628A", marker_color_outside="#6A9AB0")
         #self.__booking_information_manager.set_dropoff_address(self.__geolocator.reverse(coords))
         self.__booking_information_manager.set_pickup_coords(coords)
         self.__verify_markers()
@@ -48,7 +48,7 @@ class MapManager():
         if self.__dropoff_marker is not None:
             self.__dropoff_marker.delete()
         
-        self.__dropoff_marker = self.__booking_map.set_marker(coords[0], coords[1], text="Drop-off destination")
+        self.__dropoff_marker = self.__booking_map.set_marker(coords[0], coords[1], text="Drop-off", marker_color_circle="#16423C", marker_color_outside="#6A9C89")
         #self.__booking_information_manager.set_dropoff_address(self.__geolocator.reverse(coords))
         self.__booking_information_manager.set_dropoff_coords(coords)
         self.__verify_markers()
@@ -112,10 +112,10 @@ class MapManager():
         __route_line = self.__booking_information_manager.get_route_line()
 
         if __pickup is not None:
-            self.__pickup_marker = self.__booking_map.set_marker(__pickup[0], __pickup[1], text="Pick-up destination")
+            self.__pickup_marker = self.__booking_map.set_marker(__pickup[0], __pickup[1], text="Pick-up", marker_color_circle="#4A628A", marker_color_outside="#6A9AB0")
         
         if __dropoff is not None:
-            self.__dropoff_marker = self.__booking_map.set_marker(__dropoff[0], __dropoff[1], text="Drop-off destination")
+            self.__dropoff_marker = self.__booking_map.set_marker(__dropoff[0], __dropoff[1], text="Drop-off", marker_color_circle="#16423C", marker_color_outside="#6A9C89")
         
         if __bounding_box != ():
             self.__booking_map.fit_bounding_box(__bounding_box[0], __bounding_box[1])
