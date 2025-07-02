@@ -3,6 +3,7 @@ from tkintermapview import *
 
 from components.booking_form import BookingForm
 from components.booking_map import BookingMap
+from components.booking_summary_map import BookingSummaryMap
 
 class BookingPage(CTkFrame):
     """
@@ -44,7 +45,7 @@ class BookingPage(CTkFrame):
 
         self.__summary_form = CTkFrame(self.__booking_inner_frame)
         self.__summary_form.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
-        self.__summary_map = BookingMap(self.__booking_inner_frame, self.__booking_information_manager)
+        self.__summary_map = BookingSummaryMap(self.__booking_inner_frame, self.__booking_information_manager)
 
     def __display_current_section(self):
         if self.__current_section == "Booking":
@@ -54,8 +55,9 @@ class BookingPage(CTkFrame):
 
     def __change_section(self):
         if self.__current_section == "Booking":
-            self.__remove_current_section()
-            self.__display_summary_section()
+            if self.__can_go_next_page():
+                self.__remove_current_section()
+                self.__display_summary_section()
         elif self.__current_section == "Summary":
             self.__remove_current_section()
             self.__display_booking_section()
@@ -64,3 +66,13 @@ class BookingPage(CTkFrame):
         if self.__booking_inner_frame.winfo_children():
             for widget in self.__booking_inner_frame.winfo_children():
                 widget.destroy()
+    
+    def __can_go_next_page(self):
+        __pickup = self.__booking_information_manager.get_pickup_coords()
+        __dropoff = self.__booking_information_manager.get_dropoff_coords()
+        __vehicle_type = self.__booking_information_manager.get_vehicle_type_int()
+
+        if __pickup is not None and __dropoff is not None and __vehicle_type is not None:
+            return True
+        else:
+            return False

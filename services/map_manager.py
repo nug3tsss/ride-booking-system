@@ -23,6 +23,8 @@ class MapManager():
         self.__booking_map.set_zoom(16)
         self.__booking_map.add_right_click_menu_command(label="Select destination as pick-up", command=self.__draw_pickup_marker, pass_coords=True)
         self.__booking_map.add_right_click_menu_command(label="Select destination as drop-off", command=self.__draw_dropoff_marker, pass_coords=True)
+        self.__booking_map.add_right_click_menu_command(label="Remove pick-up marker", command=self.__remove_pickup_marker)
+        self.__booking_map.add_right_click_menu_command(label="Remove drop-off marker", command=self.__remove_dropoff_marker)
         self.__booking_map.pack(expand=True, fill="both", padx=15, pady=15)
 
         self.__restore_information_from_previous()
@@ -36,6 +38,12 @@ class MapManager():
         self.__booking_information_manager.set_pickup_coords(coords)
         self.__verify_markers()
     
+    def __remove_pickup_marker(self):
+        if self.__pickup_marker is not None:
+            self.__pickup_marker.delete()
+            self.__pickup_marker = None
+            self.__booking_map.delete_all_path()
+    
     def __draw_dropoff_marker(self, coords):
         if self.__dropoff_marker is not None:
             self.__dropoff_marker.delete()
@@ -44,6 +52,12 @@ class MapManager():
         #self.__booking_information_manager.set_dropoff_address(self.__geolocator.reverse(coords))
         self.__booking_information_manager.set_dropoff_coords(coords)
         self.__verify_markers()
+    
+    def __remove_dropoff_marker(self):
+        if self.__dropoff_marker is not None:
+            self.__dropoff_marker.delete()
+            self.__dropoff_marker = None
+            self.__booking_map.delete_all_path()
     
     def __verify_markers(self):
         if self.__pickup_marker is not None and self.__dropoff_marker is None:
@@ -101,7 +115,7 @@ class MapManager():
             self.__pickup_marker = self.__booking_map.set_marker(__pickup[0], __pickup[1], text="Pick-up destination")
         
         if __dropoff is not None:
-            self.__dropoff_marker = self.__booking_map.set_marker(__dropoff[0], __dropoff[1], text="Pick-up destination")
+            self.__dropoff_marker = self.__booking_map.set_marker(__dropoff[0], __dropoff[1], text="Drop-off destination")
         
         if __bounding_box != ():
             self.__booking_map.fit_bounding_box(__bounding_box[0], __bounding_box[1])

@@ -1,5 +1,6 @@
 from tkintermapview import *
 from customtkinter import *
+from tkinter import *
 
 from services.map_manager import MapManager
 

@@ -6,7 +6,8 @@ class BookingInformationManager():
     def __init__(self):
         self.__pickup_coords = None
         self.__dropoff_coords = None
-        self.__vehicle_type = None
+        self.__vehicle_type_str = ""
+        self.__vehicle_type_int = None
         self.__pickup_address = ""
         self.__dropoff_address = ""
         self.__route_line = []
@@ -26,8 +27,11 @@ class BookingInformationManager():
     def set_dropoff_address(self, address=""):
         self.__dropoff_address = address
     
-    def set_vehicle_information(self, vehicle_type=None):
-        self.__vehicle_type = vehicle_type
+    def set_vehicle_type_str(self, vehicle_type_str=""):
+        self.__vehicle_type_str = vehicle_type_str
+    
+    def set_vehicle_type_int(self, vehicle_type_int=None):
+        self.__vehicle_type_int = vehicle_type_int
     
     def set_route_line(self, route_line=[]):
         self.__route_line = route_line
@@ -50,8 +54,11 @@ class BookingInformationManager():
     def get_dropoff_address(self):
         return self.__dropoff_address
         
-    def get_vehicle_information(self):
-        return self.__vehicle_type
+    def get_vehicle_type_str(self):
+        return self.__vehicle_type_str
+    
+    def get_vehicle_type_int(self):
+        return self.__vehicle_type_int
     
     def get_route_line(self):
         return self.__route_line
@@ -67,7 +74,8 @@ class BookingInformationManager():
 
         self.__pickup_coords = None
         self.__dropoff_coords = None
-        self.__vehicle_type = None
+        self.__vehicle_type_str = ""
+        self.__vehicle_type_int = None
         self.__pickup_address = ""
         self.__dropoff_address = ""
         self.__route_line = []

@@ -22,6 +22,7 @@ class BookingForm(CTkScrollableFrame):
 
         self.__create_form_labels()
         self.__create_form_entries()
+        self.__create_import_button()
         self.__bind_form_entry_events()
 
         self.__restore_information_from_previous()
@@ -53,18 +54,38 @@ class BookingForm(CTkScrollableFrame):
         self.__select_dropoff_entry.pack(fill="x", pady=15, padx=15)
 
         self.__vehicle_var = IntVar(value=0)
-        self.__vehicle1 = CTkRadioButton(self.__select_vehicle_frame, text="Vehicle 1", variable=self.__vehicle_var, value=1)
+        self.__vehicle1 = CTkRadioButton(self.__select_vehicle_frame, text="Car (4-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=1)
         self.__vehicle1.pack(fill="x", pady=15, padx=15)
 
-        self.__vehicle2 = CTkRadioButton(self.__select_vehicle_frame, text="Vehicle 2", variable=self.__vehicle_var, value=2)
+        self.__vehicle2 = CTkRadioButton(self.__select_vehicle_frame, text="Van (12-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=2)
         self.__vehicle2.pack(fill="x", pady=15, padx=15)
 
-        self.__vehicle3 = CTkRadioButton(self.__select_vehicle_frame, text="Vehicle 3", variable=self.__vehicle_var, value=3)
+        self.__vehicle3 = CTkRadioButton(self.__select_vehicle_frame, text="Motorcycle (2-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=3)
         self.__vehicle3.pack(fill="x", pady=15, padx=15)
+    
+    def __create_import_button(self):
+        self.__import_button = CTkButton(self, text="Import booking", command=self.__import_booking_from_file)
+        self.__import_button.pack(fill="x", pady=15, padx=15)
+    
+    def __import_booking_from_file(self):
+        print("YOU GOT NO FILE")
 
     def __bind_form_entry_events(self):
         self.__select_pickup_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_pickup_entry, event))
         self.__select_dropoff_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_dropoff_entry, event))
+
+    def __set_vehicle_type(self):
+        __vehicle_type_int = self.__vehicle_var.get()
+
+        if __vehicle_type_int == 1:
+            __vehicle_type_str = "Car"
+        elif __vehicle_type_int == 2:
+            __vehicle_type_str = "Van"
+        elif __vehicle_type_int == 3:
+            __vehicle_type_str = "Motorcycle"
+
+        self.__booking_information_manager.set_vehicle_type_str(__vehicle_type_str)
+        self.__booking_information_manager.set_vehicle_type_int(__vehicle_type_int)
 
     def __on_key_released(self, form_entry_name, event):
         if self.__after_id:
@@ -141,9 +162,13 @@ class BookingForm(CTkScrollableFrame):
     def __restore_information_from_previous(self):
         __pickup = self.__booking_information_manager.get_pickup_address()
         __dropoff = self.__booking_information_manager.get_dropoff_address()
+        __vehicle_type = self.__booking_information_manager.get_vehicle_type_int()
 
         if __pickup != "":
             self.__select_pickup_entry.configure(placeholder_text=__pickup)
         
         if __dropoff != "":
             self.__select_dropoff_entry.configure(placeholder_text=__dropoff)
+        
+        if __vehicle_type is not None:
+            self.__vehicle_var.set(__vehicle_type)
