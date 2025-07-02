@@ -1,5 +1,5 @@
 from customtkinter import *
-from components.navbar import Navbar
+from PIL import Image, ImageOps
 
 class DashboardPage(CTkFrame):
     def __init__(self, master, app):
@@ -7,31 +7,67 @@ class DashboardPage(CTkFrame):
         self.__app = app
         self.__booking_information_manager = self.__app.booking_information_manager
 
-        # Adjust the size of the frames (currently 60% left, 40% right)
-        self.columnconfigure(0, weight=6)
-        self.columnconfigure(1, weight=4)
-        self.rowconfigure(0, weight=1)
+        # Configure the main grid
+        self.rowconfigure(1, weight=1)
+        self.columnconfigure(0, weight=1)
 
-        self.left_frame = CTkFrame(self)
-        self.left_frame.grid(row=0, column=0, sticky="nsew", padx=15, pady=15)
+        # Header label
+        self.welcome_label = CTkLabel(
+            self,
+            text="Welcome to Gethub!",
+            font=("Arial", 32, "bold"),
+            text_color="white"
+        )
+        self.welcome_label.grid(row=0, column=0, sticky="n", padx=30, pady=(30, 10))
 
-        self.right_frame = CTkFrame(self)
-        self.right_frame.grid(row=0, column=1, sticky="nsew", padx=15, pady=15)
+        # Load the original image once
+        self.original_image = Image.open("assets/dashboard_image.jpg")
 
-        # Add left frame contents
-        self.welcome_label = CTkLabel(self.left_frame, text="Welcome to Gethub!", font=("Arial", 32))
-        self.welcome_label.pack(anchor="w", padx=15, pady=15)
-        
-        self.picture_label = CTkLabel(self.left_frame, text="Picture Placeholder", font=("Arial", 16))
-        self.picture_label.pack(padx=15, pady=15)
+        # Placeholder image
+        self.dashboard_image = CTkImage(light_image=self.original_image, dark_image=self.original_image, size=(100, 100))
+        self.picture_label = CTkLabel(self, image=self.dashboard_image, text="")
+        self.picture_label.grid(row=1, column=0, sticky="nsew", padx=0, pady=10)  # No horizontal padding
 
-        self.book_your_ride_button = CTkButton(self.left_frame, text="Book your ride", command=self.go_to_booking_page)
-        self.book_your_ride_button.pack(anchor="w", side=BOTTOM, padx=15, pady=15)
+        # Book ride button
+        ride_icon = CTkImage(Image.open("assets/ride_icon-dark.png"), size=(24, 24))
+        self.book_your_ride_button = CTkButton(
+            self,
+            text="Book a ride now!",
+            font=("Arial", 16, "bold"),
+            width=220,
+            height=50,
+            corner_radius=10,
+            image=ride_icon,
+            fg_color="#1abc9c",
+            hover_color="#16a085",
+            text_color="white",
+            command=self.go_to_booking_page
+        )
+        self.book_your_ride_button.grid(row=2, column=0, pady=(20, 30))
 
-        # Add right frame contents
-        self.quotation_label = CTkLabel(self.right_frame, text="\"The best way to predict the future is to create it.\"", font=("Arial", 16))
-        self.quotation_label.pack(anchor="w", padx=15, pady=15)
-    
+        # Bind resize event
+        self.bind("<Configure>", self.resize_image)
+
+    def resize_image(self, event):
+        available_width = self.winfo_width()  # Full width, no padding subtraction
+        desired_height = 720
+
+        if available_width > 0:
+            # Resize and crop image to fill the width and crop vertically
+            fitted_image = ImageOps.fit(
+                self.original_image,
+                (available_width, desired_height),
+                method=Image.Resampling.LANCZOS,
+                centering=(0.5, 0.3)  # crop bias slightly upward if needed
+            )
+
+            self.dashboard_image = CTkImage(
+                light_image=fitted_image,
+                dark_image=fitted_image,
+                size=(available_width, desired_height)
+            )
+            self.picture_label.configure(image=self.dashboard_image)
+
     def go_to_booking_page(self):
         self.__booking_information_manager.clear_booking_information()
         self.__app.show_page("Booking")
