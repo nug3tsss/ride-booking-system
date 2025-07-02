@@ -14,7 +14,8 @@ class BookingPage(CTkFrame):
         super().__init__(master)
         self.pack(fill="both", expand=True)
 
-        self.__booking_information_manager = app.booking_information_manager
+        self.__app = app
+        self.__booking_information_manager = self.__app.booking_information_manager
 
         self.__booking_label = CTkLabel(self, text="", font=("Arial", 32))
         self.__booking_label.pack(anchor="w", padx=15, pady=15)
