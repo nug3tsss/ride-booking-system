@@ -72,7 +72,7 @@ class App(CTk):
         if page_name == "Dashboard":
             page = DashboardPage(self.container, self)
         elif page_name == "Booking":
-            page = BookingPage(self.container, self, self.booking_information_manager)
+            page = BookingPage(self.container, self)
         elif page_name == "Profile":
             page = ProfilePage(self.container, self)
         elif page_name == "History":

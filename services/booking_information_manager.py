@@ -4,19 +4,73 @@ class BookingInformationManager():
     """
 
     def __init__(self):
-        self.pickup_coords = None
-        self.dropoff_coords = None
-        self.vehicle_type = None
-        self.pickup_address = ""
-        self.dropoff_address = ""
+        self.__pickup_coords = None
+        self.__dropoff_coords = None
+        self.__vehicle_type = None
+        self.__pickup_address = ""
+        self.__dropoff_address = ""
+        self.__route_line = []
+        self.__bounding_box = ()
+
+        self.__current_booking_section = "Booking"
     
-    def set_pickup_information(self, coords=None, address=""):
-        self.pickup_coords = coords
-        self.pickup_address = address
+    def set_pickup_coords(self, coords=None):
+        self.__pickup_coords = coords
     
-    def set_dropoff_information(self, coords=None, address=""):
-        self.dropoff_coords = coords
-        self.dropoff_address = address
+    def set_pickup_address(self, address=""):
+        self.__pickup_address = address
+    
+    def set_dropoff_coords(self, coords=None):
+        self.__dropoff_coords = coords
+    
+    def set_dropoff_address(self, address=""):
+        self.__dropoff_address = address
     
     def set_vehicle_information(self, vehicle_type=None):
-        self.vehicle_type = vehicle_type
+        self.__vehicle_type = vehicle_type
+    
+    def set_route_line(self, route_line=[]):
+        self.__route_line = route_line
+    
+    def set_bounding_box(self, top_left, bottom_right):
+        self.__bounding_box = (top_left, bottom_right)
+    
+    def set_current_booking_section(self, booking_section):
+        self.__current_booking_section = booking_section
+
+    def get_pickup_coords(self):
+        return self.__pickup_coords
+    
+    def get_pickup_address(self):
+        return self.__pickup_address
+        
+    def get_dropoff_coords(self):
+        return self.__dropoff_coords
+        
+    def get_dropoff_address(self):
+        return self.__dropoff_address
+        
+    def get_vehicle_information(self):
+        return self.__vehicle_type
+    
+    def get_route_line(self):
+        return self.__route_line
+
+    def get_bounding_box(self):
+        return self.__bounding_box
+    
+    def get_current_booking_section(self):
+        return self.__current_booking_section
+    
+    def clear_booking_information(self):
+        print("BOOKING INFO HAS BEEN CLEARED")
+
+        self.__pickup_coords = None
+        self.__dropoff_coords = None
+        self.__vehicle_type = None
+        self.__pickup_address = ""
+        self.__dropoff_address = ""
+        self.__route_line = []
+        self.__bounding_box = ()
+
+        self.__current_booking_section = "Booking"
