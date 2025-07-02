@@ -1,10 +1,11 @@
-from database.db_handler import DatabaseHandler
-class BookingInformationManager():
+#from database.db_handler import DatabaseHandler
+class BookingInformationManager:
     """
     Gets data from MapManager for database and data persistence
     """
 
     def __init__(self, db_handler):
+        self.db = db_handler
         self.__pickup_coords = None
         self.__dropoff_coords = None
         self.__vehicle_type_str = ""
@@ -19,7 +20,7 @@ class BookingInformationManager():
         self.__estimated_cost_pesos = 0.0
         
 
-        self.db = db_handler
+        
         
         self.__current_booking_section = "Booking"
     
@@ -56,8 +57,7 @@ class BookingInformationManager():
             self.__vehicle_details = None
     
     def set_route_line(self, route_line=[]):
-        if route_line is []:
-            self.__route_line = route_line
+        self.__route_line = route_line
     
     def set_bounding_box(self, top_left, bottom_right):
         self.__bounding_box = (top_left, bottom_right)

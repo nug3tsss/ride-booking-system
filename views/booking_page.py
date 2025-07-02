@@ -14,9 +14,7 @@ class BookingPage(CTkFrame):
         super().__init__(master)
         self.pack(fill="both", expand=True)
 
-        self.__app = app
-        self.__booking_information_manager = self.__app.booking_information_manager
-        self.vehicle_info = {}
+        self.__booking_information_manager = app.booking_information_manager
         self.__booking_label = CTkLabel(self, text="", font=("Arial", 32))
         self.__booking_label.pack(anchor="w", padx=15, pady=15)
 
@@ -33,6 +31,7 @@ class BookingPage(CTkFrame):
         self.__booking_label.configure(text="Book your ride!")
         self.__current_section = "Booking"
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
+        
         self.__button.configure(text="Next")
 
         self.__booking_map = BookingMap(self.__booking_inner_frame, self.__booking_information_manager)
@@ -145,15 +144,14 @@ class BookingPage(CTkFrame):
         cost_frame = CTkFrame(self.__summary_form, corner_radius=15, fg_color=("#d8315b"))
         cost_frame.grid(row=4, column=1, sticky="ew", padx=20, pady=(0, 5))
 
-        CTkLabel(cost_frame, text="  Total Estimated Cost", 
-                font=("Arial", 18, "bold"), text_color="#70d6ff").grid(row=0, column=0, pady=(15, 5))
-        CTkLabel(cost_frame, text=f"₱ {estimated_cost_pesos:.2f}", 
-                font=("Arial", 28, "bold"), text_color="#70d6ff").grid(row=1, column=0, pady=(0, 15))
+        CTkLabel(cost_frame, text="  Total Estimated Cost", font=("Arial", 18, "bold"), text_color="#70d6ff").grid(row=0, column=0, pady=(15, 5))
+        CTkLabel(cost_frame, text=f"₱ {estimated_cost_pesos:.2f}", font=("Arial", 28, "bold"), text_color="#70d6ff").grid(row=1, column=0, pady=(0, 15))
 
         #Confirm Button Section
-        confirm_button = CTkButton(self.__summary_form, text="Confirm Booking", corner_radius=15, fg_color=("#d8315b"), width=250, height=100)
+        confirm_button = CTkButton(self.__summary_form, text="Confirm Booking", corner_radius=15, fg_color=("#d8315b"), width=150, height=100)
         confirm_button.grid(row=6, column=0, columnspan=2, pady=(20, 20), padx=20, sticky="ew")
     def __display_current_section(self):
+
         if self.__current_section == "Booking":
             self.__display_booking_section()
         elif self.__current_section == "Summary":
@@ -162,7 +160,7 @@ class BookingPage(CTkFrame):
     def __change_section(self):
         if self.__current_section == "Booking":
             if self.__can_go_next_page():
-                self.__booking_information_manager.get_estimated_cost()
+               #self.__booking_information_manager.get_estimated_cost()
                 self.__remove_current_section()
                 self.__display_summary_section()
 
@@ -171,9 +169,8 @@ class BookingPage(CTkFrame):
             self.__display_booking_section()
 
     def __remove_current_section(self):
-        if self.__booking_inner_frame.winfo_children():
-            for widget in self.__booking_inner_frame.winfo_children():
-                widget.destroy()
+        for widget in self.__booking_inner_frame.winfo_children():
+            widget.destroy()
     
     def __can_go_next_page(self):
         __pickup = self.__booking_information_manager.get_pickup_coords()
