@@ -2,6 +2,13 @@ import requests
 from geopy.geocoders import Nominatim
 
 class MapManager():
+    """
+    Handles everything tkintermapview-related:
+    - marker placements for pickup and dropoff locations
+    - route calculation and placement between two locations using OSRM
+    - supply and get information to/from BookingInformationManager for data persistence
+    """
+
     def __init__(self, booking_map, booking_information_manager):
         self._booking_map = booking_map
         self._booking_information_manager = booking_information_manager
@@ -38,17 +45,17 @@ class MapManager():
     
     def _verify_markers(self):
         if self._pickup_marker is not None and self._dropoff_marker is not None:
-            self._set_marker_coords()
-            self._set_marker_minmax_coords()
+            self._organize_marker_coords()
+            self._calculate_marker_minmax_coords()
             self._calculate_route_lines()
     
-    def _set_marker_coords(self):
+    def _organize_marker_coords(self):
         self._pickup_lat = self._pickup_marker.position[0]
         self._pickup_lon = self._pickup_marker.position[1]
         self._dropoff_lat = self._dropoff_marker.position[0]
         self._dropoff_lon = self._dropoff_marker.position[1]
     
-    def _set_marker_minmax_coords(self):
+    def _calculate_marker_minmax_coords(self):
         self._min_lat = min(self._pickup_lat, self._dropoff_lat)
         self._max_lat = max(self._pickup_lat, self._dropoff_lat)
         self._min_lon = min(self._pickup_lon, self._dropoff_lon)
@@ -78,18 +85,28 @@ class MapManager():
         if self._booking_information_manager.dropoff_coords is not None:
             self._draw_dropoff_marker(self._booking_information_manager.dropoff_coords)
     
-    def get_coords_from_address(self, address, marker_type):
+    def get_coords_from_address(self, address, marker_type, callback=None):
         location = self.geolocator.geocode(address)
 
         if location:
             coords = (location.latitude, location.longitude)
 
             if marker_type == "pickup":
-                self._booking_information_manager.pickup_address = address
+                location_obj = self.geolocator.reverse(coords)
+                full_address = location_obj.address
+                self._booking_information_manager.pickup_address = full_address
                 self._booking_information_manager.pickup_coords = coords
                 self._draw_pickup_marker(coords)
 
+                if callback:
+                    callback(full_address)
+
             elif marker_type == "dropoff":
-                self._booking_information_manager.dropoff_address = address
+                location_obj = self.geolocator.reverse(coords)
+                full_address = location_obj.address
+                self._booking_information_manager.dropoff_address = full_address
                 self._booking_information_manager.dropoff_coords = coords
                 self._draw_dropoff_marker(coords)
+
+                if callback:
+                    callback(full_address)

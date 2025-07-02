@@ -4,6 +4,10 @@ from customtkinter import *
 from services.map_manager import MapManager
 
 class BookingMap(CTkFrame):
+    """
+    Creates the BookingMap GUI and attaches a reference of it to the MapManager
+    """
+
     def __init__(self, master_frame, booking_information_manager):
         super().__init__(master_frame)
 
