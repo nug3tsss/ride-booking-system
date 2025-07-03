@@ -12,65 +12,69 @@ from components.navbar import Navbar
 from components.sidebar import Sidebar
 from components.logout_popup import LogoutPopup
 from config.styles import Styles
+from config.settings_manager import load_settings
 from utils.session_manager import load_session, clear_session
 from services.booking_information_manager import BookingInformationManager
 from database.db_handler import DatabaseHandler
 
+
 class App(CTk):
     def __init__(self):
         super().__init__()
+
+        # === Styling and Theme Setup ===
         self.styles = Styles()
+
+        settings = load_settings()
+        self.styles.theme = settings.get("theme_mode", "System")
+        self.styles.apply_mode(self.styles.theme)
+        set_appearance_mode(self.styles.theme.lower())
+
+        # === Window Configuration ===
         self.title("Gethub")
         self.geometry("900x600")
 
-        set_appearance_mode("dark")
         current_appearance_mode = get_appearance_mode()
         if current_appearance_mode == "dark":
             self.iconbitmap("assets/Logo-Dark-Transparent.ico")
         else:
             self.iconbitmap("assets/Logo-Light-Transparent.ico")
 
+<<<<<<< Updated upstream
         self.db = DatabaseHandler()
 
         self.current_user = None
+=======
+        # === Database & Session ===
+        self.db = DatabaseHandler()
+        self.db.initialize_database()
+        self.current_user = load_session()
+>>>>>>> Stashed changes
         self.logout_popup = None
-
         self.booking_information_manager = BookingInformationManager(self.db)
 
-        # Grid layout configuration
+        # === Grid Layout ===
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-        # Navbar
+        # === UI Components ===
         self.navbar = Navbar(self, app=self, styles=self.styles)
         self.navbar.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
-        # Container for pages
-        self.container = CTkFrame(self)
-        self.container.grid(row=1, column=1, sticky="nsew")
-
-        # Sidebar
         self.sidebar = Sidebar(self, styles=self.styles)
 
-        # Initialize pages dictionary
+        self.container = CTkFrame(self, fg_color=self.styles.colors["background"])
+        self.container.grid(row=1, column=1, sticky="nsew")
+
+        # === Initial Page Setup ===
         self.pages = {}
+        self.navbar.render_nav()
+        self.sidebar.render_sidebar()
+        self.show_page("Dashboard")
 
-        # Restore session if exists
-        self.current_user = load_session()
-        if self.current_user:
-            print("[SESSION] Restored session:", self.current_user)
-            self.navbar.render_nav()
-            self.sidebar.render_sidebar()
-            self.show_page("Dashboard")
-        else:
-            self.navbar.render_nav()
-            self.sidebar.render_sidebar()
-            self.show_page("Dashboard")
-
-        # Window close event
+        # === Window Close Event ===
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-    # Page Routing
     def show_page(self, page_name):
         for widget in self.container.winfo_children():
             widget.pack_forget()
@@ -99,15 +103,13 @@ class App(CTk):
         page.pack(fill="both", expand=True)
         self.pages[page_name] = page
 
-    # Logout Functionality
     def logout(self):
-        if hasattr(self, "logout_popup") and self.logout_popup and self.logout_popup.winfo_exists():
+        if self.logout_popup and self.logout_popup.winfo_exists():
             self.logout_popup.lift()
             return
 
         self.logout_popup = LogoutPopup(self, self._confirm_logout)
 
-    # Confirm Logout
     def _confirm_logout(self):
         clear_session()
         self.current_user = None
@@ -119,6 +121,5 @@ class App(CTk):
             self.logout_popup.destroy()
             self.logout_popup = None
 
-    # Window close event handler
     def on_closing(self):
         self.destroy()
