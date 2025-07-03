@@ -7,7 +7,7 @@ class AboutPage(CTkFrame):
 
         self.app = app
 
-        self.original_image = Image.open("assets/user_8_profile.png")
+        self.original_image = Image.open("assets/about_image.jpg")
         self.about_image = CTkImage(light_image=self.original_image, dark_image=self.original_image, size=(100, 100))
 
         self.bind("<Configure>", self.resize_image)
@@ -99,7 +99,7 @@ class AboutPage(CTkFrame):
                 self.original_image,
                 (available_width, desired_height),
                 method=Image.Resampling.LANCZOS,
-                centering=(0.5, 0.3)  # crop bias slightly upward if needed
+                centering=(0.5, 0.45)
             )
 
             self.about_image = CTkImage(
