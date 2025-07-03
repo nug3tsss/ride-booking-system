@@ -52,6 +52,17 @@ class DatabaseHandler:
                         FOREIGN KEY (vehicle_id) REFERENCES vehicles(id)
                     );
                 """)
+
+                conn.execute("""
+                    CREATE TABLE IF NOT EXISTS messages (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        email TEXT NOT NULL,
+                        message TEXT NOT NULL,
+                        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+                """)
+
                 conn.commit()
                 print("[DB INFO] Database tables created successfully.")
                 self.populate_initial_vehicles()

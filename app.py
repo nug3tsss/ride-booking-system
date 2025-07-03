@@ -46,10 +46,7 @@ class App(CTk):
         # Sidebar
         self.sidebar = Sidebar(self, styles=self.styles)
 
-        # Scrollbar
-        self.scrollbar = CTkScrollbar(self.container, orientation="vertical")
-        self.scrollbar.pack(side="right", fill="y")
-
+        # Initialize pages dictionary
         self.pages = {}
 
         # Restore session if exists
@@ -67,6 +64,7 @@ class App(CTk):
         # Window close event
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
+    # Page Routing
     def show_page(self, page_name):
         for widget in self.container.winfo_children():
             widget.pack_forget()
@@ -95,6 +93,7 @@ class App(CTk):
         page.pack(fill="both", expand=True)
         self.pages[page_name] = page
 
+    # Logout Functionality
     def logout(self):
         if hasattr(self, "logout_popup") and self.logout_popup and self.logout_popup.winfo_exists():
             self.logout_popup.lift()
@@ -102,8 +101,9 @@ class App(CTk):
 
         self.logout_popup = LogoutPopup(self, self._confirm_logout)
 
+    # Confirm Logout
     def _confirm_logout(self):
-        clear_session()  # 💾 Clear the session file
+        clear_session()
         self.current_user = None
         self.navbar.render_nav()
         self.sidebar.render_sidebar()
@@ -113,5 +113,6 @@ class App(CTk):
             self.logout_popup.destroy()
             self.logout_popup = None
 
+    # Window close event handler
     def on_closing(self):
         self.destroy()
