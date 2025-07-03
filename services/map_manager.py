@@ -52,9 +52,10 @@ class MapManager():
             self.__booking_map.delete_all_path()
     
     def __reverse_geocode_pickup(self, coords):
-        address = self.__geolocator.reverse(coords)
-        if address:
-            self.__booking_information_manager.set_pickup_address(address)
+        location_obj = self.__geolocator.reverse(coords)
+        if location_obj:
+            full_address = location_obj.address
+            self.__booking_information_manager.set_pickup_address(full_address)
 
     def __draw_dropoff_marker(self, coords):
         if self.__dropoff_marker is not None:
@@ -72,9 +73,11 @@ class MapManager():
             self.__booking_map.delete_all_path()
     
     def __reverse_geocode_dropoff(self, coords):
-        address = self.__geolocator.reverse(coords)
-        if address:
-            self.__booking_information_manager.set_dropoff_address(address)
+        location_obj = self.__geolocator.reverse(coords) # This returns a geopy.Location object
+        if location_obj:
+            # Extract the string address from the geopy.Location object
+            full_address = location_obj.address
+            self.__booking_information_manager.set_dropoff_address(full_address)
 
     def __verify_markers(self):
         if self.__pickup_marker is not None and self.__dropoff_marker is None:
