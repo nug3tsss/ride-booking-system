@@ -22,7 +22,15 @@ class App(CTk):
         self.styles = Styles()
         self.title("Gethub")
         self.geometry("900x600")
-        self.iconbitmap("assets/Logo-Dark-Transparent.ico")
+
+        set_appearance_mode("light")
+        current_appearance_mode = get_appearance_mode()
+        if current_appearance_mode == "dark":
+            self.iconbitmap("assets/Logo-Dark-Transparent.ico")
+        else:
+            self.iconbitmap("assets/Logo-Light-Transparent.ico")
+
+        
 
         self.db = DatabaseHandler()
         self.db.initialize_database()

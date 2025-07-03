@@ -34,8 +34,8 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(self.card, fg_color="transparent")
         btn_frame.grid(row=6, column=0, columnspan=3, pady=(20, 5))
 
-        save_icon = CTkImage(Image.open("assets/save_icon-dark.png"), size=(16, 16))
-        cancel_icon = CTkImage(Image.open("assets/cancel_icon-dark.png"), size=(16, 16))
+        save_icon = CTkImage(light_image=Image.open("assets/save_icon-light.png"), dark_image=Image.open("assets/save_icon-dark.png"), size=(16, 16))
+        cancel_icon = CTkImage(light_image=Image.open("assets/cancel_icon-light.png"), dark_image=Image.open("assets/cancel_icon-dark.png"), size=(16, 16))
 
         self.save_btn = CTkButton(btn_frame, text="Save Changes", fg_color="#444444", state=DISABLED,
                                   image=save_icon, compound="left", command=self.save_all_changes)
@@ -45,7 +45,7 @@ class ProfilePage(CTkFrame):
                                     image=cancel_icon, compound="left", command=self.cancel_all_changes)
         self.cancel_btn.pack(side="left", padx=10)
 
-        self.delete_icon = CTkImage(Image.open("assets/delete_icon-dark.png"), size=(16, 16))
+        self.delete_icon = CTkImage(light_image=Image.open("assets/delete_icon-light.png"), dark_image=Image.open("assets/delete_icon-dark.png"), size=(16, 16))
         CTkButton(self.card, text="Delete Account", fg_color="#9b1b1b", hover_color="#7f1515",
                   image=self.delete_icon, compound="left", command=self.confirm_delete
                   ).grid(row=7, column=0, columnspan=3, pady=10)
@@ -58,8 +58,8 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(self.card, fg_color="transparent")
         btn_frame.grid(row=1, column=0, columnspan=3, pady=(0, 20))
 
-        change_icon = CTkImage(Image.open("assets/change_icon-dark.png"), size=(16, 16))
-        remove_icon = CTkImage(Image.open("assets/remove_icon-dark.png"), size=(16, 16))
+        change_icon = CTkImage(light_image=Image.open("assets/change_icon-light.png"), dark_image=Image.open("assets/change_icon-dark.png"), size=(16, 16))
+        remove_icon = CTkImage(light_image=Image.open("assets/remove_icon-light.png"), dark_image=Image.open("assets/remove_icon-dark.png"), size=(16, 16))
 
         CTkButton(btn_frame, text="Change Photo", image=change_icon, compound="left",
                   command=self.change_picture).pack(side="left", padx=5)
@@ -102,7 +102,7 @@ class ProfilePage(CTkFrame):
         entry_widget.grid(row=row, column=1, padx=(5, 5), sticky="w")
         entry_widget.grid_remove()
 
-        edit_icon = CTkImage(Image.open("assets/edit_icon-dark.png"), size=(16, 16))
+        edit_icon = CTkImage(light_image=Image.open("assets/edit_icon-light.png"), dark_image=Image.open("assets/edit_icon-dark.png"), size=(16, 16))
         edit_btn = CTkButton(self.card, text="Edit", width=80, image=edit_icon, compound="left",
                              command=lambda: self.toggle_field(attr))
         edit_btn.grid(row=row, column=2, padx=(5, 0), sticky="w")
@@ -146,7 +146,7 @@ class ProfilePage(CTkFrame):
     def create_password_button(self, row):
         CTkLabel(self.card, text="Password:", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(0, 5), pady=4)
         CTkLabel(self.card, text="********", anchor="w").grid(row=row, column=1, padx=(5, 5), sticky="w")
-        CTkButton(self.card, width=100, text="Change", image=CTkImage(Image.open("assets/password_icon-dark.png"), size=(16, 16)),
+        CTkButton(self.card, width=100, text="Change", image=CTkImage(light_image=Image.open("assets/password_icon-light.png"), dark_image=Image.open("assets/password_icon-dark.png"), size=(16, 16)),
                   compound="left", command=self.show_password_popup).grid(row=row, column=2, padx=(5, 50), sticky="w")
 
     def show_password_popup(self):

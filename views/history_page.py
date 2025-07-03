@@ -5,6 +5,11 @@ from datetime import datetime
 from tkinter import messagebox, filedialog
 from PIL import Image
 import json
+from database.db_handler import DatabaseHandler
+from datetime import datetime
+from tkinter import messagebox, filedialog
+from PIL import Image
+import json
 
 class HistoryPage(CTkFrame):
     def __init__(self, master, app):
@@ -13,12 +18,15 @@ class HistoryPage(CTkFrame):
         self.pack(fill="both", expand=True)
 
         self.db_handler = DatabaseHandler()
+        self.download_icon = CTkImage(light_image=Image.open("assets/download_icon-light.png"), dark_image=Image.open("assets/download_icon-dark.png"))
+        # Title
+        self.db_handler = DatabaseHandler()
 
         # Load the download icon
         self.download_icon = CTkImage(Image.open("assets/download-icon-light.png"), size=(20, 20))
 
         # Title
-        CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold")).pack(pady=20)
+        CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold", "bold")).pack(pady=20)
 
         # Create main container for the table
         self.table_container = CTkFrame(self, fg_color="transparent")
