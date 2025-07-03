@@ -1,18 +1,19 @@
 from customtkinter import *
 from tkintermapview import *
+from tkinter import messagebox
 
 from components.booking_form import BookingForm
 from components.booking_map import BookingMap
 from components.booking_summary_map import BookingSummaryMap
 
 class BookingPage(CTkFrame):
-    """
-    Stores booking form, booking map, and booking summary and confirmation
-    """
+    """Stores booking form, booking map, and booking summary and confirmation"""
 
     def __init__(self, master, app):
         super().__init__(master)
         self.pack(fill="both", expand=True)
+
+        self.__app = app
 
         self.__booking_information_manager = app.booking_information_manager
         self.__booking_label = CTkLabel(self, text="", font=("Arial", 32))
@@ -35,8 +36,8 @@ class BookingPage(CTkFrame):
         self.__button.configure(text="Next")
 
         self.__booking_map = BookingMap(self.__booking_inner_frame, self.__booking_information_manager)
-        self.__booking_form = BookingForm(self.__booking_inner_frame, self.__booking_map.get_map_manager_instance(), self.__booking_information_manager)
-    
+        self.__booking_form = BookingForm(self.__app, self.__booking_inner_frame, self.__booking_map.get_map_manager_instance(), self.__booking_information_manager)
+
     def __display_summary_section(self):
         self.__booking_label.configure(text="")
         self.__current_section = "Summary"
@@ -44,7 +45,7 @@ class BookingPage(CTkFrame):
         self.__button.configure(text="Go Back")
 
         self.__summary_form = CTkFrame(self.__booking_inner_frame, corner_radius=15, fg_color=("#2d4059"))
-        self.__summary_form.pack(side=LEFT, fill="x", expand=True, padx=15, pady=15)
+        self.__summary_form.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
 
         self.__summary_form.grid_columnconfigure(0, weight=1)
         self.__summary_form.grid_columnconfigure(1, weight=2)
@@ -67,7 +68,7 @@ class BookingPage(CTkFrame):
 
         estimated_time_seconds = self.__booking_information_manager.get_estimated_time_seconds()
         estimated_time_minutes = int(estimated_time_seconds // 60)
-        estimated_cost_pesos = self.__booking_information_manager.get_estimated_cost_pesos()
+        estimated_cost_pesos = self.__booking_information_manager.get_estimated_cost()
 
         if vehicle_type_int is not None:
             vehicle_category = ""
@@ -150,6 +151,7 @@ class BookingPage(CTkFrame):
         #Confirm Button Section
         confirm_button = CTkButton(self.__summary_form, text="Confirm Booking", corner_radius=15, fg_color=("#d8315b"), width=150, height=100)
         confirm_button.grid(row=6, column=0, columnspan=2, pady=(20, 20), padx=20, sticky="ew")
+    
     def __display_current_section(self):
 
         if self.__current_section == "Booking":
@@ -180,4 +182,5 @@ class BookingPage(CTkFrame):
         if __pickup is not None and __dropoff is not None and __vehicle_type is not None:
             return True
         else:
+            messagebox.showwarning("WARNING!", "Please input all required fields before proceeding!")
             return False

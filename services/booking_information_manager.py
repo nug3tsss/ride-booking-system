@@ -133,8 +133,6 @@ class BookingInformationManager:
                 return self.__estimated_cost_pesos # Return the calculated value
     
     def clear_booking_information(self):
-        print("BOOKING INFO HAS BEEN CLEARED")
-
         self.__pickup_coords = None
         self.__dropoff_coords = None
         self.__vehicle_type_str = ""
