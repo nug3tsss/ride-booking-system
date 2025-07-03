@@ -1,4 +1,6 @@
 from customtkinter import *
+from tkinter import *
+from database.db_handler import DatabaseHandler
 
 class BookingSummaryForm(CTkFrame):
     """Contains booking summary from BookingForm with confirmation button"""
@@ -12,9 +14,13 @@ class BookingSummaryForm(CTkFrame):
         self.grid_columnconfigure(2, weight=1)
 
         self.__booking_information_manager = booking_information_manager
+        self.__db_handler = DatabaseHandler()
 
         self.__booking_after_ids = []
+        
         self.__is_booking_in_progress = False
+
+        self.__current_booking_id = None
 
         self.__retrieve_booking_informations()
         self.__calculate_time_in_mins()
@@ -28,8 +34,8 @@ class BookingSummaryForm(CTkFrame):
         self.__create_confirm_button()
 
     def __retrieve_booking_informations(self):
-        self.__pickup_address = self.__booking_information_manager.get_pickup_address()
-        self.__dropoff_address = self.__booking_information_manager.get_dropoff_address()
+        self.__pickup_address = (self.__booking_information_manager.get_pickup_address())
+        self.__dropoff_address = (self.__booking_information_manager.get_dropoff_address())
         self.__vehicle_type_str = self.__booking_information_manager.get_vehicle_type_str()
         self.__vehicle_type_int = self.__booking_information_manager.get_vehicle_type_int()
         self.__vehicle_details = self.__booking_information_manager.get_vehicle_details()
@@ -114,7 +120,34 @@ class BookingSummaryForm(CTkFrame):
     def __confirm_booking(self):
         if self.__is_booking_in_progress:
             return
+        
+        pickup = self.__booking_information_manager.get_pickup_address()
+        destination = self.__booking_information_manager.get_dropoff_address()
+        vehicle_details = self.__booking_information_manager.get_vehicle_details()
+        distance_km = self.__booking_information_manager.get_distance_km()
+        estimated_cost = self.__booking_information_manager.get_estimated_cost()
+        
+        vehicle_id = vehicle_details.get('id')
 
+        user_name = "Guest"
+        if hasattr(self.master.master.master, 'app') and self.master.master.master.app.current_user:
+            user_name = self.master.master.master.app.current_user.get('username', 'Guest')
+
+        self.__current_booking_id = self.__db_handler.add_booking(
+            name=user_name,
+            pickup=pickup,
+            destination=destination,
+            vehicle_id=vehicle_id,
+            distance_km=distance_km,
+            estimated_cost=estimated_cost
+        )
+
+        if self.__current_booking_id is None:
+            print("Error", "Failed to create booking in the database.")
+            return
+        
+        print("Booking Initiated", f"Booking ID {self.__current_booking_id} has been initiated.")
+        
         self.__is_booking_in_progress = True
         self.__confirm_button.configure(text="Cancel Booking", command=self.__cancel_booking_process)
 
@@ -128,6 +161,9 @@ class BookingSummaryForm(CTkFrame):
         self.__booking_after_ids.append(finding_id)
 
     def __driver_found(self):
+        if self.__current_booking_id:
+            self.__db_handler.complete_booking(self.__current_booking_id)
+            print("Booking Complete", f"Booking ID {self.__current_booking_id} is now completed!")
         self.__title_label.configure(text="Driver found!")
         self.__vehicle_frame.grid(row=4, column=0, columnspan=3, sticky="ew", padx=20, pady=85)
 
@@ -141,6 +177,7 @@ class BookingSummaryForm(CTkFrame):
 
         self.__is_booking_in_progress = False
         self.__booking_after_ids.clear()
+        self.__current_booking_id = None
 
     def __cancel_booking_process(self):
         for after_id in self.__booking_after_ids:
@@ -149,11 +186,22 @@ class BookingSummaryForm(CTkFrame):
         self.__booking_after_ids.clear()
         self.__is_booking_in_progress = False
 
+
+        #Mark ooking as cancelled in the database
+        if self.__current_booking_id:
+            self.__db_handler.cancel_booking(self.__current_booking_id)
+            print("Booking Cancelled", f"Booking ID {self.__current_booking_id} has been cancelled.")
+            self.__current_booking_id = None # Reset current booking ID
+
         self.__title_label.configure(text="Booking summary")
         self.__confirm_button.configure(text="Confirm Booking", command=self.__confirm_booking)
 
     def __cancel_booking(self):
-        print("Booking cancelled.")
+        if self.__current_booking_id:
+            self.__db_handler.cancel_booking(self.__current_booking_id)
+            messagebox.showinfo("Booking Cancelled", f"Booking ID {self.__current_booking_id} has been cancelled.")
+            self.__current_booking_id = None
 
     def __go_to_your_bookings(self):
         print("Navigating to your bookings.")
+        self.master.master.master.app.show_page("History")
