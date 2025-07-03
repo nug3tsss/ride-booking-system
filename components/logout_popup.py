@@ -1,6 +1,8 @@
 from customtkinter import *
 
 class LogoutPopup(CTkToplevel):
+    """Popup for user logout"""
+
     def __init__(self, app, confirm_callback):
         super().__init__(app)
         self.app = app

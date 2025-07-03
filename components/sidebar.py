@@ -3,6 +3,8 @@ from components.logout_popup import LogoutPopup
 from utils.session_manager import clear_session
 
 class Sidebar(CTkFrame):
+    """Displays the sidebar that contains the settings, about us, and contact us"""
+
     def __init__(self, master, styles=None):
         super().__init__(master)
         self.app = master

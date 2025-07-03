@@ -7,6 +7,8 @@ import datetime
 import re
 
 class ContactForm(CTkFrame):
+    """Displys contact form for users to connect with the developers"""
+
     def __init__(self, master, app):
         super().__init__(master, fg_color="transparent")
         self.app = app
@@ -15,7 +17,7 @@ class ContactForm(CTkFrame):
         self.prefilled_name = session_user["name"] if session_user and "name" in session_user else ""
 
         # Load send icon
-        self.send_icon = CTkImage(Image.open("assets/send_icon-dark.png"), size=(20, 20))
+        self.send_icon = CTkImage(light_image=Image.open("assets/send_icon-dark.png"), dark_image=Image.open("assets/send_icon-dark.png"), size=(20, 20))
 
         # Heading
         self.heading_label = CTkLabel(self, text="Send us a message", font=("Arial", 28, "bold"))

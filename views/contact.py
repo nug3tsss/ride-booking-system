@@ -13,7 +13,7 @@ class ContactPage(CTkFrame):
 
         # Top banner image
         self.original_image = Image.open("assets/contact_image.jpg")
-        self.contact_image = CTkImage(light_image=self.original_image, dark_image=self.original_image, size=(100, 100))
+        self.contact_image = CTkImage(self.original_image, size=(100, 100))
 
         self.bind("<Configure>", self.resize_image)
         self.bind("<Configure>", self.adjust_wraplength, add="+")
@@ -61,9 +61,9 @@ class ContactPage(CTkFrame):
         info_frame.grid_columnconfigure((0, 2, 4), weight=1, uniform="info")
         info_frame.grid_columnconfigure((1, 3), weight=0)
 
-        def create_info_column(icon_path, label_text, detail_text):
+        def create_info_column(light_icon_path, dark_icon_path, label_text, detail_text):
             frame = CTkFrame(info_frame, fg_color="transparent")
-            icon = CTkImage(Image.open(icon_path), size=(48, 48))
+            icon = CTkImage(light_image=Image.open(light_icon_path), dark_image=Image.open(dark_icon_path), size=(48, 48))
 
             icon_label = CTkLabel(frame, image=icon, text="")
             icon_label.pack(pady=(0, 5))
@@ -77,9 +77,9 @@ class ContactPage(CTkFrame):
             return frame
 
         # Info columns
-        address_col = create_info_column("assets/location_icon-dark.png", "Address", "Sta. Mesa, Manila, PH")
-        phone_col = create_info_column("assets/phone_icon-dark.png", "Phone", "+63 912 345 6789")
-        email_col = create_info_column("assets/email_icon-dark.png", "Email", "gethub@catgroup.uk")
+        address_col = create_info_column("assets/location_icon-light.png", "assets/location_icon-dark.png", "Address", "Sta. Mesa, Manila, PH")
+        phone_col = create_info_column("assets/phone_icon-light.png", "assets/phone_icon-dark.png", "Phone", "+63 912 345 6789")
+        email_col = create_info_column("assets/email_icon-light.png", "assets/email_icon-dark.png", "Email", "gethub@catgroup.uk")
 
         # Layout with dividers
         address_col.grid(row=0, column=0, padx=40, pady=10)

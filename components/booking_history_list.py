@@ -1,26 +1,32 @@
-from customtkinter import *
-from components.booking_history_list import BookingHistoryList
 
-class HistoryPage(CTkFrame):
+from customtkinter import *
+from database.db_handler import DatabaseHandler
+from datetime import datetime
+from tkinter import messagebox, filedialog
+from PIL import Image
+import json
+from database.db_handler import DatabaseHandler
+from datetime import datetime
+from tkinter import messagebox, filedialog
+from PIL import Image
+import json
+
+class BookingHistoryList(CTkFrame):
+    """Displays booking history of specific user in table format"""
+
     def __init__(self, master, app):
-        super().__init__(master)
+        super().__init__(master, fg_color="transparent")
         self.app = app
-        self.pack(fill="both", expand=True)
+        self.pack(fill="both", expand=True, padx=20, pady=10)
 
         self.db_handler = DatabaseHandler()
-
-        # Load the download icon
-        self.download_icon = CTkImage(Image.open("assets/download-icon-light.png"), size=(20, 20))
+        self.download_icon = CTkImage(light_image=Image.open("assets/download_icon-light.png"), dark_image=Image.open("assets/download_icon-dark.png"))
 
         # Title
-        CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold")).pack(pady=20)
-
-        # Create main container for the table
-        self.table_container = CTkFrame(self, fg_color="transparent")
-        self.table_container.pack(fill="both", expand=True, padx=20, pady=10)
+        CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold", "bold")).pack(pady=20)
 
         # Create scrollable frame for the table
-        self.table_frame = CTkScrollableFrame(self.table_container, width=1000, height=500)
+        self.table_frame = CTkScrollableFrame(self, width=1000, height=500)
         self.table_frame.pack(fill="both", expand=True)
 
         # Load booking history

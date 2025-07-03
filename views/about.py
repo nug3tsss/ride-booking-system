@@ -10,10 +10,10 @@ class AboutPage(CTkFrame):
         self.scrollable_frame.pack(fill="both", expand=True)
 
         self.original_image = Image.open("assets/about_image.jpg")
-        self.about_image = CTkImage(light_image=self.original_image, dark_image=self.original_image, size=(100, 100))
+        self.about_image = CTkImage(self.original_image, size=(100, 100))
 
         self.logo_image = CTkImage(
-            light_image=Image.open("assets/logo-dark--transparent.png"),
+            light_image=Image.open("assets/logo-light--transparent.png"),
             dark_image=Image.open("assets/logo-dark--transparent.png"),
             size=(64, 64)
         )
@@ -118,7 +118,7 @@ class AboutPage(CTkFrame):
         draw.ellipse((0, 0) + image_raw.size, fill=255)
         circular_profile = ImageOps.fit(image_raw, image_raw.size, centering=(0.5, 0.5))
         circular_profile.putalpha(mask)
-        circular_profile = CTkImage(light_image=circular_profile, dark_image=circular_profile, size=(100, 100))
+        circular_profile = CTkImage(circular_profile, size=(100, 100))
 
         # Add top 4 members
         for i in range(4):

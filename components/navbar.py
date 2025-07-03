@@ -5,6 +5,8 @@ from components.profile_button import ProfileButton
 
 
 class Navbar(CTkFrame):
+    """Displays the navigation bar at the top of the app"""
+
     def __init__(self, master, app, styles=None):
         super().__init__(master)
         self.app = app

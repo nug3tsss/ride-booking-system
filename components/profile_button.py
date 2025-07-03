@@ -2,6 +2,8 @@ from customtkinter import CTkButton, CTkImage
 from PIL import Image, ImageDraw, ImageOps
 
 class ProfileButton(CTkButton):
+    """Displays the circular profile image of user"""
+
     def __init__(self, master, app, text="John Doe", image_path="assets/profile.jpg", **kwargs):
         self.app = app
         self.profile_image = self.create_profile_image(image_path)
@@ -30,4 +32,4 @@ class ProfileButton(CTkButton):
         draw.ellipse((0, 0) + profile_raw.size, fill=255)
         circular_profile = ImageOps.fit(profile_raw, profile_raw.size, centering=(0.5, 0.5))
         circular_profile.putalpha(mask)
-        return CTkImage(light_image=circular_profile, size=(40, 40))
+        return CTkImage(circular_profile, size=(40, 40))
