@@ -3,6 +3,14 @@ import sqlite3
 import os
 from datetime import datetime
 
+class BookingStatus:
+    ACTIVE = 'active'
+    CANCELLED = 'cancelled'
+    COMPLETED = 'completed'
+    PENDING = 'pending'
+    DRIVER_ASSIGNED = 'driver_assigned'
+    EN_ROUTE = 'en_route'
+    ARRIVED_PICKUP = 'arrived_pickup'
 
 class DatabaseHandler:
     def __init__(self):
@@ -12,11 +20,14 @@ class DatabaseHandler:
     def initialize_database(self):
         """Initialize database with proper schema"""
         try:
+            #Users table
             with get_connection() as conn:
                 conn.execute("PRAGMA foreign_keys = ON;")
+
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER DEFAULT 0,
                     username TEXT UNIQUE NOT NULL,
                     password TEXT NOT NULL,
                     first_name TEXT NOT NULL,
@@ -25,6 +36,7 @@ class DatabaseHandler:
                     profile_pic TEXT DEFAULT 'assets/profile.jpg'
                 );
                 """)
+            #vehicle table
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS vehicles (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,10 +49,11 @@ class DatabaseHandler:
                         per_km_rate REAL NOT NULL
                     );
                 """)
+                #booking Table
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS bookings (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT NOT NULL,
+                        user_id INTEGER NOT NULL,
                         pickup TEXT NOT NULL,
                         destination TEXT NOT NULL,
                         vehicle_id INTEGER,
@@ -96,15 +109,15 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to fetch vehicle details by type: {e}")
             return None
 
-    def add_booking(self, name: str, pickup: str, destination: str, vehicle_id: int, distance_km: float = 0.0, estimated_cost: float = 0.0) -> int | None:
+    def add_booking(self,user_id: int, pickup: str, destination: str, vehicle_id: int, distance_km: float = 0.0, estimated_cost: float = 0.0) -> int | None:
         """Insert a new booking record"""
         try:
             with get_connection() as conn:
                 cursor = conn.execute(
                     """INSERT INTO bookings
-                       (name, pickup, destination, vehicle_id, distance_km, estimated_cost)
+                       (user_id, pickup, destination, vehicle_id, distance_km, estimated_cost)
                        VALUES (?, ?, ?, ?, ?, ?);""",
-                    (name, pickup, destination, vehicle_id, distance_km, estimated_cost)
+                    (user_id, pickup, destination, vehicle_id, distance_km, estimated_cost)
                 )
                 conn.commit()
                 print(f"[DB INFO] Booking added successfully with ID: {cursor.lastrowid}")
@@ -112,32 +125,41 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to add booking: {e}")
             return None
-
-    def get_all_bookings(self) -> list:
-        """Fetch all bookings with vehicle details"""
+        
+    def get_bookings_by_user(self, user_id: int) -> list:
         try:
             with get_connection() as conn:
-                cursor = conn.execute("""
-                    SELECT
-                        b.id, b.name, b.pickup, b.destination,
-                        COALESCE(b.distance_km, 0.0) as distance_km,
-                        COALESCE(b.estimated_cost, 0.0) as estimated_cost,
-                        b.status, b.created_at, b.completed_at,
-                        COALESCE(v.type, 'Unknown') AS vehicle_type,
-                        COALESCE(v.model, 'Unknown') AS vehicle_model,
-                        COALESCE(v.license_plate, 'N/A') AS license_plate,
-                        COALESCE(v.driver_name, 'Unknown') AS driver_name,
-                        COALESCE(v.driver_contact, 'N/A') AS driver_contact
+                cursor = conn.execute(
+                    """SELECT b.*, v.type as vehicle_type, v.model as vehicle_model, v.license_plate, v.driver_name, v.driver_contact
                     FROM bookings b
-                    LEFT JOIN vehicles v ON b.vehicle_id = v.id
-                    ORDER BY b.created_at DESC;
-                """)
-                result = cursor.fetchall()
-                print(f"[DB INFO] Retrieved {len(result)} bookings")
-                return result
+                    JOIN vehicles v ON b.vehicle_id = v.id
+                    WHERE b.user_id = ?
+                    ORDER BY b.created_at DESC;""",
+                    (user_id,)
+                )
+                bookings = [dict(row) for row in cursor.fetchall()]
+
+                print(f"[DB DEBUG] Found {len(bookings)} bookings for user_id {user_id}")
+
+                return bookings
         except sqlite3.Error as e:
-            print(f"[DB ERROR] Failed to fetch bookings: {e}")
+            print(f"[DB ERROR] Failed to fetch bookings for user: {e}")
             return []
+
+    def update_booking_status(self, booking_id: int, status: str) -> int:
+        try:
+            with get_connection() as conn:
+                cursor = conn.execute(
+                    "UPDATE bookings SET status = ? WHERE id = ?;",
+                    (status, booking_id)
+                )
+                conn.commit()
+                return cursor.rowcount
+        except sqlite3.Error as e:
+            print(f"[DB ERROR] Failed to update booking status: {e}")
+            return 0
+        
+
 
     def cancel_booking(self, booking_id: int) -> int:
         """Mark a booking as cancelled"""
@@ -166,31 +188,6 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to complete booking: {e}")
             return 0
-
-    def get_booking_history(self) -> list:
-        """Fetch completed and cancelled bookings"""
-        try:
-            with get_connection() as conn:
-                cursor = conn.execute("""
-                    SELECT
-                        b.id, b.name, b.pickup, b.destination,
-                        COALESCE(b.distance_km, 0.0) as distance_km,
-                        COALESCE(b.estimated_cost, 0.0) as estimated_cost,
-                        b.status, b.created_at, b.completed_at,
-                        COALESCE(v.type, 'Unknown') AS vehicle_type,
-                        COALESCE(v.model, 'Unknown') AS vehicle_model,
-                        COALESCE(v.license_plate, 'N/A') AS license_plate,
-                        COALESCE(v.driver_name, 'Unknown') AS driver_name,
-                        COALESCE(v.driver_contact, 'N/A') AS driver_contact
-                    FROM bookings b
-                    LEFT JOIN vehicles v ON b.vehicle_id = v.id
-                    WHERE b.status IN ('completed', 'cancelled')
-                    ORDER BY b.completed_at DESC;
-                """)
-                return cursor.fetchall()
-        except sqlite3.Error as e:
-            print(f"[DB ERROR] Failed to fetch booking history: {e}")
-            return []
 
     def clear_bookings(self) -> None:
         """Delete all bookings (for testing)"""
