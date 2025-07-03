@@ -34,7 +34,7 @@ class BookingHistoryList(CTkFrame):
 
     def configure_grid_columns(self, frame):
         """Configure grid columns with consistent weights for both header and rows"""
-        frame.grid_columnconfigure(0, weight=1, minsize=80)   # Booking ID
+        frame.grid_columnconfigure(0, weight=1, minsize=225)   # Booking ID
         frame.grid_columnconfigure(1, weight=3, minsize=200)  # Pickup
         frame.grid_columnconfigure(2, weight=3, minsize=200)  # Destination  
         frame.grid_columnconfigure(3, weight=2, minsize=150)  # Vehicle
@@ -82,7 +82,7 @@ class BookingHistoryList(CTkFrame):
 
     def create_table_header(self):
         """Create the table header with column titles"""
-        header_frame = CTkFrame(self.table_frame, fg_color="#1a1a1a", corner_radius=5)
+        header_frame = CTkFrame(self.table_frame, fg_color="transparent", corner_radius=5)
         header_frame.pack(fill="x", padx=5, pady=(0, 2))
 
         # Configure grid columns using the shared method
@@ -96,7 +96,7 @@ class BookingHistoryList(CTkFrame):
 
         for col, header_text in enumerate(headers):
             label = CTkLabel(header_frame, text=header_text, font=("Arial", 16, "bold"))
-            label.grid(row=0, column=col, padx=10, pady=15, sticky="w")
+            label.grid(row=0, column=col, padx=5, sticky="ns")
 
     def create_table_row(self, booking, row_index):
         """Create a table row for each booking"""
@@ -125,7 +125,7 @@ class BookingHistoryList(CTkFrame):
         # Create labels for each column
         for col, data in enumerate(row_data):
             label = CTkLabel(row_frame, text=data, font=("Arial", 14))
-            label.grid(row=0, column=col, padx=10, pady=15, sticky="w")
+            label.grid(row=0, column=col,padx=5, sticky="ns")
 
         # Save Button (icon only)
         save_button = CTkButton(
