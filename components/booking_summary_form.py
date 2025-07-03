@@ -189,6 +189,7 @@ class BookingSummaryForm(CTkFrame):
 
         self.__booking_after_ids.clear()
         self.__is_booking_in_progress = False
+        messagebox.showinfo("Booking Cancelled", f"Booking ID {self.__current_booking_id} has been cancelled.")
 
 
         #Mark ooking as cancelled in the database
@@ -206,13 +207,8 @@ class BookingSummaryForm(CTkFrame):
             messagebox.showinfo("Booking Cancelled", f"Booking ID {self.__current_booking_id} has been cancelled.")
             self.__current_booking_id = None
 
-            self.__vehicle_frame.grid_forget()
-            self.__cancel_button.grid_forget()
-            self.__go_to_bookings_button.grid_forget()
-
-            self.__confirm_button.grid(row=5, column=0, columnspan=3, pady=(20, 20), padx=20, sticky="ew")
-            self.__confirm_button.configure(text="Confirm Booking", command=self.__confirm_booking)
-            self.__title_label.configure(text="Booking Summary")
+            self.__booking_information_manager.clear_booking_information()
+            self.__app.show_page("Booking")
 
     def __go_to_your_bookings(self):
         print("Navigating to your bookings.")
