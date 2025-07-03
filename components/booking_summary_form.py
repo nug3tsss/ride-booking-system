@@ -179,6 +179,8 @@ class BookingSummaryForm(CTkFrame):
 
         self.__is_booking_in_progress = False
         self.__booking_after_ids.clear()
+
+        self.__booking_information_manager.clear_booking_information()
         #self.__current_booking_id = None
 
     def __cancel_booking_process(self):
