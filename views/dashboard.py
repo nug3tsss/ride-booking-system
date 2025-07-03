@@ -1,6 +1,6 @@
 from customtkinter import *
 from tkinter import Canvas
-from PIL import Image, ImageOps, ImageTk
+from PIL import Image, ImageTk
 
 class DashboardPage(CTkFrame):
     def __init__(self, master, app):
