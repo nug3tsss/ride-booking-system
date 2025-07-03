@@ -15,14 +15,18 @@ class MapManager():
         self.__booking_map = booking_map
         self.__booking_information_manager = booking_information_manager
         self.__geolocator = Nominatim(user_agent="ride-booking-system")
+        
         self.__latitude, self.__longitude = get_current_location()
-
         self.__pickup_marker = None
         self.__dropoff_marker = None
         self.__route_line = None
         
+        self.__initialize_map()
+
+        self.__restore_information_from_previous()
+    
+    def __initialize_map(self):
         self.__booking_map.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)
-        #self.__booking_map.set_position(14.599036510236097, 121.00494831003196)
         self.__booking_map.set_position(self.__latitude, self.__longitude)
         self.__booking_map.set_zoom(16)
         self.__booking_map.add_right_click_menu_command(label="Select destination as pick-up", command=self.__draw_pickup_marker, pass_coords=True)
@@ -30,8 +34,6 @@ class MapManager():
         self.__booking_map.add_right_click_menu_command(label="Remove pick-up marker", command=self.__remove_pickup_marker)
         self.__booking_map.add_right_click_menu_command(label="Remove drop-off marker", command=self.__remove_dropoff_marker)
         self.__booking_map.pack(expand=True, fill="both", padx=15, pady=15)
-
-        self.__restore_information_from_previous()
     
     def __draw_pickup_marker(self, coords):
         if self.__pickup_marker is not None:
@@ -101,11 +103,11 @@ class MapManager():
         threading.Thread(target=self.__calculate_route_lines_thread).start()
     
     def __calculate_route_lines_thread(self):
-        __url = f"http://router.project-osrm.org/route/v1/driving/{self.__pickup_lon},{self.__pickup_lat};{self.__dropoff_lon},{self.__dropoff_lat}?overview=full&geometries=geojson"
-        __response = requests.get(__url)
-        __data = __response.json()
+        url = f"http://router.project-osrm.org/route/v1/driving/{self.__pickup_lon},{self.__pickup_lat};{self.__dropoff_lon},{self.__dropoff_lat}?overview=full&geometries=geojson"
+        response = requests.get(url)
+        data = response.json()
 
-        self.__booking_map.after(0, lambda: self.__draw_route_lines(__data))
+        self.__booking_map.after(0, lambda: self.__draw_route_lines(data))
     
     def __draw_route_lines(self, data):
         if not data or "routes" not in data or not data["routes"]:
@@ -116,8 +118,8 @@ class MapManager():
             self.__booking_information_manager.set_estimated_time_seconds(0.0)
             return
         
-        __coords = data["routes"][0]["geometry"]["coordinates"]
-        __path_latlon = [(lat, lon) for lon, lat in __coords]
+        coords = data["routes"][0]["geometry"]["coordinates"]
+        path_latlon = [(lat, lon) for lon, lat in coords]
 
         distance_meters = data["routes"][0]["distance"]
         duration_seconds = data["routes"][0]["duration"]
@@ -130,8 +132,8 @@ class MapManager():
         __top_left = (self.__max_lat, self.__min_lon)
         __bottom_right = (self.__min_lat, self.__max_lon)
         
-        self.__route_line = self.__booking_map.set_path(__path_latlon)
-        self.__booking_information_manager.set_route_line(__path_latlon)
+        self.__route_line = self.__booking_map.set_path(path_latlon)
+        self.__booking_information_manager.set_route_line(path_latlon)
         self.__booking_information_manager.set_distance_km(distance_km)
         self.__booking_information_manager.set_estimated_time_seconds(duration_seconds)
 
@@ -140,45 +142,45 @@ class MapManager():
     
 
     def __restore_information_from_previous(self):
-        __pickup = self.__booking_information_manager.get_pickup_coords()
-        __dropoff = self.__booking_information_manager.get_dropoff_coords()
-        __bounding_box = self.__booking_information_manager.get_bounding_box()
-        __route_line = self.__booking_information_manager.get_route_line()
+        pickup = self.__booking_information_manager.get_pickup_coords()
+        dropoff = self.__booking_information_manager.get_dropoff_coords()
+        bounding_box = self.__booking_information_manager.get_bounding_box()
+        route_line = self.__booking_information_manager.get_route_line()
 
-        if __pickup is not None:
-            self.__pickup_marker = self.__booking_map.set_marker(__pickup[0], __pickup[1], text="Pick-up", marker_color_circle="#4A628A", marker_color_outside="#6A9AB0")
+        if pickup is not None:
+            self.__pickup_marker = self.__booking_map.set_marker(pickup[0], pickup[1], text="Pick-up", marker_color_circle="#4A628A", marker_color_outside="#6A9AB0")
         
-        if __dropoff is not None:
-            self.__dropoff_marker = self.__booking_map.set_marker(__dropoff[0], __dropoff[1], text="Drop-off", marker_color_circle="#16423C", marker_color_outside="#6A9C89")
+        if dropoff is not None:
+            self.__dropoff_marker = self.__booking_map.set_marker(dropoff[0], dropoff[1], text="Drop-off", marker_color_circle="#16423C", marker_color_outside="#6A9C89")
         
-        if __bounding_box != ():
-            self.__booking_map.fit_bounding_box(__bounding_box[0], __bounding_box[1])
+        if bounding_box != ():
+            self.__booking_map.fit_bounding_box(bounding_box[0], bounding_box[1])
         
-        if __route_line != []:
-            self.__route_line = self.__booking_map.set_path(__route_line)
+        if route_line != []:
+            self.__route_line = self.__booking_map.set_path(route_line)
     
     def get_coords_from_address(self, address, marker_type, callback=None):
-        __location = self.__geolocator.geocode(address)
+        location = self.__geolocator.geocode(address)
 
-        if __location:
-            __coords = (__location.latitude, __location.longitude)
+        if location:
+            coords = (location.latitude, location.longitude)
 
             if marker_type == "pickup":
-                __location_obj = self.__geolocator.reverse(__coords)
-                __full_address = __location_obj.address
-                self.__booking_information_manager.set_pickup_address(__full_address)
-                self.__booking_information_manager.set_pickup_coords(__coords)
-                self.__draw_pickup_marker(__coords)
+                location_obj = self.__geolocator.reverse(coords)
+                full_address = location_obj.address
+                self.__booking_information_manager.set_pickup_address(full_address)
+                self.__booking_information_manager.set_pickup_coords(coords)
+                self.__draw_pickup_marker(coords)
 
                 if callback:
-                    callback(__full_address, marker_type)
+                    callback(full_address, marker_type)
 
             elif marker_type == "dropoff":
-                __location_obj = self.__geolocator.reverse(__coords)
-                __full_address = __location_obj.address
-                self.__booking_information_manager.set_dropoff_address(__full_address)
-                self.__booking_information_manager.set_dropoff_coords(__coords)
-                self.__draw_dropoff_marker(__coords)
+                location_obj = self.__geolocator.reverse(coords)
+                full_address = location_obj.address
+                self.__booking_information_manager.set_dropoff_address(full_address)
+                self.__booking_information_manager.set_dropoff_coords(coords)
+                self.__draw_dropoff_marker(coords)
 
                 if callback:
-                    callback(__full_address, marker_type)
+                    callback(full_address, marker_type)
