@@ -2,6 +2,7 @@ from config.db_config import get_connection
 import sqlite3
 import os
 from datetime import datetime
+from models.vehicle import Vehicle, Car, Motorcycle,Van
 
 class BookingStatus:
     ACTIVE = 'active'
@@ -15,10 +16,10 @@ class BookingStatus:
 class DatabaseHandler:
     def __init__(self):
         self.initialize_database()
-        self.get_connection = get_connection()
 
     def initialize_database(self):
-        """Initialize database with proper schema"""
+        """Initialize database """
+        
         try:
             #Users table
             with get_connection() as conn:
@@ -104,8 +105,8 @@ class DatabaseHandler:
     #     except sqlite3.Error as e:
     #         print(f"[DB ERROR] Failed to populate initial vehicles: {e}")
 
-    def get_vehicle_details_by_type(self, vehicle_type: str) -> dict | None:
-        """Fetch vehicle details (base_fare, per_km_rate) by type."""
+    def get_vehicle_details_by_type(self, vehicle_type: str) -> Vehicle | None:
+        """Fetch vehicle details by type and return a Vehicle object."""
         try:
             with get_connection() as conn:
                 cursor = conn.execute(
@@ -113,9 +114,20 @@ class DatabaseHandler:
                     (vehicle_type,)
                 )
                 result = cursor.fetchone()
+
                 if result:
-                    return dict(result)
+                    # Create an instance of the specific Vehicle subclass
+                    if result['type'] == "Car":
+                        return Car(result['id'], result['model'], result['license_plate'], result['driver_name'], result['driver_contact'], result['base_fare'], result['per_km_rate'])
+                    elif result['type'] == "Van":
+                        return Van(result['id'], result['model'], result['license_plate'], result['driver_name'], result['driver_contact'], result['base_fare'], result['per_km_rate'])
+                    elif result['type'] == "Motorcycle":
+                        return Motorcycle(result['id'], result['model'], result['license_plate'], result['driver_name'], result['driver_contact'], result['base_fare'], result['per_km_rate'])
+                    else:
+                        print(f"[DB ERROR] Unknown vehicle type: {result['type']}")
+                        return None
                 return None
+            
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to fetch vehicle details by type: {e}")
             return None
