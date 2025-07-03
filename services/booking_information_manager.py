@@ -1,16 +1,13 @@
 #from database.db_handler import DatabaseHandler
 class BookingInformationManager:
-    """
-    Gets data from MapManager for database and data persistence
-    """
+    """Saves all of the booking informations from the current session"""
 
     def __init__(self, db_handler):
-        self.db = db_handler
+        self.__db = db_handler
         self.__pickup_coords = None
         self.__dropoff_coords = None
         self.__vehicle_type_str = ""
         self.__vehicle_type_int = None
-        #self.__vehicle_details = []
         self.__pickup_address = ""
         self.__dropoff_address = ""
         self.__route_line = []
@@ -18,10 +15,6 @@ class BookingInformationManager:
         self.__distance_km = 0.0
         self.__estimated_time_seconds = 0.0
         self.__estimated_cost_pesos = 0.0
-        
-
-        
-        
         self.__current_booking_section = "Booking"
     
     def set_pickup_coords(self, coords=None):
@@ -50,7 +43,7 @@ class BookingInformationManager:
             }
             vehicle_type_db = vehicle_type_map.get(vehicle_type_int)
             if vehicle_type_db:
-                self.__vehicle_details = self.db.get_vehicle_details_by_type(vehicle_type_db)
+                self.__vehicle_details = self.__db.get_vehicle_details_by_type(vehicle_type_db)
             else:
                 self.__vehicle_details = None
         else:
@@ -125,7 +118,7 @@ class BookingInformationManager:
         }
         vehicle_type_db = vehicle_type_map.get(self.__vehicle_type_int)
         if vehicle_type_db:
-            vehicle_details = self.db.get_vehicle_details_by_type(vehicle_type_db)
+            vehicle_details = self.__db.get_vehicle_details_by_type(vehicle_type_db)
             if vehicle_details:
                 base_fare = vehicle_details["base_fare"]
                 per_km_rate = vehicle_details["per_km_rate"]
@@ -143,5 +136,4 @@ class BookingInformationManager:
         self.__bounding_box = ()
         self.__distance_km = 0.0
         self.__estimated_cost_pesos = 0.0
-
         self.__current_booking_section = "Booking"

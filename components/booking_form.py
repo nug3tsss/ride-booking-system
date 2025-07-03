@@ -4,9 +4,7 @@ import requests
 import threading
 
 class BookingForm(CTkScrollableFrame):
-    """
-    Gets user input and passes it to the BookingMap and BookingInformationManager
-    """
+    """Gets user input and passes it to the BookingMap and BookingInformationManager"""
 
     def __init__(self, app, master_frame, map_manager, booking_information_manager):
         super().__init__(master_frame)
@@ -17,61 +15,70 @@ class BookingForm(CTkScrollableFrame):
         self.__app = app
         self.__booking_information_manager = booking_information_manager
 
+        self.__initialize_autosuggest_api()
+
+        self.__create_pickup_entry()
+        self.__create_dropoff_entry()
+        self.__create_vehicle_select()
+        self.__create_import_and_clear_buttons()
+        self.__bind_form_entry_events()
+
+        self.__restore_information_from_previous()
+    
+    def __initialize_autosuggest_api(self):
         self.__API_KEY = "86f10e4840eb45f4b94f17fce6d3fcec"
         self.__after_id = None
         self.__min_chars = 4
         self.__debounce_ms = 0
         self.__autosuggest_popup_frame = None
+    
+    def __create_pickup_entry(self):
+        select_pickup_label = CTkLabel(self, text="Select a pickup destination", anchor="w", font=("Arial", 32))
+        select_pickup_label.pack(fill="x", pady=15, padx=15)
 
-        self.__create_form_labels()
-        self.__create_form_entries()
-        self.__create_import_and_clear_buttons()
-        self.__bind_form_entry_events()
-
-        self.__restore_information_from_previous()
-   
-    def __create_form_labels(self):
-        self.__select_pickup_label = CTkLabel(self, text="Select a pickup destination", anchor="w", font=("Arial", 32))
-        self.__select_pickup_label.pack(fill="x", pady=15, padx=15)
-
-        self.__select_dropoff_label = CTkLabel(self, text="Select a dropoff destination", anchor="w", font=("Arial", 32))
-        self.__select_dropoff_label.pack(fill="x", pady=15, padx=15)
-
-        self.__select_vehicle_label = CTkLabel(self, text="Select a vehicle", anchor="w", font=("Arial", 32))
-        self.__select_vehicle_label.pack(fill="x", pady=15, padx=15)
-   
-    def __create_form_entries(self):
         self.__select_pickup_frame = CTkFrame(self)
-        self.__select_pickup_frame.pack(fill="x", pady=5, padx=15, after=self.__select_pickup_label)
-
-        self.__select_dropoff_frame = CTkFrame(self)
-        self.__select_dropoff_frame.pack(fill="x", pady=5, padx=15, after=self.__select_dropoff_label)
-
-        self.__select_vehicle_frame = CTkFrame(self)
-        self.__select_vehicle_frame.pack(fill="x", pady=5, padx=15, after=self.__select_vehicle_label)
+        self.__select_pickup_frame.pack(fill="x", pady=5, padx=15, after=select_pickup_label)
 
         self.__select_pickup_entry = CTkEntry(self.__select_pickup_frame, placeholder_text="Search for a destination...")
         self.__select_pickup_entry.pack(fill="x", pady=15, padx=15)
+   
+    def __create_dropoff_entry(self):
+        select_dropoff_label = CTkLabel(self, text="Select a dropoff destination", anchor="w", font=("Arial", 32))
+        select_dropoff_label.pack(fill="x", pady=15, padx=15)
+
+        self.__select_dropoff_frame = CTkFrame(self)
+        self.__select_dropoff_frame.pack(fill="x", pady=5, padx=15, after=select_dropoff_label)
 
         self.__select_dropoff_entry = CTkEntry(self.__select_dropoff_frame, placeholder_text="Search for a destination...")
         self.__select_dropoff_entry.pack(fill="x", pady=15, padx=15)
+   
+    def __create_vehicle_select(self):
+        select_vehicle_label = CTkLabel(self, text="Select a vehicle", anchor="w", font=("Arial", 32))
+        select_vehicle_label.pack(fill="x", pady=15, padx=15)
+
+        select_vehicle_frame = CTkFrame(self)
+        select_vehicle_frame.pack(fill="x", pady=5, padx=15, after=select_vehicle_label)
 
         self.__vehicle_var = IntVar(value=0)
-        self.__vehicle1 = CTkRadioButton(self.__select_vehicle_frame, text="Car (4-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=1)
-        self.__vehicle1.pack(fill="x", pady=15, padx=15)
+        vehicle1 = CTkRadioButton(select_vehicle_frame, text="Car (4-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=1)
+        vehicle1.pack(fill="x", pady=15, padx=15)
 
-        self.__vehicle2 = CTkRadioButton(self.__select_vehicle_frame, text="Van (12-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=2)
-        self.__vehicle2.pack(fill="x", pady=15, padx=15)
+        vehicle2 = CTkRadioButton(select_vehicle_frame, text="Van (12-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=2)
+        vehicle2.pack(fill="x", pady=15, padx=15)
 
-        self.__vehicle3 = CTkRadioButton(self.__select_vehicle_frame, text="Motorcycle (2-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=3)
-        self.__vehicle3.pack(fill="x", pady=15, padx=15)
+        vehicle3 = CTkRadioButton(select_vehicle_frame, text="Motorcycle (2-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=3)
+        vehicle3.pack(fill="x", pady=15, padx=15)
     
     def __create_import_and_clear_buttons(self):
-        self.__import_button = CTkButton(self, text="Import booking", command=self.__import_booking_from_file)
-        self.__import_button.pack(fill="x", pady=15, padx=15)
+        import_button = CTkButton(self, text="Import booking", command=self.__import_booking_from_file)
+        import_button.pack(fill="x", pady=15, padx=15)
 
-        self.__import_button = CTkButton(self, text="Clear booking", command=self.__clear_form_entries)
-        self.__import_button.pack(fill="x", pady=15, padx=15)
+        import_button = CTkButton(self, text="Clear booking", command=self.__clear_form_entries)
+        import_button.pack(fill="x", pady=15, padx=15)
+    
+    def __bind_form_entry_events(self):
+        self.__select_pickup_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_pickup_entry, event))
+        self.__select_dropoff_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_dropoff_entry, event))
     
     def __import_booking_from_file(self):
         file_path = filedialog.askopenfilename(
@@ -86,22 +93,18 @@ class BookingForm(CTkScrollableFrame):
         self.__booking_information_manager.clear_booking_information()
         self.__app.show_page("Booking")
 
-    def __bind_form_entry_events(self):
-        self.__select_pickup_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_pickup_entry, event))
-        self.__select_dropoff_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_dropoff_entry, event))
-
     def __set_vehicle_type(self):
-        __vehicle_type_int = self.__vehicle_var.get()
+        vehicle_type_int = self.__vehicle_var.get()
 
-        if __vehicle_type_int == 1:
-            __vehicle_type_str = "Car"
-        elif __vehicle_type_int == 2:
-            __vehicle_type_str = "Van"
-        elif __vehicle_type_int == 3:
-            __vehicle_type_str = "Motorcycle"
+        if vehicle_type_int == 1:
+            vehicle_type_str = "Car"
+        elif vehicle_type_int == 2:
+            vehicle_type_str = "Van"
+        elif vehicle_type_int == 3:
+            vehicle_type_str = "Motorcycle"
 
-        self.__booking_information_manager.set_vehicle_type_str(__vehicle_type_str)
-        self.__booking_information_manager.set_vehicle_type_int(__vehicle_type_int)
+        self.__booking_information_manager.set_vehicle_type_str(vehicle_type_str)
+        self.__booking_information_manager.set_vehicle_type_int(vehicle_type_int)
 
     def __on_key_released(self, form_entry_name, event):
         if self.__after_id:
@@ -130,7 +133,6 @@ class BookingForm(CTkScrollableFrame):
             print("Connection Timed Out", e)
     
     def __display_autosuggest_results(self, form_entry_name, data):
-        # Create frame
         if not self.__autosuggest_popup_frame:
             if form_entry_name is self.__select_pickup_entry:
                 self.__autosuggest_popup_frame = CTkScrollableFrame(self.__select_pickup_frame, scrollbar_button_color="#333333", scrollbar_button_hover_color="#333333")
@@ -181,15 +183,15 @@ class BookingForm(CTkScrollableFrame):
             self.__autosuggest_popup_frame = None
         
     def __restore_information_from_previous(self):
-        __pickup = self.__booking_information_manager.get_pickup_address()
-        __dropoff = self.__booking_information_manager.get_dropoff_address()
-        __vehicle_type = self.__booking_information_manager.get_vehicle_type_int()
+        pickup = self.__booking_information_manager.get_pickup_address()
+        dropoff = self.__booking_information_manager.get_dropoff_address()
+        vehicle_type = self.__booking_information_manager.get_vehicle_type_int()
 
-        if __pickup != "":
-            self.__select_pickup_entry.configure(placeholder_text=__pickup)
+        if pickup != "":
+            self.__select_pickup_entry.configure(placeholder_text=pickup)
         
-        if __dropoff != "":
-            self.__select_dropoff_entry.configure(placeholder_text=__dropoff)
+        if dropoff != "":
+            self.__select_dropoff_entry.configure(placeholder_text=dropoff)
         
-        if __vehicle_type is not None:
-            self.__vehicle_var.set(__vehicle_type)
+        if vehicle_type is not None:
+            self.__vehicle_var.set(vehicle_type)
