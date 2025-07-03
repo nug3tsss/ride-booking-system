@@ -23,7 +23,7 @@ class App(CTk):
         self.title("Gethub")
         self.geometry("900x600")
 
-        set_appearance_mode("light")
+        set_appearance_mode("dark")
         current_appearance_mode = get_appearance_mode()
         if current_appearance_mode == "dark":
             self.iconbitmap("assets/Logo-Dark-Transparent.ico")
