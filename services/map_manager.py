@@ -1,4 +1,5 @@
 import requests
+import threading
 from geopy.geocoders import Nominatim
 from utils.helpers import get_current_location
 
@@ -37,8 +38,9 @@ class MapManager():
             self.__pickup_marker.delete()
         
         self.__pickup_marker = self.__booking_map.set_marker(coords[0], coords[1], text="Pick-up", marker_color_circle="#4A628A", marker_color_outside="#6A9AB0")
-        #self.__booking_information_manager.set_dropoff_address(self.__geolocator.reverse(coords))
         self.__booking_information_manager.set_pickup_coords(coords)
+        threading.Thread(target=self.__reverse_geocode_pickup, args=(coords,)).start()
+
         self.__verify_markers()
     
     def __remove_pickup_marker(self):
@@ -47,13 +49,18 @@ class MapManager():
             self.__pickup_marker = None
             self.__booking_map.delete_all_path()
     
+    def __reverse_geocode_pickup(self, coords):
+        address = self.__geolocator.reverse(coords)
+        if address:
+            self.__booking_information_manager.set_pickup_address(address)
+
     def __draw_dropoff_marker(self, coords):
         if self.__dropoff_marker is not None:
             self.__dropoff_marker.delete()
         
         self.__dropoff_marker = self.__booking_map.set_marker(coords[0], coords[1], text="Drop-off", marker_color_circle="#16423C", marker_color_outside="#6A9C89")
-        #self.__booking_information_manager.set_dropoff_address(self.__geolocator.reverse(coords))
         self.__booking_information_manager.set_dropoff_coords(coords)
+        threading.Thread(target=self.__reverse_geocode_dropoff, args=(coords,)).start()
         self.__verify_markers()
     
     def __remove_dropoff_marker(self):
@@ -62,6 +69,11 @@ class MapManager():
             self.__dropoff_marker = None
             self.__booking_map.delete_all_path()
     
+    def __reverse_geocode_dropoff(self, coords):
+        address = self.__geolocator.reverse(coords)
+        if address:
+            self.__booking_information_manager.set_dropoff_address(address)
+
     def __verify_markers(self):
         if self.__pickup_marker is not None and self.__dropoff_marker is None:
             self.__booking_map.set_position(self.__pickup_marker.position[0], self.__pickup_marker.position[1])
@@ -86,16 +98,32 @@ class MapManager():
         self.__max_lon = max(self.__pickup_lon, self.__dropoff_lon)
     
     def __calculate_route_lines(self):
+        threading.Thread(target=self.__calculate_route_lines_thread).start()
+    
+    def __calculate_route_lines_thread(self):
         __url = f"http://router.project-osrm.org/route/v1/driving/{self.__pickup_lon},{self.__pickup_lat};{self.__dropoff_lon},{self.__dropoff_lat}?overview=full&geometries=geojson"
         __response = requests.get(__url)
         __data = __response.json()
 
-        self.__draw_route_lines(__data)
+        self.__booking_map.after(0, lambda: self.__draw_route_lines(__data))
     
     def __draw_route_lines(self, data):
+        if not data or "routes" not in data or not data["routes"]:
+            print("No route found or invalid OSRM response.")
+            self.__booking_information_manager.set_route_line([])
+            self.__booking_information_manager.set_bounding_box((), ())
+            self.__booking_information_manager.set_distance_km(0.0)
+            self.__booking_information_manager.set_estimated_time_seconds(0.0)
+            return
+        
         __coords = data["routes"][0]["geometry"]["coordinates"]
         __path_latlon = [(lat, lon) for lon, lat in __coords]
 
+        distance_meters = data["routes"][0]["distance"]
+        duration_seconds = data["routes"][0]["duration"]
+
+        distance_km = distance_meters / 1000.0
+        
         if self.__route_line is not None:
             self.__route_line.delete()
         
@@ -104,10 +132,13 @@ class MapManager():
         
         self.__route_line = self.__booking_map.set_path(__path_latlon)
         self.__booking_information_manager.set_route_line(__path_latlon)
+        self.__booking_information_manager.set_distance_km(distance_km)
+        self.__booking_information_manager.set_estimated_time_seconds(duration_seconds)
 
         self.__booking_map.fit_bounding_box(__top_left, __bottom_right)
         self.__booking_information_manager.set_bounding_box(__top_left, __bottom_right)
     
+
     def __restore_information_from_previous(self):
         __pickup = self.__booking_information_manager.get_pickup_coords()
         __dropoff = self.__booking_information_manager.get_dropoff_coords()

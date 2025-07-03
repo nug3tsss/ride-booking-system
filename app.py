@@ -12,9 +12,9 @@ from components.navbar import Navbar
 from components.sidebar import Sidebar
 from components.logout_popup import LogoutPopup
 from config.styles import Styles
-from database.db_handler import initialize_database
 from utils.session_manager import load_session, clear_session
 from services.booking_information_manager import BookingInformationManager
+from database.db_handler import DatabaseHandler
 
 class App(CTk):
     def __init__(self):
@@ -24,10 +24,12 @@ class App(CTk):
         self.geometry("900x600")
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
 
+        self.db = DatabaseHandler()
+
         self.current_user = None
         self.logout_popup = None
 
-        self.booking_information_manager = BookingInformationManager()
+        self.booking_information_manager = BookingInformationManager(self.db)
 
         # Grid layout configuration
         self.grid_rowconfigure(1, weight=1)
