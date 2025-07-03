@@ -158,7 +158,7 @@ class BookingSummaryForm(CTkFrame):
         self.__booking_after_ids.append(confirm_id)
 
     def __finding_driver(self):
-        self.__title_label.configure(text="Finding a driver...")
+        self.__title_label.configure(text="Finding you a driver...")
         finding_id = self.after(5000, self.__driver_found)
         self.__booking_after_ids.append(finding_id)
 
@@ -179,7 +179,7 @@ class BookingSummaryForm(CTkFrame):
 
         self.__is_booking_in_progress = False
         self.__booking_after_ids.clear()
-        self.__current_booking_id = None
+        #self.__current_booking_id = None
 
     def __cancel_booking_process(self):
         for after_id in self.__booking_after_ids:
@@ -203,6 +203,14 @@ class BookingSummaryForm(CTkFrame):
             self.__db_handler.cancel_booking(self.__current_booking_id)
             messagebox.showinfo("Booking Cancelled", f"Booking ID {self.__current_booking_id} has been cancelled.")
             self.__current_booking_id = None
+
+            self.__vehicle_frame.grid_forget()
+            self.__cancel_button.grid_forget()
+            self.__go_to_bookings_button.grid_forget()
+
+            self.__confirm_button.grid(row=5, column=0, columnspan=3, pady=(20, 20), padx=20, sticky="ew")
+            self.__confirm_button.configure(text="Confirm Booking", command=self.__confirm_booking)
+            self.__title_label.configure(text="Booking Summary")
 
     def __go_to_your_bookings(self):
         print("Navigating to your bookings.")
