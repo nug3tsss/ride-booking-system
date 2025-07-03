@@ -42,7 +42,7 @@ class BookingPage(CTkFrame):
         booking_form = BookingForm(self.__app, self.__booking_inner_frame, booking_map.get_map_manager_instance(), self.__booking_information_manager)
 
     def __display_summary_section(self):
-        self.__booking_label.configure(text="Booking Summary")
+        self.__booking_label.configure(text="")
 
         self.__current_section = "Summary"
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
