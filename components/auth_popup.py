@@ -6,6 +6,8 @@ import re
 from PIL import Image
 
 class AuthPopup(CTkToplevel):
+    """Authentication Popup for user Sign Up or Login"""
+
     _instance = None
 
     def __new__(cls, app):

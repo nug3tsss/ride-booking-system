@@ -2,6 +2,8 @@ from customtkinter import CTkButton, CTkImage
 from PIL import Image
 
 class Logo(CTkButton):
+    """Displays app logo"""
+
     def __init__(self, master, app, **kwargs):
         super().__init__(master, **kwargs)
         self.app = app

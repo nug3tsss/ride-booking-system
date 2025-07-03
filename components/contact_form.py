@@ -7,6 +7,8 @@ import datetime
 import re
 
 class ContactForm(CTkFrame):
+    """Displys contact form for users to connect with the developers"""
+
     def __init__(self, master, app):
         super().__init__(master, fg_color="transparent")
         self.app = app

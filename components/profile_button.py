@@ -2,6 +2,8 @@ from customtkinter import CTkButton, CTkImage
 from PIL import Image, ImageDraw, ImageOps
 
 class ProfileButton(CTkButton):
+    """Displays the circular profile image of user"""
+
     def __init__(self, master, app, text="John Doe", image_path="assets/profile.jpg", **kwargs):
         self.app = app
         self.profile_image = self.create_profile_image(image_path)

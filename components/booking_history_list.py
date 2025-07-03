@@ -12,6 +12,8 @@ from PIL import Image
 import json
 
 class BookingHistoryList(CTkFrame):
+    """Displays booking history of specific user in table format"""
+
     def __init__(self, master, app):
         super().__init__(master, fg_color="transparent")
         self.app = app
