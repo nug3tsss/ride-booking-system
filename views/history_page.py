@@ -1,6 +1,10 @@
 from customtkinter import *
 from database.db_handler import DatabaseHandler
 from datetime import datetime
+from tkinter import messagebox
+from tkinter import messagebox, filedialog
+from PIL import Image
+import json
 
 class HistoryPage(CTkFrame):
     def __init__(self, master, app):
@@ -9,7 +13,7 @@ class HistoryPage(CTkFrame):
         self.pack(fill="both", expand=True)
 
         self.db_handler = DatabaseHandler()
-
+        self.download_icon = CTkImage(Image.open("assets/download_icon-dark.png"))
         # Title
         CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold")).pack(pady=20)
 
@@ -122,8 +126,49 @@ class HistoryPage(CTkFrame):
             label = CTkLabel(row_frame, text=data, font=("Arial", 15))
             label.grid(row=0, column=col, sticky="w")
 
+        # Save Button
+        save_button = CTkButton(
+            row_frame,
+            image=self.download_icon,
+            text ="",
+            font=("Arial", 10, "bold"),
+            width=35,
+            height=35,
+            fg_color="transparent",
+            hover_color="#1a5a8a",
+            command=lambda b=booking: self.save_booking_to_json(b)
+        )
+        save_button.grid(row=0, column=9, padx=5, pady=8, sticky="e")
+
         # Add hover effect (optional)
         self.add_hover_effect(row_frame, row_color)
+
+    def save_booking_to_json(self, booking_data):
+        vehicle_type_map = {
+            "Car": 1,
+            "Van": 2,
+            "Motorcycle": 3
+        }
+        vehicle_type_str = booking_data.get('vehicle_type', '')
+        vehicle_type_int = vehicle_type_map.get(vehicle_type_str, 0)
+
+        export_data = {
+            "pickup_address": booking_data.get('pickup', ''),
+            "dropoff_address": booking_data.get('destination', ''),
+            "vehicle_type_int": vehicle_type_int
+        }
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".json",
+            filetypes=[("   JSON files", "*.json"), ("All files", "*.*")],
+            initialfile=f"booking_{booking_data['id']}.json" # Suggest a filename
+        )
+        if file_path:
+            try:
+                with open(file_path, 'w') as f:
+                    json.dump(export_data, f, indent=4) # Use indent for pretty printing
+                messagebox.showinfo("Success", f"Booking {booking_data['id']} saved successfully to:\n{file_path}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save booking: {e}")
 
     def truncate_text(self, text, max_length):
         """Truncate text if it's too long"""
