@@ -26,7 +26,7 @@ class Sidebar(CTkFrame):
                     fg_color="transparent", hover_color=self.app.styles.hover_color,
                     corner_radius=0, command=lambda: self.app.show_page("Contact")).pack(fill="x")
             CTkButton(self, width=50, height=40, text="Logout", font=self.app.styles.sidebar_font,
-                    fg_color="#9b1b1b", text_color="white", hover_color="#411616",
+                    fg_color="#9b1b1b", text_color="white", hover_color="#7f1515",
                     corner_radius=30, command=self.app.logout).pack(pady=(10, 0))
 
     def confirm_logout(self):
