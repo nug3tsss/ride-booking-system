@@ -197,17 +197,15 @@ class BookingForm(CTkScrollableFrame):
                 with open(file_path, 'r') as file:
                     data = json.load(file)
 
-                    self.__booking_information_manager.set_pickup_coords(tuple(data["pickup_coords"]) if "pickup_coords" in data else None)
-                    self.__booking_information_manager.set_dropoff_coords(tuple(data["dropoff_coords"]) if "dropoff_coords" in data else None)
+                    self.__booking_information_manager.set_pickup_address(data.get("pickup_address", ""))
+                    self.__booking_information_manager.set_dropoff_address(data.get("dropoff_address", ""))
                     self.__booking_information_manager.set_vehicle_type_int(data.get("vehicle_type_int", 0))
 
                     self.__vehicle_var.set(self.__booking_information_manager.get_vehicle_type_int())
                     self.__set_vehicle_type()
 
-                    self.__map_manager.set_map_markers_from_file(
-                        self.__booking_information_manager.get_pickup_coords(),
-                        self.__booking_information_manager.get_dropoff_coords()
-                    )
+                    self.after(250, self.__confirm_entry(self.__booking_information_manager.get_pickup_address(), self.__select_pickup_entry))
+                    self.after(500, lambda: self.__confirm_entry(self.__booking_information_manager.get_dropoff_address(), self.__select_dropoff_entry))
 
                     print("Booking information imported successfully.")
             
@@ -217,3 +215,4 @@ class BookingForm(CTkScrollableFrame):
     def __clear_form_entries(self):
         self.__booking_information_manager.clear_booking_information()
         self.__app.show_page("Booking")
+    
