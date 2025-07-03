@@ -30,8 +30,6 @@ class App(CTk):
         else:
             self.iconbitmap("assets/Logo-Light-Transparent.ico")
 
-        
-
         self.db = DatabaseHandler()
         self.db.initialize_database()
 
