@@ -1,5 +1,6 @@
 from customtkinter import *
 from tkinter import *
+from tkinter import messagebox
 from database.db_handler import DatabaseHandler
 
 class BookingSummaryForm(CTkFrame):
