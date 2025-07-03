@@ -1,25 +1,34 @@
 # It connects to the SQLite database and Initialize the database if it does not exist.
-
 import sqlite3
-from sqlite3 import Error
 import os
+import sys
 
 def get_connection():
     """
-    Return a sqlite3 Connection to the rides.db file,
-    with row_factory set to sqlite3.Row for dictionary data type access.
-    """
-    try: # Handle any errors that may occur during the connection process
-        base_dir = os.path.dirname(os.path.dirname(__file__))  # Determine path to project root
+    Establish and return a connection to the rides.db SQLite database.
     
-        db_path = os.path.join(base_dir, 'database', 'rides.db')  # Build path to the database file
+    The connection uses sqlite3.Row for dictionary-like access to rows.
+    Returns:
+        sqlite3.Connection: Database connection object, or None if connection fails.
+    """
+    try:
+        
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) # Determine the absolute path to the project's root directory
+        
+        db_dir = os.path.join(base_dir, 'database') # Ensure 'database' directory exists (safeguard)
+        os.makedirs(db_dir, exist_ok=True)
 
-        conn = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) # Connect (creates the file if it doesn't exist)
+        db_path = os.path.join(db_dir, 'rides.db') # Build the full path to the database file
+        
+        # Establish the connection with proper parsing of declared types
+        conn = sqlite3.connect(
+            db_path,
+            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+        )
+        conn.row_factory = sqlite3.Row
 
-        conn.row_factory = sqlite3.Row   # Return rows as sqlite3.Row for attribute or key access
-       
         return conn
 
     except sqlite3.Error as e:
-        print(f"[Database ERROR] It failed to connect to the database: {e}")
-        return None 
+        print(f"[Database ERROR] Failed to connect to the database: {e}", file=sys.stderr)
+        return None
