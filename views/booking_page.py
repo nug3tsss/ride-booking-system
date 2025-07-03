@@ -20,7 +20,7 @@ class BookingPage(CTkFrame):
 
         self.__create_core_widgets()
         self.__display_last_section_selected()
-    
+        
     def __create_core_widgets(self):
         self.__booking_label = CTkLabel(self, text="", font=("Arial", 32))
         self.__booking_label.pack(anchor="w", padx=15, pady=15, side=TOP)

@@ -130,13 +130,13 @@ class BookingSummaryForm(CTkFrame):
         estimated_cost = self.__booking_information_manager.get_estimated_cost()
         
         vehicle_id = vehicle_details.get('id')
+        user_id = self.__app.current_user.get('user_id')
 
-        user_name = "Guest"
         if hasattr(self.master.master.master, 'app') and self.master.master.master.app.current_user:
             user_name = self.master.master.master.app.current_user.get('username', 'Guest')
 
         self.__current_booking_id = self.__db_handler.add_booking(
-            name=user_name,
+            user_id=user_id,
             pickup=pickup,
             destination=destination,
             vehicle_id=vehicle_id,
