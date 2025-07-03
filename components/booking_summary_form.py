@@ -6,7 +6,7 @@ from database.db_handler import DatabaseHandler
 class BookingSummaryForm(CTkFrame):
     """Contains booking summary from BookingForm with confirmation button"""
 
-    def __init__(self, master_frame, booking_information_manager):
+    def __init__(self, master_frame, app, booking_information_manager):
         super().__init__(master_frame, corner_radius=15, fg_color="#2d4059")
         self.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
 
@@ -15,6 +15,7 @@ class BookingSummaryForm(CTkFrame):
         self.grid_columnconfigure(2, weight=1)
 
         self.__booking_information_manager = booking_information_manager
+        self.__app = app
         self.__db_handler = DatabaseHandler()
 
         self.__booking_after_ids = []
@@ -205,4 +206,4 @@ class BookingSummaryForm(CTkFrame):
 
     def __go_to_your_bookings(self):
         print("Navigating to your bookings.")
-        self.master.master.master.app.show_page("History")
+        self.__app.show_page("History")
