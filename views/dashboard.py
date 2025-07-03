@@ -1,6 +1,7 @@
 from customtkinter import *
 from tkinter import Canvas
 from PIL import Image, ImageTk
+from utils.session_manager import load_session  # <-- Import session check
 
 class DashboardPage(CTkFrame):
     def __init__(self, master, app):
@@ -29,7 +30,7 @@ class DashboardPage(CTkFrame):
             fg_color="#222222",
             border_width=2,
             border_color="#444444",
-            width=400  # default width
+            width=400
         )
         self.card_container.place(relx=0.22, rely=0.5, anchor="center")
 
@@ -63,8 +64,17 @@ class DashboardPage(CTkFrame):
         )
         self.slogan_label.pack(padx=40, pady=(0, 15))
 
-        # Book Button
+        # Ride Icon
         ride_icon = CTkImage(Image.open("assets/ride_icon-dark.png"), size=(24, 24))
+
+        # Check session to decide button behavior
+        session_user = load_session()
+        if session_user:
+            book_command = self.go_to_booking_page
+        else:
+            book_command = self.__app.navbar.open_signup_popup
+
+        # Book Button
         self.book_button = CTkButton(
             self.card_container,
             text="Book a ride now!",
@@ -74,14 +84,14 @@ class DashboardPage(CTkFrame):
             corner_radius=10,
             width=200,
             height=40,
-            command=self.go_to_booking_page
+            command=book_command
         )
         self.book_button.pack(pady=(20, 40))
 
         # Bind resize event
         self.bind("<Configure>", self.resize_image)
 
-        # Initial forced resize (after widgets load)
+        # Initial forced resize
         self.after(100, lambda: self.resize_image(None))
 
     def resize_image(self, event):
@@ -91,38 +101,27 @@ class DashboardPage(CTkFrame):
         if window_width <= 0 or window_height <= 0:
             return
 
-        # Zoom factor: lower values for subtle zoom
         zoom_factor = 1.3
-
-        # Aspect ratio of the window
         window_aspect = window_width / window_height
 
-        # Original image dimensions
         orig_w, orig_h = self.original_image.size
-
-        # Crop dimensions based on zoom factor
         crop_h = int(orig_h / zoom_factor)
         crop_w = int(crop_h * window_aspect)
 
-        # Clamp crop_w to image width (to avoid overcropping)
         if crop_w > orig_w:
             crop_w = orig_w
             crop_h = int(crop_w / window_aspect)
 
-        # Crop start point (adjust these to shift framing)
         x = max(0, min(int((orig_w - crop_w) * 0), orig_w - crop_w))
         y = max(0, min(int((orig_h - crop_h) * 1), orig_h - crop_h))
 
-        # Crop and resize
         cropped = self.original_image.crop((x, y, x + crop_w, y + crop_h))
         final_image = cropped.resize((window_width, window_height), Image.Resampling.LANCZOS)
 
-        # Update canvas
         self.tk_background_image = ImageTk.PhotoImage(final_image)
         self.canvas.config(width=window_width, height=window_height)
         self.canvas.itemconfig(self.image_id, image=self.tk_background_image)
 
-        # Responsively reposition and resize card
         if window_width < 950:
             self.card_container.place_configure(relx=0.5, anchor="center")
             self.card_container.configure(width=int(window_width * 0.85))
