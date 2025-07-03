@@ -35,7 +35,7 @@ class DashboardPage(CTkFrame):
         self.card_container.place(relx=0.22, rely=0.5, anchor="center")
 
         # Logo
-        logo_image = CTkImage(Image.open("assets/logo-dark--transparent.png"), size=(150, 150))
+        logo_image = CTkImage(light_image=Image.open("assets/logo-light--transparent.png"), dark_image=Image.open("assets/logo-dark--transparent.png"), size=(150, 150))
         self.logo_label = CTkLabel(
             self.card_container,
             image=logo_image,
@@ -65,7 +65,7 @@ class DashboardPage(CTkFrame):
         self.slogan_label.pack(padx=40, pady=(0, 15))
 
         # Ride Icon
-        ride_icon = CTkImage(Image.open("assets/ride_icon-dark.png"), size=(24, 24))
+        ride_icon = CTkImage(light_image=Image.open("assets/ride_icon-light.png"), dark_image=Image.open("assets/ride_icon-dark.png"), size=(24, 24))
 
         # Check session to decide button behavior
         session_user = load_session()

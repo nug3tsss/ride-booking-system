@@ -30,4 +30,4 @@ class ProfileButton(CTkButton):
         draw.ellipse((0, 0) + profile_raw.size, fill=255)
         circular_profile = ImageOps.fit(profile_raw, profile_raw.size, centering=(0.5, 0.5))
         circular_profile.putalpha(mask)
-        return CTkImage(light_image=circular_profile, size=(40, 40))
+        return CTkImage(circular_profile, size=(40, 40))

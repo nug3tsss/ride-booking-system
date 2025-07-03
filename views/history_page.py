@@ -13,10 +13,7 @@ class HistoryPage(CTkFrame):
         self.pack(fill="both", expand=True)
 
         self.db_handler = DatabaseHandler()
-
-        # Load the download icon
-        self.download_icon = CTkImage(Image.open("assets/download-icon-light.png"), size=(20, 20))
-
+        self.download_icon = CTkImage(light_image=Image.open("assets/download_icon-light.png"), dark_image=Image.open("assets/download_icon-dark.png"))
         # Title
         CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold")).pack(pady=20)
 
