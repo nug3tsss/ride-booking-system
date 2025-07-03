@@ -2,6 +2,7 @@ from customtkinter import *
 from tkinter import filedialog
 import requests
 import threading
+import json
 
 class BookingForm(CTkScrollableFrame):
     """Gets user input and passes it to the BookingMap and BookingInformationManager"""
@@ -79,19 +80,6 @@ class BookingForm(CTkScrollableFrame):
     def __bind_form_entry_events(self):
         self.__select_pickup_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_pickup_entry, event))
         self.__select_dropoff_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_dropoff_entry, event))
-    
-    def __import_booking_from_file(self):
-        file_path = filedialog.askopenfilename(
-            title="Select a booking file",
-            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
-        )
-
-        if file_path:
-            print("YOU HAVE SELECTED A FILE!")
-    
-    def __clear_form_entries(self):
-        self.__booking_information_manager.clear_booking_information()
-        self.__app.show_page("Booking")
 
     def __set_vehicle_type(self):
         vehicle_type_int = self.__vehicle_var.get()
@@ -195,3 +183,37 @@ class BookingForm(CTkScrollableFrame):
         
         if vehicle_type is not None:
             self.__vehicle_var.set(vehicle_type)
+        
+    def __import_booking_from_file(self):
+        file_path = filedialog.askopenfilename(
+            title="Select a booking file",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
+        )
+
+        if file_path:
+            self.__booking_information_manager.clear_booking_information()
+
+            try:
+                with open(file_path, 'r') as file:
+                    data = json.load(file)
+
+                    self.__booking_information_manager.set_pickup_coords(tuple(data["pickup_coords"]) if "pickup_coords" in data else None)
+                    self.__booking_information_manager.set_dropoff_coords(tuple(data["dropoff_coords"]) if "dropoff_coords" in data else None)
+                    self.__booking_information_manager.set_vehicle_type_int(data.get("vehicle_type_int", 0))
+
+                    self.__vehicle_var.set(self.__booking_information_manager.get_vehicle_type_int())
+                    self.__set_vehicle_type()
+
+                    self.__map_manager.set_map_markers_from_file(
+                        self.__booking_information_manager.get_pickup_coords(),
+                        self.__booking_information_manager.get_dropoff_coords()
+                    )
+
+                    print("Booking information imported successfully.")
+            
+            except Exception as e:
+                print(f"Error importing booking information: {e}")
+    
+    def __clear_form_entries(self):
+        self.__booking_information_manager.clear_booking_information()
+        self.__app.show_page("Booking")
