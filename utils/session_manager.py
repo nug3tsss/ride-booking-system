@@ -54,3 +54,6 @@ def update_session(new_user_data):
             json.dump(data, f)
     except:
         pass  # Optional: log error or warning
+
+def get_logged_user():
+    return load_session()
