@@ -25,6 +25,7 @@ class App(CTk):
         self.iconbitmap("assets/Logo-Dark-Transparent.ico")
 
         self.db = DatabaseHandler()
+        self.db.initialize_database()
 
         self.current_user = None
         self.logout_popup = None

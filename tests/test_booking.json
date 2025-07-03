@@ -1,5 +1,5 @@
 {
-    "pickup_coords": [14.625135603845429, 121.12171679496765],
-    "dropoff_coords": [14.619508918313084, 121.09594942308172],
+    "pickup_address": "Cornel Medical Center, Marcos Highway, Masinag, Mayamot, Antipolo, Rizal, Calabarzon, 1870, Philippines",
+    "dropoff_address": "Calumpang, District I, Marikina, Eastern Manila District, Metro Manila, 1801, Philippines",
     "vehicle_type_int": 1
 }
