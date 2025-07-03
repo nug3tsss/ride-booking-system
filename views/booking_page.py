@@ -16,8 +16,9 @@ class BookingPage(CTkFrame):
         self.__app = app
 
         self.__booking_information_manager = app.booking_information_manager
+
         self.__booking_label = CTkLabel(self, text="", font=("Arial", 32))
-        self.__booking_label.pack(anchor="w", padx=15, pady=15)
+        self.__booking_label.pack(anchor="w", padx=15, pady=15, side=TOP)
 
         self.__booking_inner_frame = CTkFrame(self)
         self.__booking_inner_frame.pack(fill="both", expand=True, padx=15)
@@ -29,7 +30,8 @@ class BookingPage(CTkFrame):
         self.__display_current_section()
     
     def __display_booking_section(self):
-        self.__booking_label.configure(text="Book your ride!")
+        self.__booking_label.configure(text="Book a Ride!")
+
         self.__current_section = "Booking"
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
         
@@ -39,9 +41,11 @@ class BookingPage(CTkFrame):
         self.__booking_form = BookingForm(self.__app, self.__booking_inner_frame, self.__booking_map.get_map_manager_instance(), self.__booking_information_manager)
 
     def __display_summary_section(self):
-        self.__booking_label.configure(text="")
+        self.__booking_label.configure(text="Booking Summary")
+
         self.__current_section = "Summary"
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
+        
         self.__button.configure(text="Go Back")
 
         self.__summary_form = CTkFrame(self.__booking_inner_frame, corner_radius=15, fg_color=("#2d4059"))
