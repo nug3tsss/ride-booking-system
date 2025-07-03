@@ -82,8 +82,8 @@ class BookingHistoryList(CTkFrame):
 
     def create_table_header(self):
         """Create the table header with column titles"""
-        header_frame = CTkFrame(self.table_frame, fg_color="transparent", corner_radius=5)
-        header_frame.pack(fill="x", padx=5, pady=(0, 2))
+        header_frame = CTkFrame(self.table_frame, fg_color="transparent")
+        header_frame.pack(fill="x", padx=10, pady=(10, 20))
 
         # Configure grid columns using the shared method
         self.configure_grid_columns(header_frame)
@@ -95,7 +95,7 @@ class BookingHistoryList(CTkFrame):
         ]
 
         for col, header_text in enumerate(headers):
-            label = CTkLabel(header_frame, text=header_text, font=("Arial", 16, "bold"))
+            label = CTkLabel(header_frame, text=header_text, font=("Arial", 18, "bold"))
             label.grid(row=0, column=col, padx=5, sticky="ns")
 
     def create_table_row(self, booking, row_index):
