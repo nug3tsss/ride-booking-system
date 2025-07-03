@@ -5,6 +5,9 @@ class AboutPage(CTkFrame):
     def __init__(self, master, app):
         super().__init__(master)
 
+        self.scrollable_frame = CTkScrollableFrame(self, corner_radius=15, fg_color="transparent")
+        self.scrollable_frame.pack(fill="both", expand=True)
+
         self.app = app
 
         self.original_image = Image.open("assets/about_image.jpg")
@@ -13,7 +16,7 @@ class AboutPage(CTkFrame):
         self.bind("<Configure>", self.resize_image)
         self.bind("<Configure>", self.adjust_wraplength, add="+")
 
-        self.__about_label = CTkLabel(self, text="About Us", font=("Arial", 32, "bold"), image=self.about_image, compound="center")
+        self.__about_label = CTkLabel(self.scrollable_frame, text="About Us", font=("Arial", 32, "bold"), image=self.about_image, compound="center")
         self.__about_label.pack()
 
         self.__text = (
@@ -23,13 +26,13 @@ class AboutPage(CTkFrame):
             "Gethub is proudly developed by computer engineering students of the Polytechnic University of the Philippines - College of Engineering as part of CMPE 103 (Object Oriented Programming) final project requirement."
         )
 
-        self.__about_text = CTkLabel(self, text=self.__text, wraplength=1000, justify="left", font=("Arial", 20))
+        self.__about_text = CTkLabel(self.scrollable_frame, text=self.__text, wraplength=1000, justify="left", font=("Arial", 20))
         self.__about_text.pack(pady=30)
 
-        self.__meet_the_team_label = CTkLabel(self, text="Meet the Team", font=("Arial", 32,"bold"), anchor="w")
+        self.__meet_the_team_label = CTkLabel(self.scrollable_frame, text="Meet the Team", font=("Arial", 32,"bold"), anchor="w")
         self.__meet_the_team_label.pack(pady=30)
 
-        self.__members_frame = CTkFrame(self, fg_color="transparent")
+        self.__members_frame = CTkFrame(self.scrollable_frame, fg_color="transparent")
         self.__members_frame.pack(fill="both")
 
         self.add_members()
