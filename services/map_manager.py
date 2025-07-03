@@ -142,7 +142,6 @@ class MapManager():
 
         self.__booking_map.fit_bounding_box(__top_left, __bottom_right)
         self.__booking_information_manager.set_bounding_box(__top_left, __bottom_right)
-    
 
     def __restore_information_from_previous(self):
         pickup = self.__booking_information_manager.get_pickup_coords()
@@ -187,3 +186,7 @@ class MapManager():
 
                 if callback:
                     callback(full_address, marker_type)
+    
+    def set_map_markers_from_file(self, pickup_coords, dropoff_coords):
+        self.__draw_pickup_marker(pickup_coords)
+        self.__draw_dropoff_marker(dropoff_coords)

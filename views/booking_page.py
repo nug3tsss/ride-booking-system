@@ -48,7 +48,7 @@ class BookingPage(CTkFrame):
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
         self.__button.configure(text="Go Back")
 
-        summary_form = BookingSummaryForm(self.__booking_inner_frame, self.__booking_information_manager)
+        summary_form = BookingSummaryForm(self.__booking_inner_frame, self.__app, self.__booking_information_manager)
         summary_map = BookingSummaryMap(self.__booking_inner_frame, self.__booking_information_manager)
     
     def __display_last_section_selected(self):
