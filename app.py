@@ -13,20 +13,29 @@ from components.sidebar import Sidebar
 from components.logout_popup import LogoutPopup
 from config.styles import Styles
 from config.settings_manager import load_settings
+<<<<<<< Updated upstream
 from config.settings_manager import load_settings
+=======
+>>>>>>> Stashed changes
 from utils.session_manager import load_session, clear_session
 from services.booking_information_manager import BookingInformationManager
 from database.db_handler import DatabaseHandler
 
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 class App(CTk):
     def __init__(self):
         super().__init__()
 
         # === Styling and Theme Setup ===
+<<<<<<< Updated upstream
 
         # === Styling and Theme Setup ===
+=======
+>>>>>>> Stashed changes
         self.styles = Styles()
 
         settings = load_settings()
@@ -35,6 +44,7 @@ class App(CTk):
         set_appearance_mode(self.styles.theme.lower())
 
         # === Window Configuration ===
+<<<<<<< Updated upstream
 
         settings = load_settings()
         self.styles.theme = settings.get("theme_mode", "System")
@@ -42,6 +52,8 @@ class App(CTk):
         set_appearance_mode(self.styles.theme.lower())
 
         # === Window Configuration ===
+=======
+>>>>>>> Stashed changes
         self.title("Gethub")
         self.geometry("900x600")
 
@@ -53,6 +65,7 @@ class App(CTk):
 
         # === Database & Session ===
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         self.db = DatabaseHandler()
 
         self.current_user = None
@@ -63,22 +76,34 @@ class App(CTk):
         self.current_user = load_session()
         self.current_user = load_session()
 >>>>>>> Stashed changes
+=======
+        self.db = DatabaseHandler()
+        self.db.initialize_database()
+        self.current_user = load_session()
+>>>>>>> Stashed changes
         self.logout_popup = None
         self.booking_information_manager = BookingInformationManager(self.db)
 
         # === Grid Layout ===
+<<<<<<< Updated upstream
         # === Grid Layout ===
+=======
+>>>>>>> Stashed changes
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
         # === UI Components ===
+<<<<<<< Updated upstream
         # === UI Components ===
+=======
+>>>>>>> Stashed changes
         self.navbar = Navbar(self, app=self, styles=self.styles)
         self.navbar.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
         self.sidebar = Sidebar(self, styles=self.styles)
 
         self.container = CTkFrame(self, fg_color=self.styles.colors["background"])
+<<<<<<< Updated upstream
         self.sidebar = Sidebar(self, styles=self.styles)
 
         self.container = CTkFrame(self, fg_color=self.styles.colors["background"])
@@ -86,16 +111,26 @@ class App(CTk):
 
         # === Initial Page Setup ===
         # === Initial Page Setup ===
+=======
+        self.container.grid(row=1, column=1, sticky="nsew")
+
+        # === Initial Page Setup ===
+>>>>>>> Stashed changes
         self.pages = {}
         self.navbar.render_nav()
         self.sidebar.render_sidebar()
         self.show_page("Dashboard")
+<<<<<<< Updated upstream
         self.navbar.render_nav()
         self.sidebar.render_sidebar()
         self.show_page("Dashboard")
 
         # === Window Close Event ===
         # === Window Close Event ===
+=======
+
+        # === Window Close Event ===
+>>>>>>> Stashed changes
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def show_page(self, page_name):
@@ -128,7 +163,10 @@ class App(CTk):
 
     def logout(self):
         if self.logout_popup and self.logout_popup.winfo_exists():
+<<<<<<< Updated upstream
         if self.logout_popup and self.logout_popup.winfo_exists():
+=======
+>>>>>>> Stashed changes
             self.logout_popup.lift()
             return
 
@@ -147,4 +185,7 @@ class App(CTk):
 
     def on_closing(self):
         self.destroy()
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
