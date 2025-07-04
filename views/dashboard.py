@@ -1,13 +1,15 @@
 from customtkinter import *
 from tkinter import Canvas
 from PIL import Image, ImageTk
-from utils.session_manager import load_session  # <-- Import session check
+from utils.session_manager import load_session
 
 class DashboardPage(CTkFrame):
     def __init__(self, master, app):
         super().__init__(master)
         self.__app = app
         self.__booking_information_manager = self.__app.booking_information_manager
+        f = self.__app.styles
+        c = self.__app.styles.colors
 
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
@@ -23,32 +25,37 @@ class DashboardPage(CTkFrame):
         self.tk_background_image = None
         self.image_id = self.canvas.create_image(0, 0, anchor="nw", image=None)
 
-        # Overlay Card (on top of canvas)
+        # Overlay Card
         self.card_container = CTkFrame(
             self,
             corner_radius=0,
-            fg_color="#222222",
+            fg_color=c["card"],
             border_width=2,
-            border_color="#444444",
+            border_color=c["border"],
             width=400
         )
         self.card_container.place(relx=0.22, rely=0.5, anchor="center")
 
         # Logo
-        logo_image = CTkImage(light_image=Image.open("assets/logo-light--transparent.png"), dark_image=Image.open("assets/logo-dark--transparent.png"), size=(150, 150))
+        logo_image = CTkImage(
+            light_image=Image.open("assets/logo-dark--transparent.png"),
+            dark_image=Image.open("assets/logo-dark--transparent.png"),
+            size=(150, 150)
+        )
         self.logo_label = CTkLabel(
             self.card_container,
             image=logo_image,
             text="",
             fg_color="transparent",
-            bg_color="transparent")
+            bg_color="transparent"
+        )
         self.logo_label.pack(pady=(30, 10))
 
         # Welcome Text
         self.welcome_label = CTkLabel(
             self.card_container,
             text="Welcome to Gethub!",
-            font=("Arial", 32, "bold"),
+            font=f.font_h2,
             text_color="white",
             bg_color="transparent"
         )
@@ -58,14 +65,18 @@ class DashboardPage(CTkFrame):
         self.slogan_label = CTkLabel(
             self.card_container,
             text="We get you there. Fast. Safe. Simple.",
-            font=("Arial", 16, "italic"),
-            text_color="#cccccc",
+            font=CTkFont(family="Arial", size=16, weight="normal", slant="italic"),
+            text_color="white",
             bg_color="transparent"
         )
         self.slogan_label.pack(padx=40, pady=(0, 15))
 
         # Ride Icon
-        ride_icon = CTkImage(light_image=Image.open("assets/ride_icon-light.png"), dark_image=Image.open("assets/ride_icon-dark.png"), size=(24, 24))
+        ride_icon = CTkImage(
+            light_image=Image.open("assets/ride_icon-dark.png"),
+            dark_image=Image.open("assets/ride_icon-dark.png"),
+            size=(24, 24)
+        )
 
         # Check session to decide button behavior
         session_user = load_session()
@@ -78,8 +89,10 @@ class DashboardPage(CTkFrame):
         self.book_button = CTkButton(
             self.card_container,
             text="Book a ride now!",
-            font=("Arial", 16, "bold"),
-            text_color="white",
+            font=f.font_h5,
+            text_color="White",
+            fg_color=c["green"],
+            hover_color=c["green_hover"],
             image=ride_icon,
             corner_radius=10,
             width=200,
@@ -90,8 +103,6 @@ class DashboardPage(CTkFrame):
 
         # Bind resize event
         self.bind("<Configure>", self.resize_image)
-
-        # Initial forced resize
         self.after(100, lambda: self.resize_image(None))
 
     def resize_image(self, event):

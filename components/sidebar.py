@@ -16,20 +16,58 @@ class Sidebar(CTkFrame):
         for widget in self.winfo_children():
             widget.destroy()
 
-        CTkButton(self, width=200, height=50, text="Settings", font=self.app.styles.sidebar_font,
-                fg_color="transparent", hover_color=self.app.styles.hover_color,
-                corner_radius=0, command=lambda: self.app.show_page("Settings")).pack(fill="x")
+        c = self.styles.colors
+        f = self.styles
+
+        CTkButton(
+            self,
+            width=200,
+            height=50,
+            text="Settings",
+            font=f.font_h5,
+            fg_color="transparent",
+            hover_color=c["brown_accent"],
+            corner_radius=0,
+            command=lambda: self.app.show_page("Settings")
+        ).pack(fill="x")
 
         if self.app.current_user:
-            CTkButton(self, width=200, height=50, text="About Us", font=self.app.styles.sidebar_font,
-                    fg_color="transparent", hover_color=self.app.styles.hover_color,
-                    corner_radius=0, command=lambda: self.app.show_page("About")).pack(fill="x")
-            CTkButton(self, width=200, height=50, text="Contact Us", font=self.app.styles.sidebar_font,
-                    fg_color="transparent", hover_color=self.app.styles.hover_color,
-                    corner_radius=0, command=lambda: self.app.show_page("Contact")).pack(fill="x")
-            CTkButton(self, width=50, height=40, text="Logout", font=self.app.styles.sidebar_font,
-                    fg_color="#9b1b1b", text_color="white", hover_color="#7f1515",
-                    corner_radius=30, command=self.app.logout).pack(pady=(10, 0))
+            CTkButton(
+                self,
+                width=200,
+                height=50,
+                text="About Us",
+                font=f.font_h5,
+                fg_color="transparent",
+                hover_color=c["brown_accent"],
+                corner_radius=0,
+                command=lambda: self.app.show_page("About")
+            ).pack(fill="x")
+
+            CTkButton(
+                self,
+                width=200,
+                height=50,
+                text="Contact Us",
+                font=f.font_h5,
+                fg_color="transparent",
+                hover_color=c["brown_accent"],
+                corner_radius=0,
+                command=lambda: self.app.show_page("Contact")
+            ).pack(fill="x")
+
+            CTkButton(
+                self,
+                width=50,
+                height=40,
+                text="Logout",
+                font=f.font_h5,
+                fg_color=c["brown"],
+                text_color="white",
+                hover_color=c["brown_hover"],
+                corner_radius=30,
+                command=self.app.logout
+            ).pack(pady=(10, 0))
 
     def confirm_logout(self):
         clear_session()

@@ -72,11 +72,19 @@ class Navbar(CTkFrame):
             row=0, column=7, padx=(0, 10), pady=10, sticky="nsew")
 
     def create_nav_button(self, text, page, column):
-        CTkButton(self, text=text, font=self.styles.nav_font,
-                  command=lambda: self.app.show_page(page),
-                  fg_color="transparent", text_color="white",
-                  hover_color=self.styles.hover_color, corner_radius=0
-                  ).grid(row=0, column=column, padx=5, sticky="nsew")
+        c = self.styles.colors
+        f = self.styles
+
+        CTkButton(
+            self,
+            text=text,
+            font=f.font_h5,
+            command=lambda: self.app.show_page(page),
+            fg_color="transparent",
+            text_color="white",
+            hover_color=c["green_accent"],
+            corner_radius=0
+        ).grid(row=0, column=column, padx=5, sticky="nsew")
 
     def open_signup_popup(self):
         if hasattr(self.app, "auth_popup") and self.app.auth_popup.winfo_exists():

@@ -7,6 +7,9 @@ class ContactPage(CTkFrame):
         super().__init__(master)
         self.app = app
 
+        c = self.app.styles.colors
+        f = self.app.styles
+
         # Scrollable frame
         self.scrollable_frame = CTkScrollableFrame(self, corner_radius=15, fg_color="transparent")
         self.scrollable_frame.pack(fill="both", expand=True, pady=0, padx=0)
@@ -21,7 +24,8 @@ class ContactPage(CTkFrame):
         self.title_label = CTkLabel(
             self.scrollable_frame,
             text="Contact Us",
-            font=("Arial", 32, "bold"),
+            text_color="white",
+            font=f.font_h1,
             image=self.contact_image,
             compound="center"
         )
@@ -31,7 +35,7 @@ class ContactPage(CTkFrame):
         intro_heading = CTkLabel(
             self.scrollable_frame,
             text="How can we help you?",
-            font=("Arial", 28, "bold"),
+            font=f.font_h2,
             anchor="center"
         )
         intro_heading.pack(pady=(20, 10))
@@ -41,7 +45,7 @@ class ContactPage(CTkFrame):
             self.scrollable_frame,
             text="If you have any comments, suggestions or questions, please do not hesitate to contact us.\n"
                  "We'll do our best to help and respond as soon as possible.",
-            font=("Arial", 18),
+            font=f.font_h3p,
             wraplength=1000,
             justify="center"
         )
@@ -55,6 +59,7 @@ class ContactPage(CTkFrame):
         self.contact_form.pack(pady=(40, 20), fill="x", padx=40)
 
     def build_contact_info(self):
+        f = self.app.styles
         info_frame = CTkFrame(self.scrollable_frame, fg_color="transparent")
         info_frame.pack(pady=10, padx=60, fill="x")
 
@@ -68,10 +73,10 @@ class ContactPage(CTkFrame):
             icon_label = CTkLabel(frame, image=icon, text="")
             icon_label.pack(pady=(0, 5))
 
-            label = CTkLabel(frame, text=label_text, font=("Arial", 16, "bold"))
+            label = CTkLabel(frame, text=label_text, font=f.font_h4)
             label.pack()
 
-            detail = CTkLabel(frame, text=detail_text, font=("Arial", 14))
+            detail = CTkLabel(frame, text=detail_text, font=f.font_h5p)
             detail.pack(pady=(2, 0))
 
             return frame
@@ -91,7 +96,8 @@ class ContactPage(CTkFrame):
         email_col.grid(row=0, column=4, padx=40, pady=10)
 
     def add_divider(self, parent, col):
-        divider = CTkFrame(parent, width=3, fg_color="gray")
+        c = self.app.styles.colors
+        divider = CTkFrame(parent, width=3, fg_color=c["divider"])
         divider.grid(row=0, column=col, sticky="ns", pady=10)
 
     def adjust_wraplength(self, event):

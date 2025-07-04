@@ -16,14 +16,16 @@ class BookingHistoryList(CTkFrame):
 
     def __init__(self, master, app):
         super().__init__(master, fg_color="transparent")
-        self.app = app
         self.pack(fill="both", expand=True, padx=20, pady=10)
 
+        self.app = app
+        f = self.app.styles
+
         self.db_handler = DatabaseHandler()
-        self.download_icon = CTkImage(light_image=Image.open("assets/download_icon-light.png"), dark_image=Image.open("assets/download_icon-dark.png"))
+        self.download_icon = CTkImage(light_image=Image.open("assets/download_icon-dark.png"), dark_image=Image.open("assets/download_icon-dark.png"))
 
         # Title
-        CTkLabel(self, text="Your Ride History", font=("Arial", 24, "bold", "bold")).pack(pady=20)
+        CTkLabel(self, text="Your Ride History", font=f.font_h2).pack(pady=20)
 
         # Create scrollable frame for the table
         self.table_frame = CTkScrollableFrame(self, width=1000, height=500)
@@ -45,6 +47,9 @@ class BookingHistoryList(CTkFrame):
         frame.grid_columnconfigure(8, weight=0, minsize=50)   # Save button
 
     def create_table(self):
+        c = self.app.styles.colors
+        f = self.app.styles
+
         # Clear existing widgets
         for widget in self.table_frame.winfo_children():
             widget.destroy()
@@ -56,10 +61,10 @@ class BookingHistoryList(CTkFrame):
 
         # If no user is logged in, display a message and return
         if user_id is None:
-            no_user_frame = CTkFrame(self.table_frame, fg_color="#2a2a2a", corner_radius=10)
+            no_user_frame = CTkFrame(self.table_frame, fg_color=c["table_row_even"], corner_radius=10)
             no_user_frame.pack(fill="x", padx=10, pady=20)
             CTkLabel(no_user_frame, text="Please log in to view your booking history.",
-                    font=("Arial", 16)).pack(pady=20)
+                    font=f.font_h4).pack(pady=20)
             return
 
         # Fetch bookings specific to the logged-in user
@@ -67,10 +72,10 @@ class BookingHistoryList(CTkFrame):
 
         # If no bookings are found for this user, display a message
         if not bookings:
-            no_bookings_frame = CTkFrame(self.table_frame, fg_color="#2a2a2a", corner_radius=10)
+            no_bookings_frame = CTkFrame(self.table_frame, fg_color=c["table_row_even"], corner_radius=10)
             no_bookings_frame.pack(fill="x", padx=10, pady=20)
             CTkLabel(no_bookings_frame, text="No booking history found.",
-                    font=("Arial", 16)).pack(pady=20)
+                    font=(f.font_h4)).pack(pady=20)
             return
 
         # Create table header
@@ -81,6 +86,8 @@ class BookingHistoryList(CTkFrame):
             self.create_table_row(booking, i)
 
     def create_table_header(self):
+        f = self.app.styles
+
         """Create the table header with column titles"""
         header_frame = CTkFrame(self.table_frame, fg_color="#1a1a1a", corner_radius=5)
         header_frame.pack(fill="x", padx=5, pady=(0, 2))
@@ -95,13 +102,16 @@ class BookingHistoryList(CTkFrame):
         ]
 
         for col, header_text in enumerate(headers):
-            label = CTkLabel(header_frame, text=header_text, font=("Arial", 16, "bold"))
-            label.grid(row=0, column=col, padx=10, pady=15, sticky="w")
+            label = CTkLabel(header_frame, text=header_text, font=(f.font_h3))
+            label.grid(row=0, column=col, padx=5, sticky="ns")
 
     def create_table_row(self, booking, row_index):
         """Create a table row for each booking"""
 
-        row_color = "#2a2a2a" if row_index % 2 == 0 else "#333333"
+        c = self.app.styles.colors
+        f = self.app.styles
+
+        row_color = c["table_row_even"] if row_index % 2 == 0 else c["table_row_odd"]
 
         row_frame = CTkFrame(self.table_frame, fg_color=row_color, corner_radius=5)
         row_frame.pack(fill="x", padx=5, pady=1)
@@ -124,8 +134,8 @@ class BookingHistoryList(CTkFrame):
 
         # Create labels for each column
         for col, data in enumerate(row_data):
-            label = CTkLabel(row_frame, text=data, font=("Arial", 14))
-            label.grid(row=0, column=col, padx=10, pady=15, sticky="w")
+            label = CTkLabel(row_frame, text=data, font=f.font_p)
+            label.grid(row=0, column=col,padx=5, sticky="ns")
 
         # Save Button (icon only)
         save_button = CTkButton(
@@ -134,7 +144,7 @@ class BookingHistoryList(CTkFrame):
             width=35,
             height=35,
             fg_color="transparent",
-            hover_color="#1a5a8a",
+            hover_color=c["green_hover"],
             image=self.download_icon,
             command=lambda b=booking: self.save_booking_to_json(b)
         )
@@ -203,9 +213,11 @@ class BookingHistoryList(CTkFrame):
             return str(date_string) if len(str(date_string)) < 20 else "Invalid Date"
 
     def add_hover_effect(self, frame, original_color):
+        c = self.app.styles.colors
+        
         """Add hover effect to table rows"""
         def on_enter(event):
-            frame.configure(fg_color="#404040")
+            frame.configure(fg_color=c["card_light"])
 
         def on_leave(event):
             frame.configure(fg_color=original_color)

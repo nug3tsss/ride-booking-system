@@ -10,15 +10,17 @@ class ProfilePage(CTkFrame):
         super().__init__(master)
         self.app = app
         self.user = app.current_user
+        c = app.styles.colors
+        f = app.styles
         self.new_profile_path = None
         self.reset_picture_flag = False
         self.editing_field_active = False
         self.has_unsaved_changes = False
 
         self.grid_columnconfigure(0, weight=1)
-        CTkLabel(self, text="My Profile", font=("Arial", 22, "bold")).pack(pady=(20, 10))
+        CTkLabel(self, text="My Profile", font=f.font_h2).pack(pady=(20, 10))
 
-        self.card = CTkFrame(self, fg_color="#2a2a2a", corner_radius=12)
+        self.card = CTkFrame(self, fg_color=c["card"], corner_radius=12)
         self.card.pack(padx=20, pady=10, ipady=50)
 
         self.card.grid_columnconfigure(0, weight=1)
@@ -34,23 +36,24 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(self.card, fg_color="transparent")
         btn_frame.grid(row=6, column=0, columnspan=3, pady=(20, 5))
 
-        save_icon = CTkImage(light_image=Image.open("assets/save_icon-light.png"), dark_image=Image.open("assets/save_icon-dark.png"), size=(16, 16))
-        cancel_icon = CTkImage(light_image=Image.open("assets/cancel_icon-light.png"), dark_image=Image.open("assets/cancel_icon-dark.png"), size=(16, 16))
+        save_icon = CTkImage(light_image=Image.open("assets/save_icon-dark.png"), dark_image=Image.open("assets/save_icon-dark.png"), size=(16, 16))
+        cancel_icon = CTkImage(light_image=Image.open("assets/cancel_icon-dark.png"), dark_image=Image.open("assets/cancel_icon-dark.png"), size=(16, 16))
 
-        self.save_btn = CTkButton(btn_frame, text="Save Changes", fg_color="#444444", state=DISABLED,
+        self.save_btn = CTkButton(btn_frame, text="Save Changes", fg_color=c["button_disable"], state=DISABLED,
                                   image=save_icon, compound="left", command=self.save_all_changes)
         self.save_btn.pack(side="left", padx=10)
 
-        self.cancel_btn = CTkButton(btn_frame, text="Cancel", fg_color="#444444", state=DISABLED,
+        self.cancel_btn = CTkButton(btn_frame, text="Cancel", fg_color=c["button_disable"], state=DISABLED,
                                     image=cancel_icon, compound="left", command=self.cancel_all_changes)
         self.cancel_btn.pack(side="left", padx=10)
 
-        self.delete_icon = CTkImage(light_image=Image.open("assets/delete_icon-light.png"), dark_image=Image.open("assets/delete_icon-dark.png"), size=(16, 16))
-        CTkButton(self.card, text="Delete Account", fg_color="#9b1b1b", hover_color="#7f1515",
+        self.delete_icon = CTkImage(light_image=Image.open("assets/delete_icon-dark.png"), dark_image=Image.open("assets/delete_icon-dark.png"), size=(16, 16))
+        CTkButton(self.card, text="Delete Account", fg_color=c["button_danger"], hover_color=c["button_danger_hover"],
                   image=self.delete_icon, compound="left", command=self.confirm_delete
                   ).grid(row=7, column=0, columnspan=3, pady=10)
 
     def create_profile_image_section(self):
+        c = self.app.styles.colors
         self.img_label = CTkLabel(self.card, text="")
         self.img_label.grid(row=0, column=0, columnspan=3, pady=(35, 10))
         self.display_profile_image(self.user.get("profile_pic"))
@@ -58,13 +61,13 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(self.card, fg_color="transparent")
         btn_frame.grid(row=1, column=0, columnspan=3, pady=(0, 20))
 
-        change_icon = CTkImage(light_image=Image.open("assets/change_icon-light.png"), dark_image=Image.open("assets/change_icon-dark.png"), size=(16, 16))
-        remove_icon = CTkImage(light_image=Image.open("assets/remove_icon-light.png"), dark_image=Image.open("assets/remove_icon-dark.png"), size=(16, 16))
+        change_icon = CTkImage(light_image=Image.open("assets/change_icon-dark.png"), dark_image=Image.open("assets/change_icon-dark.png"), size=(16, 16))
+        remove_icon = CTkImage(light_image=Image.open("assets/remove_icon-dark.png"), dark_image=Image.open("assets/remove_icon-dark.png"), size=(16, 16))
 
-        CTkButton(btn_frame, text="Change Photo", image=change_icon, compound="left",
+        CTkButton(btn_frame, fg_color=c["green"], hover_color=c["green_hover"], text="Change Photo", image=change_icon, compound="left",
                   command=self.change_picture).pack(side="left", padx=5)
 
-        CTkButton(btn_frame, text="Remove Photo", image=remove_icon, compound="left",
+        CTkButton(btn_frame, fg_color=c["green"], hover_color=c["green_hover"], text="Remove Photo", image=remove_icon, compound="left",
                   command=self.remove_picture).pack(side="left", padx=5)
 
     def display_profile_image(self, img_path):
@@ -91,10 +94,11 @@ class ProfilePage(CTkFrame):
 
 
     def create_field(self, label, attr, row):
-        CTkLabel(self.card, text=f"{label}:", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(25, 5), pady=2)
+        c = self.app.styles.colors
+        CTkLabel(self.card, text=f"{label}:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(25, 5), pady=2)
 
         var = StringVar(value=self.user.get(attr, ""))
-        label_widget = CTkLabel(self.card, width=140, textvariable=var, anchor="w")
+        label_widget = CTkLabel(self.card, width=140, text_color="white" ,textvariable=var, anchor="w")
         label_widget.grid(row=row, column=1, padx=(5, 5), sticky="w")
 
         entry_widget = CTkEntry(self.card)
@@ -102,8 +106,8 @@ class ProfilePage(CTkFrame):
         entry_widget.grid(row=row, column=1, padx=(5, 5), sticky="w")
         entry_widget.grid_remove()
 
-        edit_icon = CTkImage(light_image=Image.open("assets/edit_icon-light.png"), dark_image=Image.open("assets/edit_icon-dark.png"), size=(16, 16))
-        edit_btn = CTkButton(self.card, text="Edit", width=80, image=edit_icon, compound="left",
+        edit_icon = CTkImage(light_image=Image.open("assets/edit_icon-dark.png"), dark_image=Image.open("assets/edit_icon-dark.png"), size=(16, 16))
+        edit_btn = CTkButton(self.card, fg_color=c["green"], hover_color=c["green_hover"], text="Edit", text_color="white", width=80, image=edit_icon, compound="left",
                              command=lambda: self.toggle_field(attr))
         edit_btn.grid(row=row, column=2, padx=(5, 0), sticky="w")
 
@@ -112,6 +116,8 @@ class ProfilePage(CTkFrame):
         setattr(self, f"entry_{attr}", entry_widget)
 
     def toggle_field(self, attr):
+        c = self.app.styles.colors
+
         entry = getattr(self, f"entry_{attr}")
         label = getattr(self, f"label_{attr}")
         var = getattr(self, f"var_{attr}")
@@ -125,7 +131,7 @@ class ProfilePage(CTkFrame):
         entry.focus()
         entry.bind("<FocusOut>", lambda e: self.on_focus_out(attr))
         entry.bind("<KeyRelease>", lambda e: self.check_changes())
-        self.cancel_btn.configure(state=NORMAL, fg_color="#1f6aa5")
+        self.cancel_btn.configure(state=NORMAL, fg_color=c["green"])
 
     def on_focus_out(self, attr):
         entry = getattr(self, f"entry_{attr}")
@@ -144,12 +150,14 @@ class ProfilePage(CTkFrame):
         self.check_changes()
 
     def create_password_button(self, row):
-        CTkLabel(self.card, text="Password:", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(0, 5), pady=4)
-        CTkLabel(self.card, text="********", anchor="w").grid(row=row, column=1, padx=(5, 5), sticky="w")
-        CTkButton(self.card, width=100, text="Change", image=CTkImage(light_image=Image.open("assets/password_icon-light.png"), dark_image=Image.open("assets/password_icon-dark.png"), size=(16, 16)),
+        c = self.app.styles.colors
+        CTkLabel(self.card, text="Password:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(0, 5), pady=4)
+        CTkLabel(self.card, text="********", text_color="white", anchor="w").grid(row=row, column=1, padx=(5, 5), sticky="w")
+        CTkButton(self.card, width=100, fg_color=c["green"], hover_color=c["green_hover"], text="Change", image=CTkImage(light_image=Image.open("assets/password_icon-dark.png"), dark_image=Image.open("assets/password_icon-dark.png"), size=(16, 16)),
                   compound="left", command=self.show_password_popup).grid(row=row, column=2, padx=(5, 50), sticky="w")
 
     def show_password_popup(self):
+        c = self.app.styles.colors
         popup = CTkToplevel(self)
         popup.title("Change Password")
         popup.geometry("300x350")
@@ -210,7 +218,7 @@ class ProfilePage(CTkFrame):
             self.has_unsaved_changes = True
             self.check_changes()
 
-        CTkButton(popup, text="Save Password", command=change_pw).pack(pady=10)
+        CTkButton(popup, fg_color=c["green"], hover_color=c["green_hover"], text="Save Password", command=change_pw).pack(pady=10)
 
     def remove_picture(self):
         self.new_profile_path = None
@@ -300,6 +308,7 @@ class ProfilePage(CTkFrame):
 
 
     def check_changes(self):
+        c = self.app.styles.colors
         changed = False
         for attr in ["first_name", "last_name", "username"]:
             entry = getattr(self, f"entry_{attr}")
@@ -314,10 +323,10 @@ class ProfilePage(CTkFrame):
         self.has_unsaved_changes = changed
 
         self.save_btn.configure(state=NORMAL if changed else DISABLED,
-                                fg_color="#1f6aa5" if changed else "#444444")
+                                fg_color=c["green"] if changed else c["button_disable"])
 
         self.cancel_btn.configure(state=NORMAL if changed or self.editing_field_active else DISABLED,
-                                  fg_color="#1f6aa5" if changed or self.editing_field_active else "#444444")
+                                  fg_color=c["green"] if changed or self.editing_field_active else c["button_disable"])
 
     def save_all_changes(self):
         updated_data = {}
@@ -363,6 +372,7 @@ class ProfilePage(CTkFrame):
         self.refresh_labels()
 
     def refresh_labels(self):
+        c = self.app.styles.colors
         for attr in ["first_name", "last_name", "username"]:
             var = getattr(self, f"var_{attr}")
             var.set(self.user.get(attr, ""))
@@ -377,13 +387,14 @@ class ProfilePage(CTkFrame):
         self.has_unsaved_changes = False
 
         self.display_profile_image(self.user.get("profile_pic"))
-        self.save_btn.configure(state=DISABLED, fg_color="#444444")
-        self.cancel_btn.configure(state=DISABLED, fg_color="#444444")
+        self.save_btn.configure(state=DISABLED, fg_color=c["button_disable"])
+        self.cancel_btn.configure(state=DISABLED, fg_color=c["button_disable"])
 
     def cancel_all_changes(self):
         self.refresh_labels()
 
     def confirm_delete(self):
+        c = self.app.styles.colors
         confirm = CTkToplevel(self)
         confirm.title("Confirm Delete")
         confirm.geometry("400x140")
@@ -396,9 +407,9 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(confirm, fg_color="transparent")
         btn_frame.pack(pady=10)
 
-        CTkButton(btn_frame, text="Yes", fg_color="#9b1b1b", hover_color="#7f1515",
+        CTkButton(btn_frame, text="Yes", fg_color=c["button_danger"], hover_color=c["button_danger_hover"],
                   command=lambda: self.delete_account(confirm)).pack(side="left", padx=10)
-        CTkButton(btn_frame, text="Cancel", command=confirm.destroy).pack(side="left", padx=10)
+        CTkButton(btn_frame, text="Cancel", fg_color=c["green"], hover_color=c["green_hover"], command=confirm.destroy).pack(side="left", padx=10)
 
     def delete_account(self, popup):
         conn = get_connection()

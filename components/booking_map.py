@@ -7,8 +7,8 @@ from services.map_manager import MapManager
 class BookingMap(CTkFrame):
     """Contains the BookingMap GUI and passes it to the MapManager"""
 
-    def __init__(self, master_frame, booking_information_manager):
-        super().__init__(master_frame)
+    def __init__(self, master, booking_information_manager):
+        super().__init__(master)
         self.pack(side=RIGHT, fill="both", expand=True, padx=15, pady=15)
 
         booking_information_manager = booking_information_manager
