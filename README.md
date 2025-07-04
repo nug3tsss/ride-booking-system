@@ -1,16 +1,34 @@
-# 🚖 Ride Booking System
+# 🚖 Gethub
 
-A ride booking program made with Python using OpenStreetMap, OSRM, CustomTkinter, TkinterMapView, Geopy, and SQLite.
+Gethub is a ride-hailing program developed by 1st year Computer Engineering students of PUP College of Engineering.
 
 ---
 
-## 🔭 Features (WIP)
+## 🔭 Features
 
-- Interactive map (select pick-up/drop-off locations with a click of your mouse)  
-- Route display with OSRM  
-- Calculate distance (km), time (m), and fare (₱).  
-- Select from multiple vehicle types.  
-- Book a ride and manage it (view and cancel booking).  
+- Interactive booking experience
+  - Responsive map with manual marker placements and display autofocus
+  - Route navigation display
+  - Location address entry with autosuggestion feature
+  - Vehicle type selection
+  - Import past booking information
+  - Clear booking entries
+- Route and fare calculation
+- Booking history and management
+- Account creation and management
+
+---
+
+## 📚 Libraries and APIs Used
+
+- CustomTkinter -> GUI elements
+- TkinterMapView -> Map GUI integration
+- OpenStreetMap -> Map GUI integration
+- Pillow -> Image integration and customization
+- Open Source Routing Machine -> Routing calculations
+- Geopy -> Geolocation
+- SQLite -> Database handling
+- Geoapify -> Location addresses
 
 ---
 
@@ -21,7 +39,7 @@ A ride booking program made with Python using OpenStreetMap, OSRM, CustomTkinter
 
 ---
 
-## 🧰 Setup Instructions
+# 🧰 Setup Instructions
 
 ### 1. ✔️ Check if Python is installed and on the required version
 
@@ -53,8 +71,17 @@ cd ride-booking-system
 ### 3. 🖥️ Create a Virtual Environment
 
 ```bash
+py -m venv .venv
+```
+or
+```bash
 python -m venv .venv
 ```
+or
+```bash
+python3 -m venv .venv
+```
+
 Activate it:
 ```bash
 .venv\Scripts\activate
@@ -72,8 +99,10 @@ pip install -r requirements.txt
 python main.py
 ```
 
+---
+
 ### ❗ IF THE TERMINAL COMMANDS DON'T WORK
-Try typing:
+Add the possible prefix/es:
 
 ```bash
 py -m
@@ -87,18 +116,9 @@ or
 python3 -m
 ```
 
-before typing the terminal command.  
+then type the terminal command.  
 For example:
 
 ```bash
 py -m pip install -r requirements.txt
 ```
-
----
-
-## 📄 Included Tools/Libraries
-- CustomTkinter
-- TkinterMapView
-- Geopy
-- Requests
-- SQLite3
