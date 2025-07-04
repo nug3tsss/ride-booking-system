@@ -95,16 +95,16 @@ class BookingSummaryForm(CTkScrollableFrame):
 
         if self.__vehicle_details:
             CTkLabel(self.__vehicle_frame, text="Type:", font=f.font_h5).grid(row=1, column=0, sticky="w", padx=(30, 10), pady=2)
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.get('type', 'N/A'), font=f.font_p).grid(row=1, column=1, sticky="w", padx=(0, 20), pady=2)
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.type, font=("Arial", 14)).grid(row=1, column=1, sticky="w", padx=(0, 20), pady=2)
 
             CTkLabel(self.__vehicle_frame, text="Model:", font=f.font_h5).grid(row=1, column=2, sticky="w", padx=(20, 10), pady=2)
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.get('model', 'N/A'), font=f.font_p).grid(row=1, column=3, sticky="w", pady=2)
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.model, font=("Arial", 14)).grid(row=1, column=3, sticky="w", pady=2)
 
             CTkLabel(self.__vehicle_frame, text="License Plate:", font=f.font_h5).grid(row=2, column=0, sticky="w", padx=(30, 10), pady=2)
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.get('license_plate', 'N/A'), font=f.font_p).grid(row=2, column=1, sticky="w", padx=(0, 20), pady=2)
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.license_plate, font=("Arial", 14)).grid(row=2, column=1, sticky="w", padx=(0, 20), pady=2)
 
             CTkLabel(self.__vehicle_frame, text="Driver:", font=f.font_h5).grid(row=2, column=2, sticky="w", padx=(20, 10), pady=(2, 15))
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.get('driver_name', 'N/A'), font=f.font_p).grid(row=2, column=3, sticky="w", pady=(2, 15))
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.driver_name, font=("Arial", 14)).grid(row=2, column=3, sticky="w", pady=(2, 15))
 
     def __create_trip_details_section(self):
         c = self.__app.styles.colors
@@ -152,7 +152,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         distance_km = self.__booking_information_manager.get_distance_km()
         estimated_cost = self.__booking_information_manager.get_estimated_cost()
 
-        vehicle_id = vehicle_details.get('id')
+        vehicle_id = vehicle_details.id
         user_id = self.__app.current_user.get('user_id')
 
         self.__current_booking_id = self.__db_handler.add_booking(

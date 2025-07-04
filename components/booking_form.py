@@ -3,6 +3,7 @@ from tkinter import filedialog
 import requests
 import threading
 import json
+from models.vehicle import Vehicle
 
 class BookingForm(CTkScrollableFrame):
     """Gets user input and passes it to the BookingMap and BookingInformationManager"""
@@ -106,6 +107,8 @@ class BookingForm(CTkScrollableFrame):
             vehicle_type_str = "Van"
         elif vehicle_type_int == 3:
             vehicle_type_str = "Motorcycle"
+        else:
+            vehicle_type_str = ""
 
         self.__booking_information_manager.set_vehicle_type_str(vehicle_type_str)
         self.__booking_information_manager.set_vehicle_type_int(vehicle_type_int)

@@ -4,6 +4,7 @@ from database.db_handler import get_connection
 from utils.session_manager import load_session
 from PIL import Image
 import datetime
+
 import re
 
 class ContactForm(CTkFrame):
