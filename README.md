@@ -1,4 +1,4 @@
-# 🚖 Gethub
+# 🚖 Introducing: Gethub!
 
 Gethub is a ride-hailing program developed by 1st year Computer Engineering students of PUP College of Engineering.
 
