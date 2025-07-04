@@ -39,7 +39,7 @@ Gethub is a ride-hailing program developed by 1st year Computer Engineering stud
 
 ---
 
-# 🧰 Setup Instructions
+## 🧰 Setup Instructions
 
 ### 1. ✔️ Check if Python is installed and on the required version
 
