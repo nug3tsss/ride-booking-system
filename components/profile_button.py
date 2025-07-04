@@ -6,19 +6,16 @@ class ProfileButton(CTkButton):
 
     def __init__(self, master, app, text="John Doe", image_path="assets/profile.jpg", **kwargs):
         self.app = app
-        f = self.app.styles
-        c = self.app.styles.colors
-
         self.profile_image = self.create_profile_image(image_path)
 
         super().__init__(
             master,
             text=text,
-            font=f.font_h5,
+            font=("Arial", 16, "bold"),
             fg_color="transparent",
             image=self.profile_image,
             command=lambda: app.show_page("Profile"),
-            text_color=c["text"],
+            text_color="white",
             hover=False,
             compound="right",
             **kwargs

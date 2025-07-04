@@ -1,4 +1,4 @@
-from models.vehicle import Vehicle
+#from database.db_handler import DatabaseHandler
 class BookingInformationManager:
     """Saves all of the booking informations from the current session"""
 
@@ -16,7 +16,6 @@ class BookingInformationManager:
         self.__estimated_time_seconds = 0.0
         self.__estimated_cost_pesos = 0.0
         self.__current_booking_section = "Booking"
-        self.__vehicle_details: Vehicle | None
     
     def set_pickup_coords(self, coords=None):
         self.__pickup_coords = coords
@@ -104,13 +103,28 @@ class BookingInformationManager:
     def get_current_booking_section(self):
         return self.__current_booking_section
     
-    def get_vehicle_details(self) -> Vehicle | None:
+    def get_vehicle_details(self):
         return self.__vehicle_details
 
     def get_estimated_cost(self):
-        self.__estimated_cost_pesos = self.__vehicle_details.calculate_fare(self.__distance_km)
-        return self.__estimated_cost_pesos
+        if self.__vehicle_type_int is None or self.__distance_km == 0.0:
+            self.__estimated_cost_pesos = 0.0
+            return self.__estimated_cost_pesos
         
+        vehicle_type_map = {
+            1: "Car",
+            2: "Van",
+            3: "Motorcycle"
+        }
+        vehicle_type_db = vehicle_type_map.get(self.__vehicle_type_int)
+        if vehicle_type_db:
+            vehicle_details = self.__db.get_vehicle_details_by_type(vehicle_type_db)
+            if vehicle_details:
+                base_fare = vehicle_details["base_fare"]
+                per_km_rate = vehicle_details["per_km_rate"]
+                self.__estimated_cost_pesos = base_fare + (per_km_rate * self.__distance_km)
+                return self.__estimated_cost_pesos # Return the calculated value
+    
     def clear_booking_information(self):
         self.__pickup_coords = None
         self.__dropoff_coords = None
@@ -123,4 +137,3 @@ class BookingInformationManager:
         self.__distance_km = 0.0
         self.__estimated_cost_pesos = 0.0
         self.__current_booking_section = "Booking"
-        self.__vehicle_details = None

@@ -1,16 +1,11 @@
 import os
+import shutil
 
-class PycacheCleaner:
+class PycacheCleaner():
     @staticmethod
-    def clear_pycache(root_dir="."):
-        count = 0
-        for foldername, subfolders, filenames in os.walk(root_dir):
-            for file in filenames:
-                if file.endswith(".pyc"):
-                    file_path = os.path.join(foldername, file)
-                    try:
-                        os.remove(file_path)
-                        count += 1
-                    except Exception:
-                        pass
-        return count
+    def clear_pycache(directory):
+        for root, dirs, files in os.walk(directory):
+            for dir_name in dirs:
+                if dir_name == "__pycache__":
+                    pycache_path = os.path.join(root, dir_name)
+                    shutil.rmtree(pycache_path)

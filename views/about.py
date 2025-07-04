@@ -93,6 +93,14 @@ class AboutPage(CTkFrame):
             {"name": "Luke Philip Lopez", "role": "QA/Test Engineer"},
         ]
 
+        picture_paths = ["assets/members_profile/mark_profile.png",
+                         "assets/members_profile/zybert_profile.jpg",
+                         "assets/members_profile/mercado_profile.jpg",
+                         "assets/members_profile/renier_profile.jpg",
+                         "assets/members_profile/kath_profile.jpg",
+                         "assets/members_profile/maeryl_profile.jpg",
+                         "assets/members_profile/luke_profile.jpg"]
+
         # Main card background
         card_frame = CTkFrame(self.__members_frame, fg_color="#2a2a2a", corner_radius=10)
         card_frame.pack(fill="x", padx=40, pady=(10, 40))
@@ -110,21 +118,21 @@ class AboutPage(CTkFrame):
 
         for i in range(3):
             bottom_container.grid_columnconfigure(i, weight=1)
-
-        # Reusable circular profile image
-        image_raw = self.original_image.resize((100, 100))
-        mask = Image.new("L", image_raw.size, 0)
-        draw = ImageDraw.Draw(mask)
-        draw.ellipse((0, 0) + image_raw.size, fill=255)
-        circular_profile = ImageOps.fit(image_raw, image_raw.size, centering=(0.5, 0.5))
-        circular_profile.putalpha(mask)
-        circular_profile = CTkImage(circular_profile, size=(100, 100))
-
+        
         # Add top 4 members
         for i in range(4):
             member = members[i]
             frame = CTkFrame(top_container, fg_color="transparent")
             frame.grid(row=0, column=i, padx=10, pady=10, sticky="nsew")
+            
+            member_image = Image.open(picture_paths[i])
+            image_raw = member_image.resize((100, 100))
+            mask = Image.new("L", image_raw.size, 0)
+            draw = ImageDraw.Draw(mask)
+            draw.ellipse((0, 0) + image_raw.size, fill=255)
+            circular_profile = ImageOps.fit(image_raw, image_raw.size, centering=(0.5, 0.5))
+            circular_profile.putalpha(mask)
+            circular_profile = CTkImage(circular_profile, size=(100, 100))
 
             CTkLabel(frame, image=circular_profile, text="").pack()
             CTkLabel(frame, text=member["name"], font=("Arial", 14, "bold"), wraplength=150, justify="center").pack(pady=(5, 0))
@@ -135,6 +143,15 @@ class AboutPage(CTkFrame):
             member = members[i + 4]
             frame = CTkFrame(bottom_container, fg_color="transparent")
             frame.grid(row=0, column=i, padx=10, pady=10, sticky="nsew")
+
+            member_image = Image.open(picture_paths[i + 4])
+            image_raw = member_image.resize((100, 100))
+            mask = Image.new("L", image_raw.size, 0)
+            draw = ImageDraw.Draw(mask)
+            draw.ellipse((0, 0) + image_raw.size, fill=255)
+            circular_profile = ImageOps.fit(image_raw, image_raw.size, centering=(0.5, 0.5))
+            circular_profile.putalpha(mask)
+            circular_profile = CTkImage(circular_profile, size=(100, 100))
 
             CTkLabel(frame, image=circular_profile, text="").pack()
             CTkLabel(frame, text=member["name"], font=("Arial", 14, "bold"), wraplength=150, justify="center").pack(pady=(5, 0))

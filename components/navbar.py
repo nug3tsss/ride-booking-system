@@ -11,9 +11,7 @@ class Navbar(CTkFrame):
         super().__init__(master)
         self.app = app
         self.styles = styles
-        c = self.styles.colors
-
-        self.configure(fg_color=c["navbar"], corner_radius=0)
+        self.configure(fg_color=styles.primary_color, corner_radius=0)
 
         # Setup navbar grid layout
         for i in range(8):
@@ -21,7 +19,7 @@ class Navbar(CTkFrame):
         self.grid_columnconfigure(1, weight=1)  # left space
         self.grid_columnconfigure(5, weight=1)  # right space
 
-        self.logo = Logo(self, self.app, text="", font=self.styles.font_h4, fg_color="transparent")
+        self.logo = Logo(self, self.app, text="", font=self.styles.logo_font, fg_color="transparent")
         self.logo.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
         self.render_nav()
@@ -33,8 +31,6 @@ class Navbar(CTkFrame):
                 widget.destroy()
 
         user = self.app.current_user
-        c = self.styles.colors
-        f = self.styles
 
         if user is None:
             # Guest Navbar
@@ -45,10 +41,10 @@ class Navbar(CTkFrame):
             CTkButton(
                 self,
                 text="Sign Up",
-                font=f.font_h5,
+                font=self.styles.nav_font,
                 command=self.open_signup_popup,
-                fg_color=c["green"],
-                hover_color=c["green_hover"],
+                fg_color="#1E90FF",
+                hover_color="#4682B4",
                 text_color="white",
                 corner_radius=20,
                 width=100,
@@ -76,19 +72,11 @@ class Navbar(CTkFrame):
             row=0, column=7, padx=(0, 10), pady=10, sticky="nsew")
 
     def create_nav_button(self, text, page, column):
-        c = self.styles.colors
-        f = self.styles
-
-        CTkButton(
-            self,
-            text=text,
-            font=f.font_h5,
-            command=lambda: self.app.show_page(page),
-            fg_color="transparent",
-            text_color="white",
-            hover_color=c["button_hover"],
-            corner_radius=0
-        ).grid(row=0, column=column, padx=5, sticky="nsew")
+        CTkButton(self, text=text, font=self.styles.nav_font,
+                  command=lambda: self.app.show_page(page),
+                  fg_color="transparent", text_color="white",
+                  hover_color=self.styles.hover_color, corner_radius=0
+                  ).grid(row=0, column=column, padx=5, sticky="nsew")
 
     def open_signup_popup(self):
         if hasattr(self.app, "auth_popup") and self.app.auth_popup.winfo_exists():
@@ -97,3 +85,4 @@ class Navbar(CTkFrame):
 
         from components.auth_popup import AuthPopup
         self.app.auth_popup = AuthPopup(self.app)
+
