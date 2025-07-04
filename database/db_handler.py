@@ -16,6 +16,7 @@ class BookingStatus:
 class DatabaseHandler:
     def __init__(self):
         self.initialize_database()
+        self._insert_default_admin_user()
 
     def initialize_database(self):
         """Initialize database"""
@@ -66,6 +67,7 @@ class DatabaseHandler:
                     );
                 """)
 
+                #admin
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS messages (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,6 +82,22 @@ class DatabaseHandler:
                 print("[DB INFO] Database tables created successfully.")
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to initialize database: {e}")
+
+    def _insert_default_admin_user(self):
+        """Inserts a default admin user if one does not already exist."""
+        try:
+            with get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT id FROM users WHERE username = 'admin'")
+                if not cursor.fetchone():
+                    conn.execute(
+                        "INSERT INTO users (username, password, first_name, last_name, role) VALUES (?, ?, ?, ?, ?)",
+                        ('admin', 'admin', 'Admin', 'User', 'admin')
+                    )
+                    conn.commit()
+                    print("[DB INFO] Default admin user created.")
+        except sqlite3.Error as e:
+            print(f"[DB ERROR] Failed to insert default admin user: {e}")
 
     def get_vehicle_details_by_type(self, vehicle_type: str) -> Vehicle | None:
         """Fetch vehicle details by type and return a Vehicle object."""
@@ -114,9 +132,9 @@ class DatabaseHandler:
             with get_connection() as conn:
                 cursor = conn.execute(
                     """INSERT INTO bookings
-                       (user_id, pickup, destination, vehicle_id, distance_km, estimated_cost)
-                       VALUES (?, ?, ?, ?, ?, ?);""",
-                    (user_id, pickup, destination, vehicle_id, distance_km, estimated_cost)
+                       (user_id, pickup, destination, vehicle_id, distance_km, estimated_cost, status, created_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?);""",
+                    (user_id, pickup, destination, vehicle_id, distance_km, estimated_cost, 'completed', datetime.now())
                 )
                 conn.commit()
                 print(f"[DB INFO] Booking added successfully with ID: {cursor.lastrowid}")
@@ -136,11 +154,11 @@ class DatabaseHandler:
                     ORDER BY b.created_at DESC;""",
                     (user_id,)
                 )
+
                 bookings = [dict(row) for row in cursor.fetchall()]
-
                 print(f"[DB DEBUG] Found {len(bookings)} bookings for user_id {user_id}")
-
                 return bookings
+            
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to fetch bookings for user: {e}")
             return []
@@ -158,8 +176,6 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to update booking status: {e}")
             return 0
         
-
-
     def cancel_booking(self, booking_id: int) -> int:
         """Mark a booking as cancelled"""
         try:
@@ -197,6 +213,23 @@ class DatabaseHandler:
                 print("[DB INFO] All bookings cleared")
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to clear bookings: {e}")
+
+    def get_all_bookings(self) -> list:
+        """Fetches all booking records from the database."""
+        try:
+            with get_connection() as conn:
+                cursor = conn.execute(
+                    """SELECT b.*, v.type as vehicle_type, v.model as vehicle_model, v.license_plate, v.driver_name, v.driver_contact
+                    FROM bookings b
+                    JOIN vehicles v ON b.vehicle_id = v.id
+                    ORDER BY b.created_at DESC;"""
+                )
+                bookings = [dict(row) for row in cursor.fetchall()]
+                print(f"[DB DEBUG] Found {len(bookings)} total bookings.")
+                return bookings
+        except sqlite3.Error as e:
+            print(f"[DB ERROR] Failed to fetch all bookings: {e}")
+            return []
 
     def reset_database_completely(self) -> None:
         """Reset database completely (development only)"""

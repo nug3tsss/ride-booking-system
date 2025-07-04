@@ -24,8 +24,6 @@ class App(CTk):
         super().__init__()
 
         # === Styling and Theme Setup ===
-
-        # === Styling and Theme Setup ===
         self.styles = Styles()
 
         settings = load_settings()
@@ -50,19 +48,14 @@ class App(CTk):
         else:
             self.iconbitmap("assets/Logo-Light-Transparent.ico")
 
-        # === Database & Session ===
-        self.db = DatabaseHandler()
-
         self.current_user = None
         # === Database & Session ===
         self.db = DatabaseHandler()
-        self.db.initialize_database()
+
         self.current_user = load_session()
-        self.current_user = load_session()
-        self.db = DatabaseHandler()
-        self.db.initialize_database()
-        self.current_user = load_session()
+
         self.logout_popup = None
+        
         self.booking_information_manager = BookingInformationManager(self.db)
 
         # === Grid Layout ===
@@ -76,18 +69,10 @@ class App(CTk):
         self.sidebar = Sidebar(self, styles=self.styles)
 
         self.container = CTkFrame(self, fg_color=self.styles.colors["background"])
-        self.sidebar = Sidebar(self, styles=self.styles)
-
-        self.container = CTkFrame(self, fg_color=self.styles.colors["background"])
-        self.container.grid(row=1, column=1, sticky="nsew")
-
         self.container.grid(row=1, column=1, sticky="nsew")
 
         # === Initial Page Setup ===
         self.pages = {}
-        self.navbar.render_nav()
-        self.sidebar.render_sidebar()
-        self.show_page("Dashboard")
         self.navbar.render_nav()
         self.sidebar.render_sidebar()
         self.show_page("Dashboard")

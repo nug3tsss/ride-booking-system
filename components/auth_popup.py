@@ -150,34 +150,18 @@ class AuthPopup(CTkToplevel):
     def login(self):
         u = self.username.get().strip()
         p = self.password.get().strip()
-
         self.clear_highlight(self.username, self.password)
-
         if not u or not p:
             messagebox.showerror("Error", "All fields are required.")
             if not u: self.highlight_error(self.username)
             if not p: self.highlight_error(self.password)
             return
-
         remember = self.remember_me.get() if hasattr(self, "remember_me") else False
-
-        if u == "admin" and p == "admin":
-            self.app.current_user = {
-                "user_id": 0,
-                "username": "admin",
-                "first_name": "Admin",
-                "last_name": "",
-                "password": "admin",
-                "profile_pic": "assets/profile.jpg",
-                "role": "admin"
-            }
-            save_session(self.app.current_user, remember)
-            self._post_login()
-            return
 
         conn = get_connection()
         cur = conn.cursor()
-        cur.execute("SELECT id, username, first_name, last_name, profile_pic, password FROM users WHERE username=? AND password=?", (u, p))
+        
+        cur.execute("SELECT id, username, first_name, last_name, profile_pic, password, role FROM users WHERE username=? AND password=?", (u, p))
         user = cur.fetchone()
         conn.close()
 
@@ -189,7 +173,7 @@ class AuthPopup(CTkToplevel):
                 "last_name": user[3],
                 "profile_pic": user[4] if user[4] else "assets/profile.jpg",
                 "password": user[5],
-                "role": "user"
+                "role": user[6] # Assign the role directly from the database
             }
             save_session(self.app.current_user, remember)
             self._post_login()
@@ -197,6 +181,7 @@ class AuthPopup(CTkToplevel):
             messagebox.showerror("Error", "Invalid credentials.")
             self.highlight_error(self.username)
             self.highlight_error(self.password)
+    
 
     def _post_login(self):
         self.app.navbar.render_nav()

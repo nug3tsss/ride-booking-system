@@ -1,15 +1,11 @@
-
 from customtkinter import *
 from database.db_handler import DatabaseHandler
 from datetime import datetime
 from tkinter import messagebox, filedialog
 from PIL import Image
 import json
-from database.db_handler import DatabaseHandler
-from datetime import datetime
-from tkinter import messagebox, filedialog
-from PIL import Image
-import json
+from config.styles import Styles
+
 
 class BookingHistoryList(CTkFrame):
     """Displays booking history of specific user in table format"""
@@ -22,88 +18,128 @@ class BookingHistoryList(CTkFrame):
         f = self.app.styles
 
         self.db_handler = DatabaseHandler()
-        self.download_icon = CTkImage(light_image=Image.open("assets/download_icon-dark.png"), dark_image=Image.open("assets/download_icon-dark.png"))
+
+        try:
+            self.download_icon = CTkImage(
+                light_image=Image.open("assets/download_icon-dark.png"), 
+                dark_image=Image.open("assets/download_icon-dark.png")
+            )
+        except Exception as e:
+            print(f"[UI WARNING] Could not load download icon: {e}")
+            self.download_icon = None
 
         # Title
         CTkLabel(self, text="Your Ride History", font=f.font_h2).pack(pady=20)
 
         # Create scrollable frame for the table
-        self.table_frame = CTkScrollableFrame(self, width=1000, height=500)
-        self.table_frame.pack(fill="both", expand=True)
+        self.table_scroll_frame = CTkScrollableFrame(self, width=1000, height=500)
+        self.table_scroll_frame.pack(fill="both", expand=True)
+
+        self.table_scroll_frame.grid_columnconfigure(0, weight=1)
 
         # Load booking history
         self.create_table()
-
-    def configure_grid_columns(self, frame):
-        """Configure grid columns with consistent weights for both header and rows"""
-        frame.grid_columnconfigure(0, weight=1, minsize=225)   # Booking ID
-        frame.grid_columnconfigure(1, weight=3, minsize=200)  # Pickup
-        frame.grid_columnconfigure(2, weight=3, minsize=200)  # Destination  
-        frame.grid_columnconfigure(3, weight=2, minsize=150)  # Vehicle
-        frame.grid_columnconfigure(4, weight=2, minsize=120)  # Driver
-        frame.grid_columnconfigure(5, weight=1, minsize=80)   # Cost
-        frame.grid_columnconfigure(6, weight=1, minsize=80)   # Status
-        frame.grid_columnconfigure(7, weight=1, minsize=120)  # Date
-        frame.grid_columnconfigure(8, weight=0, minsize=50)   # Save button
 
     def create_table(self):
         c = self.app.styles.colors
         f = self.app.styles
 
         # Clear existing widgets
-        for widget in self.table_frame.winfo_children():
+        for widget in self.table_scroll_frame.winfo_children():
             widget.destroy()
 
         user_id = None
+        user_role = None
+
+
         # Check if a user is currently logged in
         if self.app.current_user:
             user_id = self.app.current_user.get('user_id')
+            user_role = self.app.current_user.get('role')
+            print(f"[UI DEBUG] Extracted user_id: {user_id}, role: {user_role}")
+        else:
+            print("[UI DEBUG] No current_user found")
 
         # If no user is logged in, display a message and return
         if user_id is None:
-            no_user_frame = CTkFrame(self.table_frame, fg_color=c["table_row_even"], corner_radius=10)
-            no_user_frame.pack(fill="x", padx=10, pady=20)
-            CTkLabel(no_user_frame, text="Please log in to view your booking history.",
-                    font=f.font_h4).pack(pady=20)
+            print("[UI DEBUG] user_id is None, showing login message")
+            no_user_label = CTkLabel(
+                self.table_scroll_frame, 
+                text="Please log in to view your booking history.",
+                font=f.font_h4, 
+                text_color=c["text"]
+            )
+            no_user_label.pack(pady=20)
             return
 
-        # Fetch bookings specific to the logged-in user
-        bookings = self.db_handler.get_bookings_by_user(user_id)
+        bookings = []
+        if user_role == 'admin':
+            print("[UI DEBUG] Fetching all bookings for admin")
+            bookings = self.db_handler.get_all_bookings()
+        else:
+            print(f"[UI DEBUG] Fetching bookings for user_id: {user_id}")
+            bookings = self.db_handler.get_bookings_by_user(user_id)
 
-        # If no bookings are found for this user, display a message
-        if not bookings:
-            no_bookings_frame = CTkFrame(self.table_frame, fg_color=c["table_row_even"], corner_radius=10)
-            no_bookings_frame.pack(fill="x", padx=10, pady=20)
-            CTkLabel(no_bookings_frame, text="No booking history found.",
-                    font=(f.font_h4)).pack(pady=20)
+        print(f"[UI DEBUG] Retrieved {len(bookings)} bookings")
+        print(f"[UI DEBUG] First few bookings: {bookings[:2] if bookings else 'None'}")
+
+        if not bookings or len(bookings) == 0:
+            print("[UI DEBUG] No bookings found, showing no bookings message")
+
+            no_bookings_label = CTkLabel(
+                self.table_scroll_frame, 
+                text="No booking history found.",
+                font=f.font_h4, 
+                text_color=c["text"]
+            )
+            no_bookings_label.pack(pady=20)
             return
-
+        
+        print("[UI DEBUG] Creating table with bookings...")
         # Create table header
         self.create_table_header()
 
         # Create table rows
         for i, booking in enumerate(bookings):
+            print(f"[UI DEBUG] Creating row {i} for booking ID: {booking.get('id', 'Unknown')}")
             self.create_table_row(booking, i)
+        print("[UI DEBUG] Table creation completed")
 
     def create_table_header(self):
         f = self.app.styles
+        c = self.app.styles.colors
 
         """Create the table header with column titles"""
-        header_frame = CTkFrame(self.table_frame, fg_color="transparent")
-        header_frame.pack(fill="x", padx=10, pady=(10, 20))
+        header_frame = CTkFrame(self.table_scroll_frame, fg_color=c["card_light"])
+        header_frame.grid(row=0, column=0, sticky="ew", padx=10, pady=(10, 5))
 
-        # Configure grid columns using the shared method
-        self.configure_grid_columns(header_frame)
-
-        # Header labels
+        columns_config = [
+            (1, 80),    # Booking ID
+            (3, 150),   # Pickup
+            (3, 150),   # Destination
+            (2, 100),   # Vehicle
+            (2, 100),   # Driver
+            (1, 80),    # Cost
+            (1, 80),    # Status
+            (2, 100),   # Date
+            (0, 50)     # Action
+        ]
+        
+        for col, (weight, minsize) in enumerate(columns_config):
+            header_frame.grid_columnconfigure(col, weight=weight, minsize=minsize)
         headers = [
             "Booking ID", "Pickup", "Destination", "Vehicle",
-            "Driver", "Cost", "Status", "Date", "Action"
+            "Driver", "Cost", "Status", "Date", "Save"
         ]
-
         for col, header_text in enumerate(headers):
-            label = CTkLabel(header_frame, text=header_text, font=(f.font_h3))
-            label.grid(row=0, column=col, padx=5, sticky="ns")
+            label = CTkLabel(
+                header_frame, 
+                text=header_text, 
+                font=f.font_h3, 
+                text_color=c["text"]
+            )
+            label.grid(row=0, column=col, padx=5, pady=10, sticky="ew")
+        print("[UI DEBUG] Header created successfully")
 
     def create_table_row(self, booking, row_index):
         """Create a table row for each booking"""
@@ -111,22 +147,40 @@ class BookingHistoryList(CTkFrame):
         c = self.app.styles.colors
         f = self.app.styles
 
+        print(f"[UI DEBUG] Creating row {row_index} with booking data: {booking}")
         row_color = c["table_row_even"] if row_index % 2 == 0 else c["table_row_odd"]
+        row_frame = CTkFrame(self.table_scroll_frame, fg_color=row_color, corner_radius=5)
+        row_frame.grid(row=row_index + 1, column=0, sticky="ew", padx=5, pady=2)
+        # Configure grid columns for the row_frame (same as header)
 
-        row_frame = CTkFrame(self.table_frame, fg_color=row_color, corner_radius=5)
-        row_frame.pack(fill="x", padx=5, pady=1)
+        columns_config = [
+            (1, 80),    # Booking ID
+            (3, 150),   # Pickup
+            (3, 150),   # Destination
+            (2, 100),   # Vehicle
+            (2, 100),   # Driver
+            (1, 80),    # Cost
+            (1, 80),    # Status
+            (2, 100),   # Date
+            (0, 50)     # Action
+        ]
 
-        # Configure grid columns using the shared method
-        self.configure_grid_columns(row_frame)
+        for col, (weight, minsize) in enumerate(columns_config):
+            row_frame.grid_columnconfigure(col, weight=weight, minsize=minsize)
 
-        # Prepare data for display
-        booking_id = str(booking['id'])
-        pickup = self.truncate_text(booking['pickup'], 25)
-        destination = self.truncate_text(booking['destination'], 25)
-        vehicle = f"{booking['vehicle_type']}" if booking['vehicle_type'] else "N/A"
-        driver = booking['driver_name'] if booking['driver_name'] else "N/A"
-        cost = f"₱{booking['estimated_cost']:.2f}"
-        status = booking['status'].capitalize()
+
+        booking_id = str(booking.get('id', 'N/A'))
+        pickup = self.truncate_text(booking.get('pickup', 'N/A'), 25)
+        destination = self.truncate_text(booking.get('destination', 'N/A'), 25)
+        vehicle = booking.get('vehicle_type', 'N/A')
+        driver = booking.get('driver_name', 'N/A')
+
+        try:
+            cost = f"₱{float(booking.get('estimated_cost', 0)):.2f}"
+        except (ValueError, TypeError):
+            cost = "₱0.00"
+            
+        status = str(booking.get('status', 'Unknown')).capitalize()
         date = self.format_date(booking.get('created_at'))
 
         # Create data list
@@ -134,37 +188,51 @@ class BookingHistoryList(CTkFrame):
 
         # Create labels for each column
         for col, data in enumerate(row_data):
-            label = CTkLabel(row_frame, text=data, font=f.font_p)
-            label.grid(row=0, column=col,padx=5, sticky="ns")
+            label = CTkLabel(
+                row_frame, 
+                text=str(data), 
+                font=f.font_p, 
+                text_color=c["text"]
+            )
+            label.grid(row=0, column=col, padx=5, pady=8, sticky="ew")
 
         # Save Button (icon only)
-        save_button = CTkButton(
-            row_frame,
-            text="",
-            width=35,
-            height=35,
-            fg_color="transparent",
-            hover_color=c["green_hover"],
-            image=self.download_icon,
-            command=lambda b=booking: self.save_booking_to_json(b)
-        )
-        save_button.grid(row=0, column=8, padx=10, pady=8, sticky="w")
+        if self.download_icon:
+            save_button = CTkButton(
+                row_frame,
+                text="",
+                width=35,
+                height=35,
+                fg_color="transparent",
+                hover_color=c.get("green_hover", "#45a049"),
+                image=self.download_icon,
+                command=lambda b=booking: self.save_booking_to_json(b)
+            )
+        else:
+            save_button = CTkButton(
+                row_frame,
+                text="Save",
+                width=50,
+                height=30,
+                fg_color=c.get("primary", "#1f538d"),
+                hover_color=c.get("green_hover", "#45a049"),
+                command=lambda b=booking: self.save_booking_to_json(b)
+            )
+
+        save_button.grid(row=0, column=8, padx=5, pady=8, sticky="w")
 
         # Add hover effect (optional)
         self.add_hover_effect(row_frame, row_color)
 
     def save_booking_to_json(self, booking_data):
-        # Map vehicle type string to integer for export, if needed by the import function
-        # This mapping should ideally be consistent with how vehicle_type_int is used in BookingForm
         vehicle_type_map = {
             "Car": 1,
             "Van": 2,
             "Motorcycle": 3
         }
-        # Get the vehicle type string from booking_data and convert it to int using the map
-        # Default to 0 or None if not found, depending on what the import expects
+
         vehicle_type_str = booking_data.get('vehicle_type', '')
-        vehicle_type_int = vehicle_type_map.get(vehicle_type_str, 0) # Default to 0 if not found
+        vehicle_type_int = vehicle_type_map.get(vehicle_type_str, 0)
 
         export_data = {
             "pickup_address": booking_data.get('pickup', ''),
@@ -176,6 +244,7 @@ class BookingHistoryList(CTkFrame):
             filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
             initialfile=f"booking_{booking_data['id']}.json"
         )
+
         if file_path:
             try:
                 with open(file_path, 'w') as f:
@@ -193,38 +262,43 @@ class BookingHistoryList(CTkFrame):
     def format_date(self, date_string):
         if not date_string:
             return "No Date"
+        
         date_str = str(date_string)
         
         try:
+            # Handle various date formats
             if 'T' in date_str:
+                # ISO format with T separator
+                date_str = date_str.split('.')[0]  # Remove microseconds if present
                 date_obj = datetime.fromisoformat(date_str.replace('T', ' '))
-                if '.' in date_str:
-                    date_str = date_str.split('.')[0]
+            elif ' ' in date_str and '-' in date_str:
+                # Standard datetime format
+                date_str = date_str.split('.')[0]  # Remove microseconds if present
                 date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
             elif '-' in date_str and len(date_str) == 10:
+                # Date only format
                 date_obj = datetime.strptime(date_str, "%Y-%m-%d")
             else:
+                # Try ISO format as fallback
                 date_obj = datetime.fromisoformat(date_str)
             
             return date_obj.strftime("%m/%d/%Y")
             
         except (ValueError, TypeError) as e:
-            print(f"Date parsing error for '{date_string}': {e}")
-            return str(date_string) if len(str(date_string)) < 20 else "Invalid Date"
+            print(f"[UI WARNING] Date parsing error for '{date_string}': {e}")
+            return str(date_string)[:15] if len(str(date_string)) > 15 else str(date_string)
 
     def add_hover_effect(self, frame, original_color):
         c = self.app.styles.colors
         
-        """Add hover effect to table rows"""
         def on_enter(event):
-            frame.configure(fg_color=c["card_light"])
-
+            frame.configure(fg_color=c.get("card_light", "#f0f0f0"))
         def on_leave(event):
             frame.configure(fg_color=original_color)
-
         frame.bind("<Enter>", on_enter)
         frame.bind("<Leave>", on_leave)
-
+        
+        # Apply to child widgets as well
         for child in frame.winfo_children():
             child.bind("<Enter>", on_enter)
             child.bind("<Leave>", on_leave)
