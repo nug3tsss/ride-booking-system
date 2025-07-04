@@ -14,8 +14,12 @@ Gethub is a ride-hailing program developed by 1st year Computer Engineering stud
   - Import past booking information
   - Clear booking entries
 - Route and fare calculation
+  - Distance in km
+  - Estimate Time of Arrival in mins
+  - Calculated cost in ₱
 - Booking history and management
-- Account creation and management
+  - Downloadable bookings as .json
+- Account creation and customization
 
 ---
 
