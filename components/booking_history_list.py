@@ -36,7 +36,7 @@ class BookingHistoryList(CTkFrame):
 
     def configure_grid_columns(self, frame):
         """Configure grid columns with consistent weights for both header and rows"""
-        frame.grid_columnconfigure(0, weight=1, minsize=80)   # Booking ID
+        frame.grid_columnconfigure(0, weight=1, minsize=225)   # Booking ID
         frame.grid_columnconfigure(1, weight=3, minsize=200)  # Pickup
         frame.grid_columnconfigure(2, weight=3, minsize=200)  # Destination  
         frame.grid_columnconfigure(3, weight=2, minsize=150)  # Vehicle
@@ -89,8 +89,8 @@ class BookingHistoryList(CTkFrame):
         f = self.app.styles
 
         """Create the table header with column titles"""
-        header_frame = CTkFrame(self.table_frame, fg_color="#1a1a1a", corner_radius=5)
-        header_frame.pack(fill="x", padx=5, pady=(0, 2))
+        header_frame = CTkFrame(self.table_frame, fg_color="transparent")
+        header_frame.pack(fill="x", padx=10, pady=(10, 20))
 
         # Configure grid columns using the shared method
         self.configure_grid_columns(header_frame)

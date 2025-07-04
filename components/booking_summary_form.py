@@ -191,10 +191,10 @@ class BookingSummaryForm(CTkScrollableFrame):
 
         self.__confirm_button.grid_forget()
 
-        self.__cancel_button = CTkButton(self, text="Cancel Booking", command=self.__cancel_booking, corner_radius=15, fg_color=c["text"], width=150, height=40)
+        self.__cancel_button = CTkButton(self, text="Cancel Booking", command=self.__cancel_booking, corner_radius=15, fg_color=c["brown"], hover_color=c["brown_hover"], width=150, height=40)
         self.__cancel_button.grid(row=6, column=0, columnspan=1, pady=(20, 20), padx=20, sticky="ew")
 
-        self.__go_to_bookings_button = CTkButton(self, text="Go to your bookings", command=self.__go_to_your_bookings, corner_radius=15, fg_color=c["text"], width=150, height=40)
+        self.__go_to_bookings_button = CTkButton(self, text="Go to your bookings", command=self.__go_to_your_bookings, corner_radius=15, fg_color=c["green"], hover_color=c["green_hover"], width=150, height=40)
         self.__go_to_bookings_button.grid(row=6, column=1, columnspan=2, pady=(20, 20), padx=20, sticky="ew")
 
         self.__is_booking_in_progress = False

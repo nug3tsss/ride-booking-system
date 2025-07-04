@@ -1,13 +1,1 @@
-{
-    "user": {
-        "user_id": 8,
-        "username": "Test",
-        "first_name": "Test",
-        "last_name": "Test",
-        "profile_pic": "assets/profile.png",
-        "password": "Test123?",
-        "role": "user"
-    },
-    "timestamp": 1751579321.1406083,
-    "theme_mode": "Dark"
-}
+{"user": {"user_id": 6, "username": "SirGodo", "first_name": "Godofredo", "last_name": "Avena", "profile_pic": "assets/profile.png", "password": "CMPE103oop_", "role": "user"}, "timestamp": 0}

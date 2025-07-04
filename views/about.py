@@ -102,7 +102,7 @@ class AboutPage(CTkFrame):
 
         picture_paths = ["assets/members_profile/mark_profile.png",
                          "assets/members_profile/zybert_profile.jpg",
-                         "assets/members_profile/mercado_profile.jpg",
+                         "assets/members_profile/lorens_profile.jpg",
                          "assets/members_profile/renier_profile.jpg",
                          "assets/members_profile/kath_profile.jpg",
                          "assets/members_profile/maeryl_profile.jpg",
@@ -125,13 +125,13 @@ class AboutPage(CTkFrame):
 
         for i in range(3):
             bottom_container.grid_columnconfigure(i, weight=1)
-        
+
         # Add top 4 members
         for i in range(4):
             member = members[i]
             frame = CTkFrame(top_container, fg_color="transparent")
             frame.grid(row=0, column=i, padx=10, pady=10, sticky="nsew")
-            
+
             member_image = Image.open(picture_paths[i])
             image_raw = member_image.resize((100, 100))
             mask = Image.new("L", image_raw.size, 0)
@@ -162,7 +162,7 @@ class AboutPage(CTkFrame):
 
             CTkLabel(frame, image=circular_profile, text="").pack()
             CTkLabel(frame, text=member["name"], font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
-            CTkLabel(frame, text=member["role"], font=f.font_h5, wraplength=150, justify="center").pack()
+            CTkLabel(frame, text=member["role"], font=f.font_p, wraplength=150, justify="center").pack()
 
 
     def adjust_wraplength(self, event):

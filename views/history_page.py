@@ -1,4 +1,3 @@
-
 from customtkinter import *
 from components.booking_history_list import BookingHistoryList
 

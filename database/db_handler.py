@@ -78,31 +78,31 @@ class DatabaseHandler:
 
                 conn.commit()
                 print("[DB INFO] Database tables created successfully.")
-                self.populate_initial_vehicles()
+                #self.populate_initial_vehicles()
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to initialize database: {e}")
 
-    def populate_initial_vehicles(self):
-        """Populate initial vehicle data if the table is empty."""
-        try:
-            with get_connection() as conn:
-                cursor = conn.execute("SELECT COUNT(*) FROM vehicles;")
-                if cursor.fetchone()[0] == 0:
-                    vehicles_to_add = [
-                        ("Car", "Sedan", "ABC-123", "John Doe", "09171234567", 50.0, 15.0),
-                        ("Van", "Cargo Van", "DEF-456", "Jane Smith", "09187654321", 100.0, 25.0),
-                        ("Motorcycle", "Scooter", "GHI-789", "Peter Jones", "09191122334", 30.0, 10.0)
-                    ]
-                    conn.executemany("""
-                        INSERT INTO vehicles (type, model, license_plate, driver_name, driver_contact, base_fare, per_km_rate)
-                        VALUES (?, ?, ?, ?, ?, ?, ?);
-                    """, vehicles_to_add)
-                    conn.commit()
-                    print("[DB INFO] Initial vehicle data populated.")
-                else:
-                    print("[DB INFO] Vehicles table already contains data. Skipping initial population.")
-        except sqlite3.Error as e:
-            print(f"[DB ERROR] Failed to populate initial vehicles: {e}")
+    # def populate_initial_vehicles(self):
+    #     """Populate initial vehicle data if the table is empty."""
+    #     try:
+    #         with get_connection() as conn:
+    #             cursor = conn.execute("SELECT COUNT(*) FROM vehicles;")
+    #             if cursor.fetchone()[0] == 0:
+    #                 vehicles_to_add = [
+    #                     ("Car", "McLaren F1", "MRPL8S", "Zybert Sibolboro", "09171234567", 50.0, 15.0),
+    #                     ("Van", "Becker Ford Transit Jet Van", "DEF-456", "Lorens Mercado", "09187654321", 100.0, 25.0),
+    #                     ("Motorcycle", "Aston Martin AMB-001", "GHI-789", "Mark Abucejo", "09191122334", 30.0, 10.0)
+    #                 ]
+    #                 conn.executemany("""
+    #                     INSERT INTO vehicles (type, model, license_plate, driver_name, driver_contact, base_fare, per_km_rate)
+    #                     VALUES (?, ?, ?, ?, ?, ?, ?);
+    #                 """, vehicles_to_add)
+    #                 conn.commit()
+    #                 print("[DB INFO] Initial vehicle data populated.")
+    #             else:
+    #                 print("[DB INFO] Vehicles table already contains data. Skipping initial population.")
+    #     except sqlite3.Error as e:
+    #         print(f"[DB ERROR] Failed to populate initial vehicles: {e}")
 
     def get_vehicle_details_by_type(self, vehicle_type: str) -> dict | None:
         """Fetch vehicle details (base_fare, per_km_rate) by type."""

@@ -1,5 +1,7 @@
 from customtkinter import *
-from utils.pycache_cleaner import PycacheCleaner
+from components.restart_popup import RestartPopup
+from config.settings_manager import save_settings, reset_settings
+from tkinter import messagebox
 
 class SettingsPage(CTkFrame):
     def __init__(self, master, app):

@@ -1,5 +1,4 @@
 from customtkinter import *
-from components.logout_popup import LogoutPopup
 from utils.session_manager import clear_session
 
 class Sidebar(CTkFrame):
@@ -9,7 +8,10 @@ class Sidebar(CTkFrame):
         super().__init__(master)
         self.app = master
         self.styles = styles
-        self.configure(width=200, fg_color=styles.sidebar_color, corner_radius=0)
+        c = self.styles.colors
+        f = self.styles
+
+        self.configure(width=200, fg_color=c["sidebar"], corner_radius=0)
         self.render_sidebar()
 
     def render_sidebar(self):
@@ -71,9 +73,10 @@ class Sidebar(CTkFrame):
 
     def confirm_logout(self):
         clear_session()
-        self.current_user = None
-        self.navbar.render_nav()
-        self.sidebar.render_sidebar()
-        self.show_page("Dashboard")
-        if self.logout_popup:
-            self.logout_popup.destroy()
+        self.app.current_user = None
+        self.app.navbar.render_nav()
+        self.app.sidebar.render_sidebar()
+        self.app.show_page("Dashboard")
+
+        if hasattr(self.app, "logout_popup") and self.app.logout_popup:
+            self.app.logout_popup.destroy()

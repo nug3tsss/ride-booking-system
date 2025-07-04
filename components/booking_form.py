@@ -84,10 +84,13 @@ class BookingForm(CTkScrollableFrame):
         vehicle3.pack(fill="x", pady=(10,15), padx=15)
     
     def __create_import_and_clear_buttons(self):
-        import_button = CTkButton(self, text="Import booking", command=self.__import_booking_from_file)
+        c = self.__app.styles.colors
+        f = self.__app.styles
+
+        import_button = CTkButton(self, text="Import booking", fg_color=c["mono"], hover_color=c["mono_hover"], text_color=c["text"], command=self.__import_booking_from_file)
         import_button.pack(fill="x", pady=(20,10), padx=15)
 
-        import_button = CTkButton(self, text="Clear booking", command=self.__clear_form_entries)
+        import_button = CTkButton(self, text="Clear booking", fg_color=c["mono"], hover_color=c["mono_hover"], text_color=c["text"], command=self.__clear_form_entries)
         import_button.pack(fill="x", pady=(10,15), padx=15)
     
     def __bind_form_entry_events(self):

@@ -18,6 +18,7 @@ from utils.session_manager import load_session, clear_session
 from services.booking_information_manager import BookingInformationManager
 from database.db_handler import DatabaseHandler
 
+
 class App(CTk):
     def __init__(self):
         super().__init__()
@@ -43,7 +44,6 @@ class App(CTk):
         self.title("Gethub")
         self.geometry("900x600")
 
-        set_appearance_mode("dark")
         current_appearance_mode = get_appearance_mode()
         if current_appearance_mode == "dark":
             self.iconbitmap("assets/Logo-Dark-Transparent.ico")
@@ -63,7 +63,6 @@ class App(CTk):
         self.db.initialize_database()
         self.current_user = load_session()
         self.logout_popup = None
-
         self.booking_information_manager = BookingInformationManager(self.db)
 
         # === Grid Layout ===
@@ -96,7 +95,6 @@ class App(CTk):
         # === Window Close Event ===
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-    # Page Routing
     def show_page(self, page_name):
         for widget in self.container.winfo_children():
             widget.pack_forget()
@@ -125,7 +123,6 @@ class App(CTk):
         page.pack(fill="both", expand=True)
         self.pages[page_name] = page
 
-    # Logout Functionality
     def logout(self):
         if self.logout_popup and self.logout_popup.winfo_exists():
             self.logout_popup.lift()
@@ -133,7 +130,6 @@ class App(CTk):
 
         self.logout_popup = LogoutPopup(self, self._confirm_logout)
 
-    # Confirm Logout
     def _confirm_logout(self):
         clear_session()
         self.current_user = None
@@ -145,6 +141,5 @@ class App(CTk):
             self.logout_popup.destroy()
             self.logout_popup = None
 
-    # Window close event handler
     def on_closing(self):
         self.destroy()
