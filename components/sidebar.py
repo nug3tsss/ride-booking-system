@@ -28,7 +28,7 @@ class Sidebar(CTkFrame):
             text="Settings",
             font=f.font_h5,
             fg_color="transparent",
-            hover_color=c["button_hover"],
+            hover_color=c["brown_accent"],
             corner_radius=0,
             command=lambda: self.app.show_page("Settings")
         ).pack(fill="x")
@@ -41,7 +41,7 @@ class Sidebar(CTkFrame):
                 text="About Us",
                 font=f.font_h5,
                 fg_color="transparent",
-                hover_color=c["button_hover"],
+                hover_color=c["brown_accent"],
                 corner_radius=0,
                 command=lambda: self.app.show_page("About")
             ).pack(fill="x")
@@ -53,7 +53,7 @@ class Sidebar(CTkFrame):
                 text="Contact Us",
                 font=f.font_h5,
                 fg_color="transparent",
-                hover_color=c["button_hover"],
+                hover_color=c["brown_accent"],
                 corner_radius=0,
                 command=lambda: self.app.show_page("Contact")
             ).pack(fill="x")
@@ -65,7 +65,7 @@ class Sidebar(CTkFrame):
                 text="Logout",
                 font=f.font_h5,
                 fg_color=c["brown"],
-                text_color=c["text"],
+                text_color="white",
                 hover_color=c["brown_hover"],
                 corner_radius=30,
                 command=self.app.logout

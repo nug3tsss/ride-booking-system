@@ -18,7 +18,7 @@ class ProfileButton(CTkButton):
             fg_color="transparent",
             image=self.profile_image,
             command=lambda: app.show_page("Profile"),
-            text_color=c["text"],
+            text_color="white",
             hover=False,
             compound="right",
             **kwargs

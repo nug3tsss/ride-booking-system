@@ -86,7 +86,7 @@ class Navbar(CTkFrame):
             command=lambda: self.app.show_page(page),
             fg_color="transparent",
             text_color="white",
-            hover_color=c["button_hover"],
+            hover_color=c["green_accent"],
             corner_radius=0
         ).grid(row=0, column=column, padx=5, sticky="nsew")
 

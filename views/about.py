@@ -6,6 +6,9 @@ class AboutPage(CTkFrame):
         super().__init__(master)
         self.app = app
 
+        c = self.app.styles.colors
+        f = self.app.styles
+
         self.scrollable_frame = CTkScrollableFrame(self, corner_radius=15, fg_color="transparent")
         self.scrollable_frame.pack(fill="both", expand=True)
 
@@ -22,7 +25,7 @@ class AboutPage(CTkFrame):
         self.bind("<Configure>", self.adjust_wraplength, add="+")
 
         self.__about_label = CTkLabel(
-            self.scrollable_frame, text="About Us", font=("Arial", 32, "bold"),
+            self.scrollable_frame, text="About Us", font=f.font_h1,
             image=self.about_image, compound="center"
         )
         self.__about_label.pack()
@@ -35,13 +38,13 @@ class AboutPage(CTkFrame):
         self.__what_label = CTkLabel(
             self.scrollable_frame,
             text="What is Gethub?",
-            font=("Arial", 28, "bold"),
+            font=f.font_h2,
             anchor="center"
         )
         self.__what_label.pack(pady=(0, 10))
 
         # About Text Card
-        about_card = CTkFrame(self.scrollable_frame, fg_color="#2a2a2a", corner_radius=10)
+        about_card = CTkFrame(self.scrollable_frame, fg_color=c["card"], corner_radius=10)
         about_card.pack(padx=40, pady=(0, 40), fill="x")
 
         self.__text = (
@@ -58,24 +61,25 @@ class AboutPage(CTkFrame):
             text=self.__text,
             wraplength=1000,
             justify="left",
-            font=("Arial", 18),
+            font=f.font_h3p,
+            text_color="white",
             anchor="w"
         )
         self.__about_text.pack(padx=30, pady=30)
 
         # Horizontal Divider
-        divider = CTkFrame(self.scrollable_frame, height=2, fg_color="gray")
+        divider = CTkFrame(self.scrollable_frame, height=2, fg_color=c["divider"])
         divider.pack(fill="x", padx=40, pady=(0, 30))
 
         # Meet the Team Heading (outside the card)
         self.__meet_the_team_label = CTkLabel(
             self.scrollable_frame, text="Meet the Team",
-            font=("Arial", 32, "bold"), anchor="center"
+            font=f.font_h2, anchor="center"
         )
         self.__meet_the_team_label.pack(pady=(10, 20))
 
         # Team Card
-        self.__team_card = CTkFrame(self.scrollable_frame, fg_color="#2a2a2a", corner_radius=10)
+        self.__team_card = CTkFrame(self.scrollable_frame, fg_color=c["card"], corner_radius=10)
         self.__team_card.pack(padx=40, pady=(0, 40), fill="x")
 
         self.__members_frame = CTkFrame(self.__team_card, fg_color="transparent")
@@ -83,6 +87,9 @@ class AboutPage(CTkFrame):
         self.add_members()
 
     def add_members(self):
+        c = self.app.styles.colors
+        f = self.app.styles
+
         members = [
             {"name": "Mark Christian Abucejo", "role": "Lead Developer"},
             {"name": "Zybert Jio Sibolboro", "role": "Full-stack Developer"},
@@ -94,7 +101,7 @@ class AboutPage(CTkFrame):
         ]
 
         # Main card background
-        card_frame = CTkFrame(self.__members_frame, fg_color="#2a2a2a", corner_radius=10)
+        card_frame = CTkFrame(self.__members_frame, fg_color=c["card"], corner_radius=10)
         card_frame.pack(fill="x", padx=40, pady=(10, 40))
 
         # Top container: 4 members
@@ -127,8 +134,8 @@ class AboutPage(CTkFrame):
             frame.grid(row=0, column=i, padx=10, pady=10, sticky="nsew")
 
             CTkLabel(frame, image=circular_profile, text="").pack()
-            CTkLabel(frame, text=member["name"], font=("Arial", 14, "bold"), wraplength=150, justify="center").pack(pady=(5, 0))
-            CTkLabel(frame, text=member["role"], font=("Arial", 12), wraplength=150, justify="center").pack()
+            CTkLabel(frame, text=member["name"], font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
+            CTkLabel(frame, text=member["role"], font=f.font_p, wraplength=150, justify="center").pack()
 
         # Add bottom 3 members
         for i in range(3):
@@ -137,8 +144,8 @@ class AboutPage(CTkFrame):
             frame.grid(row=0, column=i, padx=10, pady=10, sticky="nsew")
 
             CTkLabel(frame, image=circular_profile, text="").pack()
-            CTkLabel(frame, text=member["name"], font=("Arial", 14, "bold"), wraplength=150, justify="center").pack(pady=(5, 0))
-            CTkLabel(frame, text=member["role"], font=("Arial", 12), wraplength=150, justify="center").pack()
+            CTkLabel(frame, text=member["name"], font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
+            CTkLabel(frame, text=member["role"], font=f.font_h5, wraplength=150, justify="center").pack()
 
 
     def adjust_wraplength(self, event):

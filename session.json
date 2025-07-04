@@ -1,24 +1,13 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-{"user": {"user_id": 7, "username": "Pogi", "first_name": "Renier", "last_name": "Dela Cruz", "profile_pic": "assets/profile.png", "password": "Kahitano123?", "role": "user"}, "timestamp": 1751564340.6897392}
-=======
-=======
->>>>>>> Stashed changes
 {
     "user": {
-        "user_id": 0,
-        "username": "admin",
-        "first_name": "Admin",
-        "last_name": "",
-        "password": "admin",
-        "profile_pic": "assets/profile.jpg",
-        "role": "admin"
+        "user_id": 8,
+        "username": "Test",
+        "first_name": "Test",
+        "last_name": "Test",
+        "profile_pic": "assets/profile.png",
+        "password": "Test123?",
+        "role": "user"
     },
-    "timestamp": 1751563584.830411,
+    "timestamp": 1751579321.1406083,
     "theme_mode": "Dark"
-<<<<<<< Updated upstream
 }
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes

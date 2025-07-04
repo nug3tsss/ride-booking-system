@@ -7,9 +7,13 @@ import json
 class BookingForm(CTkScrollableFrame):
     """Gets user input and passes it to the BookingMap and BookingInformationManager"""
 
-    def __init__(self, app, master_frame, map_manager, booking_information_manager):
-        super().__init__(master_frame)
-        self.configure(scrollbar_button_color="#333333", scrollbar_button_hover_color="#333333")
+    def __init__(self, app, master, map_manager, booking_information_manager):
+        super().__init__(master)
+
+        f = app.styles
+        c = app.styles.colors
+
+        self.configure(scrollbar_button_color=c["card_accent"], scrollbar_button_hover_color=c["scrollbar"])
         self.pack(side=LEFT, fill="both", expand=True, padx=15, pady=15)
 
         self.__map_manager = map_manager
@@ -34,48 +38,57 @@ class BookingForm(CTkScrollableFrame):
         self.__autosuggest_popup_frame = None
     
     def __create_pickup_entry(self):
-        select_pickup_label = CTkLabel(self, text="Select a pickup destination", anchor="w", font=("Arial", 32))
-        select_pickup_label.pack(fill="x", pady=15, padx=15)
+        c = self.__app.styles.colors
+        f = self.__app.styles
+
+        select_pickup_label = CTkLabel(self, text="Select a pickup destination", anchor="w", font=f.font_h1)
+        select_pickup_label.pack(fill="x", pady=(15,5), padx=15)
 
         self.__select_pickup_frame = CTkFrame(self)
         self.__select_pickup_frame.pack(fill="x", pady=5, padx=15, after=select_pickup_label)
 
         self.__select_pickup_entry = CTkEntry(self.__select_pickup_frame, placeholder_text="Search for a destination...")
-        self.__select_pickup_entry.pack(fill="x", pady=15, padx=15)
+        self.__select_pickup_entry.pack(fill="x", pady=15, padx=15, ipady=5)
    
     def __create_dropoff_entry(self):
-        select_dropoff_label = CTkLabel(self, text="Select a dropoff destination", anchor="w", font=("Arial", 32))
-        select_dropoff_label.pack(fill="x", pady=15, padx=15)
+        c = self.__app.styles.colors
+        f = self.__app.styles
+
+        select_dropoff_label = CTkLabel(self, text="Select a dropoff destination", anchor="w", font=f.font_h1)
+        select_dropoff_label.pack(fill="x", pady=(15,0), padx=15)
 
         self.__select_dropoff_frame = CTkFrame(self)
         self.__select_dropoff_frame.pack(fill="x", pady=5, padx=15, after=select_dropoff_label)
 
         self.__select_dropoff_entry = CTkEntry(self.__select_dropoff_frame, placeholder_text="Search for a destination...")
-        self.__select_dropoff_entry.pack(fill="x", pady=15, padx=15)
+        self.__select_dropoff_entry.pack(fill="x", pady=15, padx=15, ipady=5)
    
     def __create_vehicle_select(self):
-        select_vehicle_label = CTkLabel(self, text="Select a vehicle", anchor="w", font=("Arial", 32))
-        select_vehicle_label.pack(fill="x", pady=15, padx=15)
+        c = self.__app.styles.colors
+        f = self.__app.styles
+
+        select_vehicle_label = CTkLabel(self, text="Select a vehicle", anchor="w", font=f.font_h1)
+        select_vehicle_label.pack(fill="x", pady=(15,0), padx=15)
 
         select_vehicle_frame = CTkFrame(self)
         select_vehicle_frame.pack(fill="x", pady=5, padx=15, after=select_vehicle_label)
 
         self.__vehicle_var = IntVar(value=0)
         vehicle1 = CTkRadioButton(select_vehicle_frame, text="Car (4-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=1)
-        vehicle1.pack(fill="x", pady=15, padx=15)
+        vehicle1.pack(fill="x", pady=(15,10), padx=15)
 
         vehicle2 = CTkRadioButton(select_vehicle_frame, text="Van (12-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=2)
-        vehicle2.pack(fill="x", pady=15, padx=15)
+        vehicle2.pack(fill="x", pady=10, padx=15)
 
         vehicle3 = CTkRadioButton(select_vehicle_frame, text="Motorcycle (2-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=3)
-        vehicle3.pack(fill="x", pady=15, padx=15)
+        vehicle3.pack(fill="x", pady=(10,15), padx=15)
     
     def __create_import_and_clear_buttons(self):
         import_button = CTkButton(self, text="Import booking", command=self.__import_booking_from_file)
-        import_button.pack(fill="x", pady=15, padx=15)
+        import_button.pack(fill="x", pady=(20,10), padx=15)
 
         import_button = CTkButton(self, text="Clear booking", command=self.__clear_form_entries)
-        import_button.pack(fill="x", pady=15, padx=15)
+        import_button.pack(fill="x", pady=(10,15), padx=15)
     
     def __bind_form_entry_events(self):
         self.__select_pickup_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_pickup_entry, event))
@@ -121,12 +134,15 @@ class BookingForm(CTkScrollableFrame):
             print("Connection Timed Out", e)
     
     def __display_autosuggest_results(self, form_entry_name, data):
+        c = self.__app.styles.colors
+        f = self.__app.styles
+
         if not self.__autosuggest_popup_frame:
             if form_entry_name is self.__select_pickup_entry:
-                self.__autosuggest_popup_frame = CTkScrollableFrame(self.__select_pickup_frame, scrollbar_button_color="#333333", scrollbar_button_hover_color="#333333")
+                self.__autosuggest_popup_frame = CTkScrollableFrame(self.__select_pickup_frame, scrollbar_button_color=c["scrollbar"], scrollbar_button_hover_color=c["scrollbar_hover"])
                 self.__autosuggest_popup_frame.pack(fill="x", pady=15, padx=15)
             elif form_entry_name is self.__select_dropoff_entry:
-                self.__autosuggest_popup_frame = CTkScrollableFrame(self.__select_dropoff_frame, scrollbar_button_color="#333333", scrollbar_button_hover_color="#333333")
+                self.__autosuggest_popup_frame = CTkScrollableFrame(self.__select_dropoff_frame, scrollbar_button_color=c["scrollbar"], scrollbar_button_hover_color=c["scrollbar_hover"])
                 self.__autosuggest_popup_frame.pack(fill="x", pady=15, padx=15)
         else:
             for widget in self.__autosuggest_popup_frame.winfo_children():
@@ -140,7 +156,7 @@ class BookingForm(CTkScrollableFrame):
             country = props.get("country")
 
             if country_code == "PH" or country == "Philippines":
-                    label = CTkLabel(self.__autosuggest_popup_frame, text=address, fg_color="gray20", corner_radius=5, anchor="w")
+                    label = CTkLabel(self.__autosuggest_popup_frame, text=address, fg_color=c["card_accent"], corner_radius=5, anchor="w")
                     label.pack(fill="x", pady=2, anchor=W)
                     label.bind("<Button-1>", lambda e, a=address, f=form_entry_name: (self.__confirm_entry(a, f), self.__delete_autosuggest()))
                     count += 1

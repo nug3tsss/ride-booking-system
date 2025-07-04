@@ -16,41 +16,71 @@ class BookingPage(CTkFrame):
         self.__app = app
         self.__booking_information_manager = app.booking_information_manager
 
+        f = app.styles
+        c = app.styles.colors
+
+        self.configure(fg_color=c["bg"])
+
         self.__current_section = self.__booking_information_manager.get_current_booking_section()
 
-        self.__create_core_widgets()
+        self.__create_core_widgets(f, c)
         self.__display_last_section_selected()
-        
-    def __create_core_widgets(self):
-        self.__booking_label = CTkLabel(self, text="", font=("Arial", 32))
+
+    def __create_core_widgets(self, f, c):
+        self.__booking_label = CTkLabel(
+            self,
+            text="",
+            font=f.font_h2,
+            text_color=c["text"],
+            fg_color="transparent"
+        )
         self.__booking_label.pack(anchor="w", padx=15, pady=15, side=TOP)
 
-        self.__booking_inner_frame = CTkFrame(self)
-        self.__booking_inner_frame.pack(fill="both", expand=True, padx=15)
+        self.__booking_inner_frame = CTkFrame(
+            self,
+            fg_color=c["card"],
+            corner_radius=10
+        )
+        self.__booking_inner_frame.pack(fill="both", expand=True, padx=15, pady=(0, 15))
 
-        self.__button = CTkButton(self, command=self.__change_section)
-        self.__button.pack(side=LEFT, padx=15, pady=15)
-    
+        self.__button = CTkButton(
+            self,
+            command=self.__change_section,
+            font=f.font_h5,
+            text_color=c["text"],
+            fg_color=c["green"],
+            hover_color=c["green_hover"],
+            corner_radius=8,
+            width=150,
+            height=40
+        )
+        self.__button.pack(side=LEFT, padx=15, pady=(0, 15))
+
     def __display_booking_section(self):
         self.__booking_label.configure(text="Book a Ride!")
 
         self.__current_section = "Booking"
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
-        self.__button.configure(text="Next")
+        self.__button.configure(text="Next", text_color="white")
 
         booking_map = BookingMap(self.__booking_inner_frame, self.__booking_information_manager)
-        booking_form = BookingForm(self.__app, self.__booking_inner_frame, booking_map.get_map_manager_instance(), self.__booking_information_manager)
+        booking_form = BookingForm(
+            self.__app,
+            self.__booking_inner_frame,
+            booking_map.get_map_manager_instance(),
+            self.__booking_information_manager
+        )
 
     def __display_summary_section(self):
         self.__booking_label.configure(text="")
 
         self.__current_section = "Summary"
         self.__booking_information_manager.set_current_booking_section(self.__current_section)
-        self.__button.configure(text="Go Back")
+        self.__button.configure(text="Go Back", text_color="white")
 
         summary_form = BookingSummaryForm(self.__booking_inner_frame, self.__app, self.__booking_information_manager)
         summary_map = BookingSummaryMap(self.__booking_inner_frame, self.__booking_information_manager)
-    
+
     def __display_last_section_selected(self):
         if self.__current_section == "Booking":
             self.__display_booking_section()
@@ -70,7 +100,7 @@ class BookingPage(CTkFrame):
     def __remove_current_section(self):
         for widget in self.__booking_inner_frame.winfo_children():
             widget.destroy()
-    
+
     def __can_go_next_page(self):
         pickup = self.__booking_information_manager.get_pickup_coords()
         dropoff = self.__booking_information_manager.get_dropoff_coords()

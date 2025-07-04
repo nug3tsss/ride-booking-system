@@ -3,11 +3,14 @@ from customtkinter import CTkFont
 class Styles:
     def __init__(self):
         # === Fonts ===
-        self.font_h1 = CTkFont(family="Arial", size=24, weight="bold")
-        self.font_h2 = CTkFont(family="Arial", size=20, weight="bold")
+        self.font_h1 = CTkFont(family="Arial", size=32, weight="bold")
+        self.font_h2 = CTkFont(family="Arial", size=24, weight="bold")
         self.font_h3 = CTkFont(family="Arial", size=18, weight="bold")
+        self.font_h3p = CTkFont(family="Arial", size=18)
         self.font_h4 = CTkFont(family="Arial", size=16, weight="bold")
+        self.font_h4pi = CTkFont(family="Arial", size=16, weight="normal", slant="italic")
         self.font_h5 = CTkFont(family="Arial", size=14, weight="bold")
+        self.font_h5p = CTkFont(family="Arial", size=14)
         self.font_h6 = CTkFont(family="Arial", size=12, weight="bold")
         self.font_p = CTkFont(family="Arial", size=12)
         self.font_p_small = CTkFont(family="Arial", size=10)
@@ -19,29 +22,42 @@ class Styles:
         # === Light Mode Palette ===
         self.light_palette = {
             "green": {
-                "base": "#4CAF50",
-                "hover": "#388E3C",
-                "accent": "#C8E6C9"
+                "base": "#287E2B",
+                "hover": "#186D1C",
+                "accent": "#3CA13F"
             },
             "brown": {
-                "base": "#A1887F",
-                "hover": "#8D6E63",
-                "accent": "#D7CCC8"
+                "base": "#633C22",
+                "hover": "#994F24",
+                "accent": "#B96E52"
             },
             "monochrome": {
                 "base": "#CFD8DC",
                 "hover": "#B0BEC5",
                 "accent": "#ECEFF1"
             },
-            "background": "#F5F5F5",
-            "card": "#FFFFFF",
-            "navbar": "#FFFFFF",
-            "sidebar": "#E0E0E0",
-            "button": "#DDDDDD",
-            "button_hover": "#CCCCCC",
+            "background": "#E0C097",
+            "card": "#795322",
+            "card_light": "#A38849",
+            "card_accent": "#62B956",
+            "card_hover": "#578053",
+            "navbar": "#39743B",
+            "sidebar": "#815C32",
+            "scrollbar": "#BDBDBD",
+            "scrollbar_hover": "#9E9E9E",
+            "button": "#487C4C",
+            "button_hover": "#4DAF7E",
+            "button_disable": "#595E63",
+            "button_danger": "#702121",
+            "button_danger_hover": "#944242",
             "entry": "#FFFFFF",
             "text": "#212121",
-            "border": "#CCCCCC"
+            "border": "#553914",
+            "entry_border": "#795322",
+            "table_header": "#E0E0E0",
+            "table_row_even": "#916731",
+            "table_row_odd": "#BE8C49",
+            "divider": "#BDBDBD"
         }
 
         # === Dark Mode Palette ===
@@ -49,27 +65,40 @@ class Styles:
             "green": {
                 "base": "#2E7D32",
                 "hover": "#1B5E20",
-                "accent": "#66BB6A"
+                "accent": "#2A352D"
             },
             "brown": {
-                "base": "#4E342E",
-                "hover": "#3E2723",
-                "accent": "#A1887F"
+                "base": "#6B4137",
+                "hover": "#4B2E29",
+                "accent": "#52403A"
             },
             "monochrome": {
                 "base": "#37474F",
                 "hover": "#263238",
                 "accent": "#90A4AE"
             },
-            "background": "#121212",
-            "card": "#1E1E1E",
-            "navbar": "#1E1E1E",
-            "sidebar": "#2A2A2A",
+            "background": "#111613",
+            "card": "#1F2521",
+            "card_light": "#2D3A32",
+            "card_accent": "#1C2720",
+            "card_hover": "#2A352D",
+            "navbar": "#191D1A",
+            "sidebar": "#302A27",
+            "scrollbar": "#444444",
+            "scrollbar_hover": "#555555",
             "button": "#362222",
+            "button_disable": "#555555",
             "button_hover": "#444444",
+            "button_danger": "#9b1b1b",
+            "button_danger_hover": "#7f1515",
             "entry": "#1E1E1E",
+            "entry_border": "#333333",
             "text": "#FFFFFF",
-            "border": "#444444"
+            "border": "#444444",
+            "table_header": "#1E1E1E",
+            "table_row_even": "#242424",
+            "table_row_odd": "#303030",
+            "divider": "#444444"
         }
 
         # Active color map
