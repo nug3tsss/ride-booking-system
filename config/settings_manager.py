@@ -1,12 +1,16 @@
 import json
 import os
 
+"""Settings manager for the ride booking system.
+This module handles loading, saving, and resetting user settings."""
+
 SETTINGS_FILE = "session.json"
 
 DEFAULT_SETTINGS = {
     "theme_mode": "System",
 }
 
+# Ensure the settings file exists with default values if not present
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
         try:
@@ -16,6 +20,7 @@ def load_settings():
             return DEFAULT_SETTINGS.copy()
     return DEFAULT_SETTINGS.copy()
 
+# Save new settings to the settings file.
 def save_settings(new_settings):
     # Ensure the file exists with default values if not present
     if not os.path.exists(SETTINGS_FILE):
@@ -37,5 +42,6 @@ def save_settings(new_settings):
     except Exception as e:
         print(f"Failed to save settings: {e}")
 
+# Reset settings to default values.
 def reset_settings():
     save_settings(DEFAULT_SETTINGS.copy())

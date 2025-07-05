@@ -5,6 +5,8 @@ from tkinter import messagebox
 from utils.pycache_cleaner import PycacheCleaner
 
 class SettingsPage(CTkFrame):
+    """Settings Page of the application, allowing users to change theme and manage settings."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self.app = app
@@ -33,6 +35,7 @@ class SettingsPage(CTkFrame):
         # Clear Cache
         CTkButton(self, text="Clear Cache", fg_color=c["green"], hover_color=c["green_hover"], command=self.clear_cache).pack(pady=5)
 
+    # Handles theme change from the dropdown menu
     def on_theme_change(self, selected):
         c = self.app.styles.colors
         t = self.app.styles
@@ -49,11 +52,13 @@ class SettingsPage(CTkFrame):
 
         RestartPopup(self.app)
 
+    # Restores default settings and updates the theme
     def restore_defaults(self):
         reset_settings()
         messagebox.showinfo("Reset", "Settings restored to default.")
         self.on_theme_change("System")
 
+    # Clears the Python cache by deleting .pyc files and __pycache__ folders
     def clear_cache(self):
         pyc_count, folder_count = PycacheCleaner.clear_pycache(".")
         messagebox.showinfo(

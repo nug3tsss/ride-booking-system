@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
 class Vehicle(ABC):
+    """Abstract base class for all vehicle types in the ride booking system.
+    This class defines common attributes and methods that all vehicles must implement."""
+
     def __init__(self, id: int, type: str, model: str, license_plate: str, driver_name: str, driver_contact: str, base_fare: float, per_km_rate: float):
         self._id = id
         self._type = type

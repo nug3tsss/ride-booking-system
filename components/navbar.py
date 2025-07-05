@@ -26,6 +26,7 @@ class Navbar(CTkFrame):
 
         self.render_nav()
 
+    # Renders the navigation bar based on the current user state
     def render_nav(self):
         # Clear existing widgets (except logo)
         for widget in self.winfo_children():
@@ -75,6 +76,7 @@ class Navbar(CTkFrame):
         HamburgerButton(self, self.app, text="", fg_color="transparent").grid(
             row=0, column=7, padx=(0, 10), pady=10, sticky="nsew")
 
+    # Creates a navigation button with the given text, page, and column index
     def create_nav_button(self, text, page, column):
         c = self.styles.colors
         f = self.styles
@@ -90,6 +92,7 @@ class Navbar(CTkFrame):
             corner_radius=0
         ).grid(row=0, column=column, padx=5, sticky="nsew")
 
+    # Opens the signup popup if it doesn't already exist
     def open_signup_popup(self):
         if hasattr(self.app, "auth_popup") and self.app.auth_popup.winfo_exists():
             self.app.auth_popup.lift()  # bring to front

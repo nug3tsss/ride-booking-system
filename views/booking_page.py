@@ -26,6 +26,8 @@ class BookingPage(CTkFrame):
         self.__create_core_widgets(f, c)
         self.__display_last_section_selected()
 
+    # Creates the core widgets for the booking page
+    # Includes a label, inner frame for content, and a button to change sections
     def __create_core_widgets(self, f, c):
         self.__booking_label = CTkLabel(
             self,
@@ -56,6 +58,7 @@ class BookingPage(CTkFrame):
         )
         self.__button.pack(side=LEFT, padx=15, pady=(0, 15))
 
+    # Displays the booking section with the booking form and map
     def __display_booking_section(self):
         self.__booking_label.configure(text="Book a Ride!")
 
@@ -71,6 +74,7 @@ class BookingPage(CTkFrame):
             self.__booking_information_manager
         )
 
+    # Displays the summary section with booking summary form and map
     def __display_summary_section(self):
         self.__booking_label.configure(text="")
 
@@ -81,12 +85,14 @@ class BookingPage(CTkFrame):
         summary_form = BookingSummaryForm(self.__booking_inner_frame, self.__app, self.__booking_information_manager)
         summary_map = BookingSummaryMap(self.__booking_inner_frame, self.__booking_information_manager)
 
+    # Displays the last selected section based on the current section
     def __display_last_section_selected(self):
         if self.__current_section == "Booking":
             self.__display_booking_section()
         elif self.__current_section == "Summary":
             self.__display_summary_section()
 
+    # Changes the section based on the current section
     def __change_section(self):
         if self.__current_section == "Booking":
             if self.__can_go_next_page():
@@ -97,10 +103,12 @@ class BookingPage(CTkFrame):
             self.__remove_current_section()
             self.__display_booking_section()
 
+    # Removes all widgets in the current section to prepare for the next section
     def __remove_current_section(self):
         for widget in self.__booking_inner_frame.winfo_children():
             widget.destroy()
 
+    # Checks if all required fields are filled before proceeding to the next page
     def __can_go_next_page(self):
         pickup = self.__booking_information_manager.get_pickup_coords()
         dropoff = self.__booking_information_manager.get_dropoff_coords()

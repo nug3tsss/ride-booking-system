@@ -3,6 +3,8 @@ import sys
 import os
 
 class RestartPopup(CTkToplevel):
+    """Popup to notify user that a restart is required to apply changes."""
+
     def __init__(self, master):
         super().__init__(master)
         self.master = master
@@ -16,7 +18,7 @@ class RestartPopup(CTkToplevel):
         c = self.styles.colors
         f = self.styles
 
-        # === Message ===
+        # Set the background color of the popup
         CTkLabel(
             self,
             text="Restart the app to apply\nchanges.",
@@ -25,11 +27,10 @@ class RestartPopup(CTkToplevel):
             justify="center"
         ).pack(pady=(40, 20), padx=20)
 
-        # === Buttons Frame ===
         button_frame = CTkFrame(self, fg_color="transparent")
         button_frame.pack(pady=10)
 
-        # === Restart Now ===
+        # Restart Now Butotn
         restart_btn = CTkButton(
             button_frame,
             text="Restart Now",
@@ -42,7 +43,7 @@ class RestartPopup(CTkToplevel):
         )
         restart_btn.pack(side="left", padx=10, pady=10)
 
-        # === Later ===
+        # Later Button
         later_btn = CTkButton(
             button_frame,
             text="Later",
@@ -55,6 +56,7 @@ class RestartPopup(CTkToplevel):
         )
         later_btn.pack(side="left", padx=10, pady=10)
 
+    # Restarts the application using the current Python executable
     def restart_app(self):
         python = sys.executable
         os.execl(python, python, *sys.argv)

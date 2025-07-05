@@ -1,9 +1,10 @@
 from customtkinter import *
 from tkinter import messagebox
-import sqlite3
 from database.db_handler import get_connection
 
 class LoginPage(CTkFrame):
+    """Login Page of the application, allowing users to log in with their credentials."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self._app = app
@@ -19,6 +20,7 @@ class LoginPage(CTkFrame):
         CTkButton(self, text="Login", command=self.__login_user).pack(pady=20)
         CTkButton(self, text="Go to Register", command=lambda: self._app.show_page("Register")).pack(pady=5)
 
+    # Handles user login by validating credentials and navigating to the dashboard
     def login_user(self):
         username = self.__username_entry.get()
         password = self.__password_entry.get()

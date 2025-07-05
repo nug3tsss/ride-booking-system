@@ -31,6 +31,7 @@ class BookingForm(CTkScrollableFrame):
 
         self.__restore_information_from_previous()
     
+    # Initializes the API key and other parameters for autosuggest functionality
     def __initialize_autosuggest_api(self):
         self.__API_KEY = "86f10e4840eb45f4b94f17fce6d3fcec"
         self.__after_id = None
@@ -38,6 +39,7 @@ class BookingForm(CTkScrollableFrame):
         self.__debounce_ms = 0
         self.__autosuggest_popup_frame = None
     
+    # Creates the pickup and dropoff entry fields with labels and autosuggest functionality
     def __create_pickup_entry(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -50,7 +52,8 @@ class BookingForm(CTkScrollableFrame):
 
         self.__select_pickup_entry = CTkEntry(self.__select_pickup_frame, placeholder_text="Search for a destination...")
         self.__select_pickup_entry.pack(fill="x", pady=15, padx=15, ipady=5)
-   
+    
+    # Creates the dropoff entry field with a label and autosuggest functionality
     def __create_dropoff_entry(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -63,7 +66,8 @@ class BookingForm(CTkScrollableFrame):
 
         self.__select_dropoff_entry = CTkEntry(self.__select_dropoff_frame, placeholder_text="Search for a destination...")
         self.__select_dropoff_entry.pack(fill="x", pady=15, padx=15, ipady=5)
-   
+    
+    # Creates the vehicle selection radio buttons with a label
     def __create_vehicle_select(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -84,6 +88,7 @@ class BookingForm(CTkScrollableFrame):
         vehicle3 = CTkRadioButton(select_vehicle_frame, text="Motorcycle (2-seater)", command=self.__set_vehicle_type, variable=self.__vehicle_var, value=3)
         vehicle3.pack(fill="x", pady=(10,15), padx=15)
     
+    # Creates the import and clear buttons for booking actions
     def __create_import_and_clear_buttons(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -94,10 +99,12 @@ class BookingForm(CTkScrollableFrame):
         import_button = CTkButton(self, text="Clear booking", text_color="white", fg_color=c["book_button"], hover_color=c["book_button_hover"], command=self.__clear_form_entries)
         import_button.pack(fill="x", pady=(10,15), padx=15)
     
+    # Binds key release events to the pickup and dropoff entry fields for autosuggest functionality
     def __bind_form_entry_events(self):
         self.__select_pickup_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_pickup_entry, event))
         self.__select_dropoff_entry.bind("<KeyRelease>", lambda event: self.__on_key_released(self.__select_dropoff_entry, event))
 
+    # Sets the vehicle type based on the selected radio button
     def __set_vehicle_type(self):
         vehicle_type_int = self.__vehicle_var.get()
 
@@ -113,6 +120,7 @@ class BookingForm(CTkScrollableFrame):
         self.__booking_information_manager.set_vehicle_type_str(vehicle_type_str)
         self.__booking_information_manager.set_vehicle_type_int(vehicle_type_int)
 
+    # Handles key release events for the pickup and dropoff entry fields
     def __on_key_released(self, form_entry_name, event):
         if self.__after_id:
             self.after_cancel(self.__after_id)
@@ -126,9 +134,11 @@ class BookingForm(CTkScrollableFrame):
             self.__delete_autosuggest()
             return
     
+    # Generates autosuggest results for the given entry input
     def __generate_autosuggest(self, form_entry_name, entry_input):
         threading.Thread(target=self.__generate_autosuggest_thread, args=(form_entry_name, entry_input)).start()
 
+    # Thread function to fetch autosuggest results from the Geoapify API
     def __generate_autosuggest_thread(self, form_entry_name, entry_input):
         try:
             url = f"https://api.geoapify.com/v1/geocode/autocomplete?text={entry_input}&lang=en&limit=10&apiKey={self.__API_KEY}"
@@ -139,6 +149,7 @@ class BookingForm(CTkScrollableFrame):
         except Exception as e:
             print("Connection Timed Out", e)
     
+    # Displays the autosuggest results in a popup frame below the entry field
     def __display_autosuggest_results(self, form_entry_name, data):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -170,12 +181,14 @@ class BookingForm(CTkScrollableFrame):
             if count >= 5:
                 break
     
+    # Confirms the selected address and updates the corresponding entry field
     def __confirm_entry(self, address, form_entry_name):
         if form_entry_name is self.__select_pickup_entry:
             self.__map_manager.get_coords_from_address(address, "pickup", callback=self.__update_entry)
         elif form_entry_name is self.__select_dropoff_entry:
             self.__map_manager.get_coords_from_address(address, "dropoff", callback=self.__update_entry)
 
+    # Updates the entry field with the confirmed address
     def __update_entry(self, address, destination):
         if destination == "pickup":
             self.__select_pickup_entry.delete(0, END)
@@ -184,6 +197,7 @@ class BookingForm(CTkScrollableFrame):
             self.__select_dropoff_entry.delete(0, END)
             self.__select_dropoff_entry.configure(placeholder_text=address)
 
+    # Deletes the autosuggest popup frame and its contents
     def __delete_autosuggest(self):
         if self.__autosuggest_popup_frame:
             for widget in self.__autosuggest_popup_frame.winfo_children():
@@ -191,7 +205,8 @@ class BookingForm(CTkScrollableFrame):
         
             self.__autosuggest_popup_frame.pack_forget()
             self.__autosuggest_popup_frame = None
-        
+
+    # Restores the booking information from the previous session        
     def __restore_information_from_previous(self):
         pickup = self.__booking_information_manager.get_pickup_address()
         dropoff = self.__booking_information_manager.get_dropoff_address()
@@ -205,7 +220,8 @@ class BookingForm(CTkScrollableFrame):
         
         if vehicle_type is not None:
             self.__vehicle_var.set(vehicle_type)
-        
+
+    # Imports booking information from a JSON file and updates the form entries  
     def __import_booking_from_file(self):
         file_path = filedialog.askopenfilename(
             title="Select a booking file",
@@ -234,6 +250,7 @@ class BookingForm(CTkScrollableFrame):
             except Exception as e:
                 print(f"Error importing booking information: {e}")
     
+    # Clears the booking information and returns to the booking page
     def __clear_form_entries(self):
         self.__booking_information_manager.clear_booking_information()
         self.__app.show_page("Booking")

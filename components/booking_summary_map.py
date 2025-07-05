@@ -15,7 +15,8 @@ class BookingSummaryMap(CTkFrame):
         self.__booking_summary_map.pack(expand=True, fill="both", padx=15, pady=15)
 
         self.__display_map_details()
-    
+
+    # Displays the map details such as markers for pick-up and drop-off, bounding box, and route line 
     def __display_map_details(self):
         pickup = self.__booking_information_manager.get_pickup_coords()
         dropoff = self.__booking_information_manager.get_dropoff_coords()

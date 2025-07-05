@@ -21,10 +21,10 @@ class DatabaseHandler:
     def initialize_database(self):
         """Initialize database"""
         try:
-            #Users table
-            with get_connection() as conn:
-                conn.execute("PRAGMA foreign_keys = ON;")
+            with get_connection() as conn: # Create a connection to the database
+                conn.execute("PRAGMA foreign_keys = ON;") # Enable foreign key constraints for maintaining data integrity.
 
+                # Create users table
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +37,8 @@ class DatabaseHandler:
                     profile_pic TEXT DEFAULT 'assets/profile.jpg'
                 );
                 """)
-            #vehicle table
+                
+                # Create vehicles table
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS vehicles (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,7 +51,8 @@ class DatabaseHandler:
                         per_km_rate REAL NOT NULL
                     );
                 """)
-                #booking Table
+
+                # Insert default vehicles
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS bookings (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +69,7 @@ class DatabaseHandler:
                     );
                 """)
 
-                #admin
+                # Create messages table
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS messages (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,11 +80,12 @@ class DatabaseHandler:
                     );
                 """)
 
-                conn.commit()
+                conn.commit() # Commit the changes
                 print("[DB INFO] Database tables created successfully.")
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to initialize database: {e}")
 
+    # Inserts a default admin user if one does not already exist
     def _insert_default_admin_user(self):
         """Inserts a default admin user if one does not already exist."""
         try:
@@ -99,6 +102,7 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to insert default admin user: {e}")
 
+    # Fetches all users from the database - This is used to display user information in the admin dashboard
     def get_vehicle_details_by_type(self, vehicle_type: str) -> Vehicle | None:
         """Fetch vehicle details by type and return a Vehicle object."""
         try:
@@ -125,7 +129,7 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to fetch vehicle details by type: {e}")
             return None
 
-
+    # Inserts a new booking record into the database - This is used when a user books a ride
     def add_booking(self,user_id: int, pickup: str, destination: str, vehicle_id: int, distance_km: float = 0.0, estimated_cost: float = 0.0) -> int | None:
         """Insert a new booking record"""
         try:
@@ -142,7 +146,8 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to add booking: {e}")
             return None
-        
+
+    # Fetches all bookings made by a specific user - This is used to display the user's booking history
     def get_bookings_by_user(self, user_id: int) -> list:
         try:
             with get_connection() as conn:
@@ -163,6 +168,7 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to fetch bookings for user: {e}")
             return []
 
+    # Updates the status of a booking - This is used to mark a booking as completed, cancelled, etc.
     def update_booking_status(self, booking_id: int, status: str) -> int:
         try:
             with get_connection() as conn:
@@ -175,7 +181,8 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to update booking status: {e}")
             return 0
-        
+
+    # Cancels a booking by marking it as cancelled    
     def cancel_booking(self, booking_id: int) -> int:
         """Mark a booking as cancelled"""
         try:
@@ -190,6 +197,7 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to cancel booking: {e}")
             return 0
 
+    # Completes a booking by marking it as completed - This is used when the ride is finished
     def complete_booking(self, booking_id: int) -> int:
         """Mark a booking as completed"""
         try:
@@ -204,6 +212,7 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to complete booking: {e}")
             return 0
 
+    # Clears all bookings from the database - This is used for testing purposes
     def clear_bookings(self) -> None:
         """Delete all bookings (for testing)"""
         try:
@@ -214,6 +223,7 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to clear bookings: {e}")
 
+    # Fetches all bookings from the database - This is used to display all bookings in the admin dashboard
     def get_all_bookings(self) -> list:
         """Fetches all booking records from the database."""
         try:
@@ -231,6 +241,7 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to fetch all bookings: {e}")
             return []
 
+    # Fetches all vehicles from the database - This is used to display vehicle information in the admin dashboard
     def reset_database_completely(self) -> None:
         """Reset database completely (development only)"""
         try:

@@ -6,6 +6,8 @@ import os
 from PIL import Image, ImageDraw, ImageOps
 
 class ProfilePage(CTkFrame):
+    """Profile Page of the application, allowing users to view and edit their profile information."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self.app = app
@@ -52,6 +54,7 @@ class ProfilePage(CTkFrame):
                   image=self.delete_icon, compound="left", command=self.confirm_delete
                   ).grid(row=7, column=0, columnspan=3, pady=10)
 
+    # Confirms if the user wants to delete their account
     def create_profile_image_section(self):
         c = self.app.styles.colors
         self.img_label = CTkLabel(self.card, text="")
@@ -70,6 +73,7 @@ class ProfilePage(CTkFrame):
         CTkButton(btn_frame, fg_color=c["green"], hover_color=c["green_hover"], text="Remove Photo", image=remove_icon, compound="left",
                   command=self.remove_picture).pack(side="left", padx=5)
 
+    # Displays the profile image in the profile section
     def display_profile_image(self, img_path):
         try:
             target_size = (100, 100)
@@ -92,7 +96,7 @@ class ProfilePage(CTkFrame):
             self.img_label.configure(text="[No Image]", image=None)
 
 
-
+    # Creates a field for user profile attributes like first name, last name, and username
     def create_field(self, label, attr, row):
         c = self.app.styles.colors
         CTkLabel(self.card, text=f"{label}:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(25, 5), pady=2)
@@ -115,6 +119,7 @@ class ProfilePage(CTkFrame):
         setattr(self, f"label_{attr}", label_widget)
         setattr(self, f"entry_{attr}", entry_widget)
 
+    # Toggles the entry field for editing a profile attribute
     def toggle_field(self, attr):
         c = self.app.styles.colors
 
@@ -133,6 +138,7 @@ class ProfilePage(CTkFrame):
         entry.bind("<KeyRelease>", lambda e: self.check_changes())
         self.cancel_btn.configure(state=NORMAL, fg_color=c["green"])
 
+    # Handles focus out event for entry fields
     def on_focus_out(self, attr):
         entry = getattr(self, f"entry_{attr}")
         label = getattr(self, f"label_{attr}")
@@ -149,6 +155,7 @@ class ProfilePage(CTkFrame):
 
         self.check_changes()
 
+    # Creates the password button and its functionality
     def create_password_button(self, row):
         c = self.app.styles.colors
         CTkLabel(self.card, text="Password:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(0, 5), pady=4)
@@ -156,6 +163,7 @@ class ProfilePage(CTkFrame):
         CTkButton(self.card, width=100, fg_color=c["green"], hover_color=c["green_hover"], text="Change", image=CTkImage(light_image=Image.open("assets/icons/password_icon-dark.png"), dark_image=Image.open("assets/icons/password_icon-dark.png"), size=(16, 16)),
                   compound="left", command=self.show_password_popup).grid(row=row, column=2, padx=(5, 50), sticky="w")
 
+    # Opens a popup to change the user's password
     def show_password_popup(self):
         c = self.app.styles.colors
         popup = CTkToplevel(self)
@@ -179,6 +187,7 @@ class ProfilePage(CTkFrame):
 
         show_pw_var = BooleanVar(value=False)
 
+        # Switch to toggle password visibility
         def toggle_pw():
             show = "" if show_pw_var.get() else "*"
             old_pw.configure(show=show)
@@ -187,6 +196,7 @@ class ProfilePage(CTkFrame):
 
         CTkSwitch(popup, text="Show Password", variable=show_pw_var, command=toggle_pw).pack(pady=5)
 
+        # Function to change the password
         def change_pw():
             old = old_pw.get()
             new = new_pw.get()
@@ -218,26 +228,25 @@ class ProfilePage(CTkFrame):
             self.has_unsaved_changes = True
             self.check_changes()
 
+        # Save button to change password
         CTkButton(popup, fg_color=c["green"], hover_color=c["green_hover"], text="Save Password", command=change_pw).pack(pady=10)
 
+    # Removes the profile picture and resets to default
     def remove_picture(self):
         self.new_profile_path = None
         self.reset_picture_flag = True
         self.display_profile_image("assets/user/profile.png")
         self.check_changes()
 
+    # Opens a file dialog to select a new profile picture
     def change_picture(self):
         filepath = filedialog.askopenfilename(filetypes=[("Image Files", "*.png *.jpg *.jpeg")])
         if filepath:
             self.open_crop_popup(filepath)
 
-            # self.new_profile_path = filepath
-            # self.reset_picture_flag = False
-            # self.display_profile_image(filepath)
-            # self.check_changes()
-
+    # Opens a popup to crop the selected profile picture
     def open_crop_popup(self, filepath):
-        from PIL import ImageTk  # Needed for displaying in Canvas
+        from PIL import ImageTk
 
         popup = CTkToplevel(self)
         popup.title("Crop Photo")
@@ -258,6 +267,7 @@ class ProfilePage(CTkFrame):
         crop_box = [50, 50, 250, 250]
         rect = canvas.create_rectangle(*crop_box, outline="cyan", width=2)
 
+        # Function to handle mouse drag for cropping
         def on_drag(event):
             x, y = event.x, event.y
             size = crop_box[2] - crop_box[0]
@@ -270,8 +280,8 @@ class ProfilePage(CTkFrame):
 
         canvas.bind("<B1-Motion>", on_drag)
 
+        # Function to apply the crop and update the profile image
         def apply_crop():
-            # Scale crop box back to original image dimensions
             scale_x = original.width / img.width
             scale_y = original.height / img.height
             left = int(crop_box[0] * scale_x)
@@ -286,9 +296,11 @@ class ProfilePage(CTkFrame):
             self.check_changes()
             popup.destroy()
 
+        # Buttons to apply crop or cancel
         CTkButton(popup, text="Crop & Use Photo", command=apply_crop).pack(pady=5)
         CTkButton(popup, text="Cancel", command=popup.destroy).pack(pady=5)
 
+    # Displays the profile image from a PIL Image object
     def display_profile_image_from_object(self, pil_image):
         try:
             target_size = (100, 100)
@@ -306,7 +318,7 @@ class ProfilePage(CTkFrame):
         except:
             self.img_label.configure(text="[No Image]", image=None)
 
-
+    # Checks if any changes have been made to the profile fields
     def check_changes(self):
         c = self.app.styles.colors
         changed = False
@@ -328,6 +340,7 @@ class ProfilePage(CTkFrame):
         self.cancel_btn.configure(state=NORMAL if changed or self.editing_field_active else DISABLED,
                                   fg_color=c["green"] if changed or self.editing_field_active else c["button_disable"])
 
+    # Saves all changes made in the profile page
     def save_all_changes(self):
         updated_data = {}
         conn = get_connection()
@@ -372,6 +385,7 @@ class ProfilePage(CTkFrame):
         conn.close()
         self.refresh_labels()
 
+    # Refreshes the labels and entries to reflect the current user data
     def refresh_labels(self):
         c = self.app.styles.colors
         for attr in ["first_name", "last_name", "username"]:
@@ -391,9 +405,11 @@ class ProfilePage(CTkFrame):
         self.save_btn.configure(state=DISABLED, fg_color=c["button_disable"])
         self.cancel_btn.configure(state=DISABLED, fg_color=c["button_disable"])
 
+    # Cancels all changes made in the profile page
     def cancel_all_changes(self):
         self.refresh_labels()
 
+    # Confirms account deletion with the user
     def confirm_delete(self):
         c = self.app.styles.colors
         confirm = CTkToplevel(self)
@@ -412,6 +428,7 @@ class ProfilePage(CTkFrame):
                   command=lambda: self.delete_account(confirm)).pack(side="left", padx=10)
         CTkButton(btn_frame, text="Cancel", fg_color=c["green"], hover_color=c["green_hover"], command=confirm.destroy).pack(side="left", padx=10)
 
+    # Deletes the user account from the database and logs out
     def delete_account(self, popup):
         conn = get_connection()
         with conn:

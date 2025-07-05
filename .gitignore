@@ -1,3 +1,5 @@
+# This file is used to specify files and directories that should be ignored by Git.
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

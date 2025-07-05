@@ -3,6 +3,8 @@ from PIL import Image, ImageOps
 from components.contact_form import ContactForm
 
 class ContactPage(CTkFrame):
+    """Contact Page of the application, allowing users to send messages or inquiries."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self.app = app
@@ -52,13 +54,14 @@ class ContactPage(CTkFrame):
         self.intro_label.pack(pady=(0, 30))
 
         # Info section: Address, Phone, Email
-        self.build_contact_info()
+        self.create_contact_info()
 
         # Contact form component
         self.contact_form = ContactForm(self.scrollable_frame, app)
         self.contact_form.pack(pady=(40, 20), fill="x", padx=40)
 
-    def build_contact_info(self):
+    # Creates the contact information section with address, phone, and email
+    def create_contact_info(self):
         f = self.app.styles
         info_frame = CTkFrame(self.scrollable_frame, fg_color="transparent")
         info_frame.pack(pady=10, padx=60, fill="x")
@@ -95,15 +98,18 @@ class ContactPage(CTkFrame):
 
         email_col.grid(row=0, column=4, padx=40, pady=10)
 
+    # Adds a vertical divider between contact info columns
     def add_divider(self, parent, col):
         c = self.app.styles.colors
         divider = CTkFrame(parent, width=3, fg_color=c["divider"])
         divider.grid(row=0, column=col, sticky="ns", pady=10)
 
+    # Adjusts the wraplength of the intro label based on available width
     def adjust_wraplength(self, event):
         available_width = self.winfo_width() - 200
         self.intro_label.configure(wraplength=available_width)
 
+    # Resizes the contact image based on the available width of the frame
     def resize_image(self, event):
         available_width = self.winfo_width()
         desired_height = 200

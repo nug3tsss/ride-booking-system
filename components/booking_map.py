@@ -15,5 +15,6 @@ class BookingMap(CTkFrame):
         booking_map = TkinterMapView(self)
         self.__map_manager = MapManager(booking_map, booking_information_manager)
     
+    # Sets the tile server for the map and packs it into the frame
     def get_map_manager_instance(self):
         return self.__map_manager

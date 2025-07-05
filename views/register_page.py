@@ -4,6 +4,8 @@ import sqlite3
 from database.db_handler import get_connection
 
 class RegisterPage(CTkFrame):
+    """Register Page of the application, allowing new users to create an account."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self._app = app
@@ -23,6 +25,7 @@ class RegisterPage(CTkFrame):
         CTkButton(self, text="Register", command=self.__register_user).pack(pady=20)
         CTkButton(self, text="Go to Login", command=lambda: self._app.show_page("Login")).pack(pady=5)
 
+    # Registers a new user with the provided username, password, and role
     def __register_user(self):
         username = self.__username_entry.get()
         password = self.__password_entry.get()

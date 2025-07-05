@@ -4,6 +4,8 @@ from PIL import Image, ImageTk
 from utils.session_manager import load_session
 
 class DashboardPage(CTkFrame):
+    """Dashboard/Home Page of the application, displaying a welcome message and a booking button."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self.__app = app
@@ -105,6 +107,7 @@ class DashboardPage(CTkFrame):
         self.bind("<Configure>", self.resize_image)
         self.after(100, lambda: self.resize_image(None))
 
+    # Resize the image based on the window size
     def resize_image(self, event):
         window_width = self.winfo_width()
         window_height = self.winfo_height()
@@ -140,6 +143,7 @@ class DashboardPage(CTkFrame):
             self.card_container.place_configure(relx=0.22, anchor="center")
             self.card_container.configure(width=400)
 
+    # Navigate to the booking page and clear any existing booking information
     def go_to_booking_page(self):
         self.__booking_information_manager.clear_booking_information()
         self.__app.show_page("Booking")

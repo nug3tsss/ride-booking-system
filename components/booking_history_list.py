@@ -38,6 +38,7 @@ class BookingHistoryList(CTkFrame):
         # Load booking history
         self.create_table()
 
+    # Creates the booking history table with user bookings
     def create_table(self):
         c = self.app.styles.colors
         f = self.app.styles
@@ -103,6 +104,7 @@ class BookingHistoryList(CTkFrame):
             self.create_table_row(booking, i)
         # print("[UI DEBUG] Table creation completed")
 
+    # Creates the table header with column titles
     def create_table_header(self):
         f = self.app.styles
         c = self.app.styles.colors
@@ -139,6 +141,7 @@ class BookingHistoryList(CTkFrame):
             label.grid(row=0, column=col, padx=5, pady=10, sticky="ew")
         # print("[UI DEBUG] Header created successfully")
 
+    # Creates a table row for each booking
     def create_table_row(self, booking, row_index):
         """Create a table row for each booking"""
 
@@ -222,6 +225,7 @@ class BookingHistoryList(CTkFrame):
         # Add hover effect (optional)
         self.add_hover_effect(row_frame, row_color)
 
+    # Saves booking data to a JSON file
     def save_booking_to_json(self, booking_data):
         vehicle_type_map = {
             "Car": 1,
@@ -251,12 +255,14 @@ class BookingHistoryList(CTkFrame):
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to save booking: {e}")
 
+    # Truncates text if it's too long
     def truncate_text(self, text, max_length):
         """Truncate text if it's too long"""
         if text and len(text) > max_length:
             return text[:max_length-3] + "..."
         return text if text else "N/A"
 
+    # Formats date string to MM/DD/YYYY
     def format_date(self, date_string):
         if not date_string:
             return "No Date"
@@ -286,6 +292,7 @@ class BookingHistoryList(CTkFrame):
             print(f"[UI WARNING] Date parsing error for '{date_string}': {e}")
             return str(date_string)[:15] if len(str(date_string)) > 15 else str(date_string)
 
+    # Adds hover effect to the frame and its children
     def add_hover_effect(self, frame, original_color):
         c = self.app.styles.colors
         
@@ -301,6 +308,7 @@ class BookingHistoryList(CTkFrame):
             child.bind("<Enter>", on_enter)
             child.bind("<Leave>", on_leave)
 
+    # Refreshes the booking history table
     def refresh_history(self):
         """Refresh the booking history table"""
         self.create_table()

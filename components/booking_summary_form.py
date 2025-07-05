@@ -39,6 +39,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__create_costs_section()
         self.__create_confirm_button()
 
+    # Retrieves booking information from the BookingInformationManager
     def __retrieve_booking_informations(self):
         self.__pickup_address = self.__booking_information_manager.get_pickup_address()
         self.__dropoff_address = self.__booking_information_manager.get_dropoff_address()
@@ -49,9 +50,11 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__estimated_time_seconds = self.__booking_information_manager.get_estimated_time_seconds()
         self.__estimated_cost_pesos = self.__booking_information_manager.get_estimated_cost()
 
+    # Calculates the estimated time in minutes from the estimated time in seconds
     def __calculate_time_in_mins(self):
         self.__estimated_time_minutes = int(self.__estimated_time_seconds // 60)
 
+    # Creates the booking summary label at the top of the form
     def __create_booking_summary_label(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -59,6 +62,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__title_label = CTkLabel(self, text="Booking Summary", font=f.font_h1, text_color=c["text"])
         self.__title_label.grid(row=0, column=0, columnspan=3, pady=30, sticky="ew")
 
+    # Creates the sections for pickup, dropoff, ride details, trip details, costs, and confirmation button
     def __create_pickup_section(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -70,6 +74,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         CTkLabel(pickup_frame, text="Pickup Location:", font=f.font_h4, text_color="white").grid(row=0, column=0, sticky="w", padx=15, pady=15)
         CTkLabel(pickup_frame, text=self.__pickup_address, text_color="white", font=f.font_p, wraplength=350).grid(row=0, column=1, sticky="w", padx=(10, 15), pady=15)
 
+    # Creates the section for dropoff location
     def __create_dropoff_section(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -81,6 +86,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         CTkLabel(dropoff_frame, text="Dropoff Location:", font=f.font_h4, text_color="white").grid(row=0, column=0, sticky="w", padx=15, pady=15)
         CTkLabel(dropoff_frame, text=self.__dropoff_address, text_color="white", font=f.font_p, wraplength=350).grid(row=0, column=1, sticky="w", padx=(10, 15), pady=15)
 
+    # Creates the section for ride details such as vehicle type, model, license plate, and driver
     def __create_ride_details_section(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -106,6 +112,7 @@ class BookingSummaryForm(CTkScrollableFrame):
             CTkLabel(self.__vehicle_frame, text="Driver:", text_color="white", font=f.font_h5).grid(row=2, column=2, sticky="w", padx=(20, 10), pady=(2, 15))
             CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.driver_name, text_color="white", font=("Arial", 14)).grid(row=2, column=3, sticky="w", pady=(2, 15))
 
+    # Creates the section for trip details such as distance and estimated time of arrival (ETA)
     def __create_trip_details_section(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -124,6 +131,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         CTkLabel(eta_frame, text="ETA", font=f.font_h4, text_color="white", anchor="center").grid(row=0, column=0, pady=(15, 5), padx=10, sticky="ew")
         CTkLabel(eta_frame, text=f"{self.__estimated_time_minutes} min", text_color="white", font=f.font_h5, anchor="center").grid(row=1, column=0, pady=(5, 15), padx=10, sticky="ew")
 
+    # Creates the section for estimated costs
     def __create_costs_section(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -135,6 +143,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         CTkLabel(cost_frame, text="Total Estimated Cost", font=f.font_h4, text_color="white", anchor="center").grid(row=0, column=0, pady=(15, 5), sticky="ew")
         CTkLabel(cost_frame, text=f"₱ {self.__estimated_cost_pesos:.2f}", font=f.font_h1, text_color="white", anchor="center").grid(row=1, column=0, pady=(0, 15), sticky="ew")
 
+    # Creates the confirmation button for booking
     def __create_confirm_button(self):
         c = self.__app.styles.colors
         f = self.__app.styles
@@ -142,6 +151,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__confirm_button = CTkButton(self, text="Confirm Booking", command=self.__confirm_booking, corner_radius=15, fg_color=c["green"], hover_color=c["green_hover"], width=150, height=40)
         self.__confirm_button.grid(row=5, column=0, columnspan=3, pady=(20, 20), padx=20)
 
+    # Confirms the booking process
     def __confirm_booking(self):
         if self.__is_booking_in_progress:
             return
@@ -175,11 +185,13 @@ class BookingSummaryForm(CTkScrollableFrame):
         confirm_id = self.after(5000, self.__finding_driver)
         self.__booking_after_ids.append(confirm_id)
 
+    # Initiates the process of finding a driver after confirming the booking
     def __finding_driver(self):
         self.__title_label.configure(text="Finding you a driver...")
         finding_id = self.after(5000, self.__driver_found)
         self.__booking_after_ids.append(finding_id)
 
+    # Handles the process when a driver is found
     def __driver_found(self):
         c = self.__app.styles.colors
 
@@ -201,6 +213,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__booking_after_ids.clear()
         self.__booking_information_manager.clear_booking_information()
 
+    # Cancels the booking process and resets the state
     def __cancel_booking_process(self):
         for after_id in self.__booking_after_ids:
             self.after_cancel(after_id)
@@ -216,6 +229,7 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__confirm_button.configure(text="Confirm Booking", command=self.__confirm_booking)
         messagebox.showinfo("Booking Cancelled", "Booking has been cancelled.")
 
+    # Cancels the booking and resets the state
     def __cancel_booking(self):
         if self.__current_booking_id:
             self.__db_handler.cancel_booking(self.__current_booking_id)
@@ -225,5 +239,6 @@ class BookingSummaryForm(CTkScrollableFrame):
             self.__booking_information_manager.clear_booking_information()
             self.__app.show_page("Booking")
 
+    # Navigates to the user's booking history page
     def __go_to_your_bookings(self):
         self.__app.show_page("History")

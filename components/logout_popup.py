@@ -24,11 +24,13 @@ class LogoutPopup(CTkToplevel):
         CTkButton(button_frame, text="Yes", command=self.confirm, fg_color="#9b1b1b").pack(side="left", padx=10)
         CTkButton(button_frame, text="Cancel", command=self.close).pack(side="left", padx=10)
 
+    # Confirm logout action
     def confirm(self):
         self.grab_release()
         self.destroy()
         self.confirm_callback()
 
+    # Close the popup without action
     def close(self):
         self.grab_release()
         self.destroy()

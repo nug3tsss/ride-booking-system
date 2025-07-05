@@ -24,6 +24,7 @@ class ProfileButton(CTkButton):
             **kwargs
         )
 
+    # Creates a circular profile image from the given path
     def create_profile_image(self, path):
         try:
             profile_raw = Image.open(path).resize((40, 40))

@@ -2,6 +2,9 @@ import os
 import shutil
 import stat
 
+"""Utility class to clear Python bytecode cache files (.pyc) and __pycache__ directories.
+This class provides a method to recursively search through a directory and remove all .pyc files"""
+
 class PycacheCleaner:
     @staticmethod
     def clear_pycache(root_dir="."):
@@ -38,4 +41,4 @@ class PycacheCleaner:
                 except Exception as e:
                     print(f"[ERROR] Failed to delete folder {foldername}: {e}")
 
-        return pyc_count, folder_count
+        return pyc_count, folder_count # Returns the count of deleted .pyc files and __pycache__ folders

@@ -2,6 +2,8 @@ from customtkinter import *
 from PIL import Image, ImageOps, ImageDraw
 
 class AboutPage(CTkFrame):
+    """About Page of the application, providing information about the app and its team."""
+
     def __init__(self, master, app):
         super().__init__(master)
         self.app = app
@@ -67,7 +69,7 @@ class AboutPage(CTkFrame):
         )
         self.__about_text.pack(padx=30, pady=30)
 
-        # Horizontal Divider
+        # Divider below the About Text
         divider = CTkFrame(self.scrollable_frame, height=2, fg_color=c["divider"])
         divider.pack(fill="x", padx=40, pady=(0, 30))
 
@@ -86,6 +88,7 @@ class AboutPage(CTkFrame):
         self.__members_frame.pack(padx=30, pady=30, fill="both")
         self.add_members()
 
+    # Adds team members to the About page with their names, roles, and profile pictures
     def add_members(self):
         c = self.app.styles.colors
         f = self.app.styles
@@ -164,11 +167,12 @@ class AboutPage(CTkFrame):
             CTkLabel(frame, text=member["name"], text_color="white", font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
             CTkLabel(frame, text=member["role"], text_color="white", font=f.font_p, wraplength=150, justify="center").pack()
 
-
+    # Adjusts the wraplength of the about text based on the available width
     def adjust_wraplength(self, event):
         available_width = self.winfo_width() - 200
         self.__about_text.configure(wraplength=available_width)
 
+    # Resizes the about image based on the available width of the frame
     def resize_image(self, event):
         available_width = self.winfo_width()
         desired_height = 200

@@ -9,6 +9,7 @@ class AuthPopup(CTkToplevel):
 
     _instance = None
 
+    # Singleton pattern to ensure only one instance of AuthPopup exists
     def __new__(cls, app):
         if cls._instance is None or not cls._instance.winfo_exists():
             cls._instance = super().__new__(cls)
@@ -32,6 +33,7 @@ class AuthPopup(CTkToplevel):
 
         self.switch_mode("signup")
 
+    # Switches between Sign Up and Login modes
     def switch_mode(self, mode):
         for widget in self.winfo_children():
             widget.destroy()
@@ -90,19 +92,23 @@ class AuthPopup(CTkToplevel):
             signup_label.bind("<Leave>", lambda e: signup_label.configure(text_color="#1E90FF"))
             signup_label.bind("<Button-1>", lambda e: self.switch_mode("signup"))
 
+    # Toggles password visibility based on the checkbox state
     def toggle_password_visibility(self):
         if self.show_password_var.get():
             self.password.configure(show="")
         else:
             self.password.configure(show="*")
 
+    # Highlights the entry field with a red border to indicate an error
     def highlight_error(self, entry):
         entry.configure(border_color="red")
 
+    # Clears the highlight from the entry fields
     def clear_highlight(self, *entries):
         for entry in entries:
             entry.configure(border_color="gray")
 
+    # Registers a new user with the provided credentials
     def register(self):
         f = self.first_name.get().strip()
         l = self.last_name.get().strip()
@@ -146,6 +152,7 @@ class AuthPopup(CTkToplevel):
         finally:
             conn.close()
 
+    # Logs in the user with the provided credentials
     def login(self):
         u = self.username.get().strip()
         p = self.password.get().strip()
@@ -181,13 +188,14 @@ class AuthPopup(CTkToplevel):
             self.highlight_error(self.username)
             self.highlight_error(self.password)
     
-
+    # Post-login actions such as rendering the navbar and sidebar, and showing the dashboard
     def _post_login(self):
         self.app.navbar.render_nav()
         self.app.sidebar.render_sidebar()
         self.app.show_page("Dashboard")
         self.destroy()
 
+    # Handles the close event of the popup
     def on_close(self):
         self.grab_release()
         self.destroy()

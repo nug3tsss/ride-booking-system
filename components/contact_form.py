@@ -69,24 +69,29 @@ class ContactForm(CTkFrame):
         )
         self.submit_btn.pack(pady=(0, 20))
 
+    # Clears the placeholder text in the entry field if it matches the placeholder
     def clear_placeholder(self, entry, placeholder):
         if entry.get() == placeholder:
             entry.delete(0, "end")
 
+    # Restores the placeholder text in the entry field if it is empty
     def restore_placeholder(self, entry, placeholder):
         if not entry.get().strip():
             entry.insert(0, placeholder)
         self.on_field_edit()
 
+    # Clears the placeholder text in the textbox if it matches the placeholder
     def clear_textbox_placeholder(self, textbox, placeholder):
         if textbox.get("1.0", "end-1c") == placeholder:
             textbox.delete("1.0", "end")
 
+    # Restores the placeholder text in the textbox if it is empty
     def restore_textbox_placeholder(self, textbox, placeholder):
         if not textbox.get("1.0", "end-1c").strip():
             textbox.insert("1.0", placeholder)
         self.on_field_edit()
 
+    # Validates the fields and enables/disables the submit button accordingly
     def on_field_edit(self, event=None):
         c = self.app.styles.colors
         name = self.name_entry.get().strip()
@@ -103,6 +108,7 @@ class ContactForm(CTkFrame):
         else:
             self.submit_btn.configure(state="disabled", fg_color=c["button_disable"], hover=False)
 
+    # Submits the message to the database
     def submit_message(self):
         name = self.name_entry.get().strip()
         email = self.email_entry.get().strip()
@@ -124,6 +130,7 @@ class ContactForm(CTkFrame):
         messagebox.showinfo("Thank you", "Your message has been submitted.")
         self.reset_form()
 
+    # Resets the form fields to their default state
     def reset_form(self):
         c = self.app.styles.colors
         self.name_entry.delete(0, "end")

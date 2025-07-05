@@ -3,6 +3,7 @@ import sqlite3
 import os
 import sys
 
+# This module provides a function to establish a connection to the rides.db SQLite database.
 def get_connection():
     """
     Establish and return a connection to the rides.db SQLite database.

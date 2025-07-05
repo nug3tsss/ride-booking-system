@@ -10,6 +10,7 @@ class HamburgerButton(CTkButton):
         self.image = CTkImage(light_image=Image.open("assets/icons/hamburger_icon-dark.png"), dark_image=Image.open("assets/icons/hamburger_icon-dark.png"), size=(30, 30))
         self.configure(image=self.image, command=self.toggle_sidebar, width=40, height=40, hover=False)
 
+    # Toggles the sidebar visibility and updates the button image accordingly
     def toggle_sidebar(self):
         if self.app.sidebar.winfo_ismapped():
             self.app.sidebar.grid_remove()

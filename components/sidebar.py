@@ -14,6 +14,7 @@ class Sidebar(CTkFrame):
         self.configure(width=200, fg_color=c["sidebar"], corner_radius=0)
         self.render_sidebar()
 
+    # Renders the sidebar with buttons for settings, about us, contact us, and logout
     def render_sidebar(self):
         for widget in self.winfo_children():
             widget.destroy()
@@ -21,6 +22,7 @@ class Sidebar(CTkFrame):
         c = self.styles.colors
         f = self.styles
 
+        # Settings button
         CTkButton(
             self,
             width=200,
@@ -33,7 +35,9 @@ class Sidebar(CTkFrame):
             command=lambda: self.app.show_page("Settings")
         ).pack(fill="x")
 
+        # Setting separate buttons for logged in users
         if self.app.current_user:
+            # About Us Button
             CTkButton(
                 self,
                 width=200,
@@ -46,6 +50,7 @@ class Sidebar(CTkFrame):
                 command=lambda: self.app.show_page("About")
             ).pack(fill="x")
 
+            # Contact Us Button
             CTkButton(
                 self,
                 width=200,
@@ -58,6 +63,7 @@ class Sidebar(CTkFrame):
                 command=lambda: self.app.show_page("Contact")
             ).pack(fill="x")
 
+            # Logout Button
             CTkButton(
                 self,
                 width=50,
@@ -71,6 +77,7 @@ class Sidebar(CTkFrame):
                 command=self.app.logout
             ).pack(pady=(10, 0))
 
+    # Confirms the logout action by clearing the session and updating the UI
     def confirm_logout(self):
         clear_session()
         self.app.current_user = None

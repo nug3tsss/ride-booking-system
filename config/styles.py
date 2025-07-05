@@ -1,5 +1,8 @@
 from customtkinter import CTkFont
 
+"""Styles and themes used in the application.
+It includes font definitions, color palettes for light and dark modes"""
+
 class Styles:
     def __init__(self):
         # === Fonts ===
@@ -129,6 +132,7 @@ class Styles:
         self.colors = {}
         self.apply_mode("light")  # Default mode
 
+    # Apply the selected theme mode and update colors
     def apply_mode(self, mode):
         """Apply theme colors based on mode and add flat aliases."""
         self.theme = mode.lower()
@@ -169,6 +173,7 @@ class Styles:
             "border": palette["border"]
         })
 
+    # Reset to default system theme
     def reset_to_defaults(self):
         """Reset to default system theme (Light as fallback)."""
         self.theme = "System"
