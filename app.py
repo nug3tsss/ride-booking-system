@@ -20,10 +20,12 @@ from database.db_handler import DatabaseHandler
 
 
 class App(CTk):
+    """Main application class that initializes the GUI and manages navigation between pages."""
+
     def __init__(self):
         super().__init__()
 
-        # === Styling and Theme Setup ===
+        # Styling and Theme Setup
         self.styles = Styles()
 
         settings = load_settings()
@@ -31,14 +33,11 @@ class App(CTk):
         self.styles.apply_mode(self.styles.theme)
         set_appearance_mode(self.styles.theme.lower())
 
-        # === Window Configuration ===
-
+        # Window Configuration
         settings = load_settings()
         self.styles.theme = settings.get("theme_mode", "System")
         self.styles.apply_mode(self.styles.theme)
         set_appearance_mode(self.styles.theme.lower())
-
-        # === Window Configuration ===
         self.title("Gethub")
         self.geometry("900x600")
 
@@ -49,7 +48,8 @@ class App(CTk):
             self.iconbitmap("assets/icons/Logo-Light-Transparent.ico")
 
         self.current_user = None
-        # === Database & Session ===
+        
+        # Database Handler
         self.db = DatabaseHandler()
 
         self.current_user = load_session()
@@ -58,11 +58,11 @@ class App(CTk):
         
         self.booking_information_manager = BookingInformationManager(self.db)
 
-        # === Grid Layout ===
+        # Grid Configuration
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(1, weight=1)
 
-        # === UI Components ===
+        # UI Components
         self.navbar = Navbar(self, app=self, styles=self.styles)
         self.navbar.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
@@ -71,15 +71,16 @@ class App(CTk):
         self.container = CTkFrame(self, fg_color=self.styles.colors["background"])
         self.container.grid(row=1, column=1, sticky="nsew")
 
-        # === Initial Page Setup ===
+        # Initialize Pages
         self.pages = {}
         self.navbar.render_nav()
         self.sidebar.render_sidebar()
         self.show_page("Dashboard")
 
-        # === Window Close Event ===
+        # Window Close Event
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
+    # Shows the specified page by clearing the container and loading the new page
     def show_page(self, page_name):
         for widget in self.container.winfo_children():
             widget.pack_forget()
@@ -108,6 +109,7 @@ class App(CTk):
         page.pack(fill="both", expand=True)
         self.pages[page_name] = page
 
+    # Logs out the current user and clears the session
     def logout(self):
         if self.logout_popup and self.logout_popup.winfo_exists():
             self.logout_popup.lift()
@@ -115,6 +117,7 @@ class App(CTk):
 
         self.logout_popup = LogoutPopup(self, self._confirm_logout)
 
+    # Confirms the logout action, clears the session, and updates the UI
     def _confirm_logout(self):
         clear_session()
         self.current_user = None
@@ -126,5 +129,6 @@ class App(CTk):
             self.logout_popup.destroy()
             self.logout_popup = None
 
+    # Handles the window close event
     def on_closing(self):
         self.destroy()
