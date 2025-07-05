@@ -14,9 +14,14 @@ class BookingStatus:
     ARRIVED_PICKUP = 'arrived_pickup'
 
 class DatabaseHandler:
+    _initialized = False
+
     def __init__(self):
-        self.initialize_database()
-        self._insert_default_admin_user()
+        if not DatabaseHandler._initialized:
+            self.initialize_database()
+            self._insert_default_admin_user()
+            DatabaseHandler._initialized = True
+
 
     def initialize_database(self):
         """Initialize database"""
@@ -27,14 +32,14 @@ class DatabaseHandler:
                 # Create users table
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    user_id INTEGER DEFAULT 0,
-                    username TEXT UNIQUE NOT NULL,
-                    password TEXT NOT NULL,
-                    first_name TEXT NOT NULL,
-                    last_name TEXT NOT NULL,
-                    role TEXT NOT NULL DEFAULT 'user',
-                    profile_pic TEXT DEFAULT 'assets/profile.jpg'
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER DEFAULT 0,
+                        username TEXT UNIQUE NOT NULL,
+                        password TEXT NOT NULL,
+                        first_name TEXT NOT NULL,
+                        last_name TEXT NOT NULL,
+                        role TEXT NOT NULL DEFAULT 'user',
+                        profile_pic TEXT DEFAULT 'assets/icons/profile.jpg'
                 );
                 """)
                 
@@ -223,7 +228,21 @@ class DatabaseHandler:
         except sqlite3.Error as e:
             print(f"[DB ERROR] Failed to clear bookings: {e}")
 
-    # Fetches all bookings from the database - This is used to display all bookings in the admin dashboard
+    # Resets the database completely (development only)
+    def reset_database_completely(self) -> None:
+        """Reset database completely (development only)"""
+        try:
+            with get_connection() as conn:
+                conn.execute("DROP TABLE IF EXISTS bookings;")
+                conn.execute("DROP TABLE IF EXISTS vehicles;")
+                conn.execute("DROP TABLE IF EXISTS users;")
+                conn.commit()
+                print("[DB INFO] Database reset completely")
+            self.initialize_database()
+        except sqlite3.Error as e:
+            print(f"[DB ERROR] Failed to reset database: {e}")
+
+    # Fetches all bookings from the database
     def get_all_bookings(self) -> list:
         """Fetches all booking records from the database."""
         try:
@@ -241,17 +260,39 @@ class DatabaseHandler:
             print(f"[DB ERROR] Failed to fetch all bookings: {e}")
             return []
 
-    # Fetches all vehicles from the database - This is used to display vehicle information in the admin dashboard
-    def reset_database_completely(self) -> None:
-        """Reset database completely (development only)"""
+    # Fetches all vehicles from the database
+    def get_all_vehicles(self) -> list:
         try:
             with get_connection() as conn:
-                conn.execute("DROP TABLE IF EXISTS bookings;")
-                conn.execute("DROP TABLE IF EXISTS vehicles;")
-                conn.execute("DROP TABLE IF EXISTS users;")
-                conn.commit()
-                print("[DB INFO] Database reset completely")
-            self.initialize_database()
+                cursor = conn.execute("SELECT * FROM vehicles;")
+                vehicles = [dict(row) for row in cursor.fetchall()]
+                print(f"[DB DEBUG] Loaded {len(vehicles)} vehicles.")
+                return vehicles
         except sqlite3.Error as e:
-            print(f"[DB ERROR] Failed to reset database: {e}")
+            print(f"[DB ERROR] Failed to fetch all vehicles: {e}")
+            return []
+        
+    # Fetches all users from the database
+    def get_all_users(self) -> list:
+        try:
+            with get_connection() as conn:
+                cursor = conn.execute("SELECT * FROM users;")
+                users = [dict(row) for row in cursor.fetchall()]
+                print(f"[DB DEBUG] Loaded {len(users)} users.")
+                return users
+        except sqlite3.Error as e:
+            print(f"[DB ERROR] Failed to fetch all users: {e}")
+            return []
 
+    # Fetches all messages submitted through the Contact Us form
+    def get_all_messages(self) -> list:
+        """Fetch all messages submitted through the Contact Us form."""
+        try:
+            with get_connection() as conn:
+                cursor = conn.execute("SELECT * FROM messages ORDER BY timestamp DESC;")
+                messages = [dict(row) for row in cursor.fetchall()]
+                print(f"[DB DEBUG] Loaded {len(messages)} messages.")
+                return messages
+        except sqlite3.Error as e:
+            print(f"[DB ERROR] Failed to fetch messages: {e}")
+            return []
