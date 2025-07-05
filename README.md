@@ -16,6 +16,12 @@
 
 We are happy to announce that **Version 2.0** is now available!
 
+**New features:**
+- Loading screen
+  - Automatic setup of a virtual environment
+  - Automatic installation of required libraries
+  - Memory caching
+
 *Version 2.0 is currently included as a branch in our repository and has yet to be merged with our main branch (coming soon!)*
 
 ---
