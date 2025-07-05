@@ -1,7 +1,9 @@
-<picture>
-  <source srcset="assets/icons/logo-dark--transparent.png" media="(prefers-color-scheme: dark)">
-  <img src="assets/icons/logo-light--transparent.png" alt="Gethub logo light">
-</picture>
+<p align="center">
+  <picture>
+    <source srcset="darkmode_image.png" media="(prefers-color-scheme: dark)">
+    <img src="lightmode_image.png" alt="My Image" width="200">
+  </picture>
+</p>
 
 <h1 align="center">Gethub</h1>
 <p align="center">
