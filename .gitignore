@@ -183,4 +183,4 @@ cython_debug/
 .cursorindexingignore
 
 # Session file to prevent reloading the same session
-# session.json
+session.json
