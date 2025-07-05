@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source srcset="darkmode_image.png" media="(prefers-color-scheme: dark)">
-    <img src="lightmode_image.png" alt="My Image" width="200">
+    <img src="lightmode_image.png" alt="My Image" width="150">
   </picture>
 </p>
 
