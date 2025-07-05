@@ -1,11 +1,8 @@
 <p align="center">
-  <img src="assets/icons/logo-dark--transparent.png" alt="Gethub Logo">
+  <img src="assets/icons/logo-dark--transparent.png" alt="Gethub Logo" width="200"><br>
+  <b><h1>Gethub</h1></b><br>
+  A ride-hailing program developed by 1st year Computer Engineering students of PUP College of Engineering.
 </p>
-<p align="center">
-  Gethub
-</p>
-
-Gethub is a ride-hailing program developed by 1st year Computer Engineering students of PUP College of Engineering.
 
 ---
 
