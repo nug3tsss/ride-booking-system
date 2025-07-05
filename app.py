@@ -27,13 +27,6 @@ class App(CTk):
 
         # Styling and Theme Setup
         self.styles = Styles()
-
-        settings = load_settings()
-        self.styles.theme = settings.get("theme_mode", "System")
-        self.styles.apply_mode(self.styles.theme)
-        set_appearance_mode(self.styles.theme.lower())
-
-        # Window Configuration
         settings = load_settings()
         self.styles.theme = settings.get("theme_mode", "System")
         self.styles.apply_mode(self.styles.theme)
