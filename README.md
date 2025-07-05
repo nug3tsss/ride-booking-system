@@ -31,6 +31,78 @@
 
 ---
 
+## 🔭 File Structure
+
+This app follows a modular, component-based file structure designed for clarity, scalability, and ease of maintenance. 
+
+```bash
+.
+├── _documentation/                  # Final project report and presentation
+│   ├── OOP_CPE-1-7_Group-4_Project-Final-Report.pdf
+│   └── OOP_CPE-1-7_Group-4_Project-Presentation.pdf
+│
+├── assets/                          # All static images/icons used in the app
+│   ├── banners/                     # Banner/header images for each main page
+│   ├── icons/                       # UI icons for light/dark mode
+│   ├── members_profile/             # Member pictures used in about us page
+│   └── user/                        # User-uploaded profile pictures
+│
+├── components/                      # Reusable UI elements across pages
+│   ├── navbar.py                    # Top navigation bar with theme/login buttons
+│   ├── sidebar.py                   # Side navigation menu with route buttons
+│   ├── booking_form.py              # Form UI to create new ride bookings
+│   ├── booking_summary_form.py      # Displays booking summary + confirm button
+│   ├── booking_map.py               # Shows map route preview (via OSRM)
+│   ├── contact_form.py              # Contact Us form logic with validation
+│   └── auth_popup.py                # Reusable login/register modals
+│
+├── config/                          # App settings and centralized style configs
+│   ├── styles.py                    # Fonts, theme modes, colors, hover effects
+│   └── settings_manager.py          # Manages saving/loading UI settings
+│
+├── database/                        # SQLite database and related logic
+│   ├── db_handler.py                # Connects to SQLite DB and runs queries
+│   ├── query.sql                    # Raw SQL schema or seed data (optional)
+│   └── rides.db                     # SQLite database file storing all records
+│
+├── models/                          # Data classes representing core app entities
+│   ├── message.py                   # Message model used in Contact Us page
+│   └── vehicle.py                   # Vehicle data model for bookings
+│
+├── services/                        # Logic connecting UI and data models
+│   ├── booking_information_manager.py  # Handles temporary booking data across pages
+│   └── map_manager.py               # Manages map routes, geocoding, etc.
+│
+├── tests/                           # Sample JSON test data for booking scenarios
+│   ├── test_booking_0.json
+│   └── test_booking_1.json
+│
+├── utils/                           # Small helper modules
+│   ├── ip_location.py               # Gets user location via IP (for maps)
+│   ├── pycache_cleaner.py           # Removes __pycache__ folders and .pyc files
+│   └── session_manager.py           # Saves/loads session (logged-in user)
+│
+├── views/                           # Full-page layouts and routing logic
+│   ├── about.py                     # Static About Us page
+│   ├── contact.py                   # Static Contact Us page
+│   ├── dashboard.py                 # Logged-in home page with metrics/cards
+│   ├── login_page.py                # Login screen UI
+│   ├── register_page.py             # Registration form
+│   ├── profile_page.py              # User profile editor with image cropping
+│   ├── history_page.py              # Ride history page (past bookings)
+│   └── settings.py                  # App settings page (theme, font, etc.)
+│
+├── .gitattributes                   # Git settings for line endings or diffing
+├── .gitignore                       # Untracked files by Git
+├── app.py                           # Main App GUI class or layout controller
+├── main.py                          # Entry point: setup loading, then start app
+├── requirements.txt                 # List of all required Python packages
+├── README.md                        # Project overview, instructions, credits
+└── LICENSE                          # Open-source license information
+```
+
+---
+
 ## 📚 Libraries and APIs Used
 
 - CustomTkinter -> GUI elements
