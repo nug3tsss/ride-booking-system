@@ -16,7 +16,9 @@
 
 We are happy to announce that **Version 2.0** is now available!
 
-***Version 2.0 is currently included as a branch in our repository and has yet to be merged with our main branch (coming soon!)***
+*Version 2.0 is currently included as a branch in our repository and has yet to be merged with our main branch (coming soon!)*
+
+---
 
 ## 🔭 Features
 
