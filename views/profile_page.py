@@ -51,7 +51,7 @@ class ProfilePage(CTkFrame):
         self.cancel_btn.pack(side="left", padx=10)
 
         self.delete_icon = CTkImage(light_image=Image.open("assets/icons/delete_icon-dark.png"), dark_image=Image.open("assets/icons/delete_icon-dark.png"), size=(16, 16))
-        CTkButton(self.card, text="Delete Account", fg_color="#9b1b1b", hover_color="#7f1515",
+        CTkButton(self.card, text="Delete Account", fg_color=c["button_danger"], hover_color=c["button_danger_hover"],
                   image=self.delete_icon, compound="left", command=self.confirm_delete
                   ).grid(row=7, column=0, columnspan=3, pady=10)
 
@@ -366,7 +366,7 @@ class ProfilePage(CTkFrame):
                 self.user[attr] = new_val
 
         if self.new_profile_path:
-            dest_path = os.path.join("assets", f"user_{self.user['user_id']}_profile.png")
+            dest_path = os.path.join("assets", "user", f"user_{self.user['user_id']}_profile.png")
             if hasattr(self, "cropped_profile_image"):
                 self.cropped_profile_image.save(dest_path)
             else:
@@ -374,8 +374,9 @@ class ProfilePage(CTkFrame):
             updated_data["profile_pic"] = dest_path
             self.user["profile_pic"] = dest_path
         elif self.reset_picture_flag:
-            updated_data["profile_pic"] = "assets/user/profile.png"
-            self.user["profile_pic"] = "assets/user/profile.png"
+            default_path = os.path.join("assets", "user", "profile.png")
+            updated_data["profile_pic"] = default_path
+            self.user["profile_pic"] = default_path
 
         if updated_data:
             sql = ", ".join(f"{k}=?" for k in updated_data)
