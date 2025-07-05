@@ -20,7 +20,7 @@ class ProfilePage(CTkFrame):
         self.grid_columnconfigure(0, weight=1)
         CTkLabel(self, text="My Profile", font=f.font_h2).pack(pady=(20, 10))
 
-        self.card = CTkFrame(self, fg_color=c["card"], corner_radius=12)
+        self.card = CTkFrame(self, fg_color=c["profile_card"], corner_radius=12)
         self.card.pack(padx=20, pady=10, ipady=50)
 
         self.card.grid_columnconfigure(0, weight=1)
@@ -36,8 +36,8 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(self.card, fg_color="transparent")
         btn_frame.grid(row=6, column=0, columnspan=3, pady=(20, 5))
 
-        save_icon = CTkImage(light_image=Image.open("assets/save_icon-dark.png"), dark_image=Image.open("assets/save_icon-dark.png"), size=(16, 16))
-        cancel_icon = CTkImage(light_image=Image.open("assets/cancel_icon-dark.png"), dark_image=Image.open("assets/cancel_icon-dark.png"), size=(16, 16))
+        save_icon = CTkImage(light_image=Image.open("assets/icons/save_icon-dark.png"), dark_image=Image.open("assets/icons/save_icon-dark.png"), size=(16, 16))
+        cancel_icon = CTkImage(light_image=Image.open("assets/icons/cancel_icon-dark.png"), dark_image=Image.open("assets/icons/cancel_icon-dark.png"), size=(16, 16))
 
         self.save_btn = CTkButton(btn_frame, text="Save Changes", fg_color=c["button_disable"], state=DISABLED,
                                   image=save_icon, compound="left", command=self.save_all_changes)
@@ -47,7 +47,7 @@ class ProfilePage(CTkFrame):
                                     image=cancel_icon, compound="left", command=self.cancel_all_changes)
         self.cancel_btn.pack(side="left", padx=10)
 
-        self.delete_icon = CTkImage(light_image=Image.open("assets/delete_icon-dark.png"), dark_image=Image.open("assets/delete_icon-dark.png"), size=(16, 16))
+        self.delete_icon = CTkImage(light_image=Image.open("assets/icons/delete_icon-dark.png"), dark_image=Image.open("assets/icons/delete_icon-dark.png"), size=(16, 16))
         CTkButton(self.card, text="Delete Account", fg_color=c["button_danger"], hover_color=c["button_danger_hover"],
                   image=self.delete_icon, compound="left", command=self.confirm_delete
                   ).grid(row=7, column=0, columnspan=3, pady=10)
@@ -61,8 +61,8 @@ class ProfilePage(CTkFrame):
         btn_frame = CTkFrame(self.card, fg_color="transparent")
         btn_frame.grid(row=1, column=0, columnspan=3, pady=(0, 20))
 
-        change_icon = CTkImage(light_image=Image.open("assets/change_icon-dark.png"), dark_image=Image.open("assets/change_icon-dark.png"), size=(16, 16))
-        remove_icon = CTkImage(light_image=Image.open("assets/remove_icon-dark.png"), dark_image=Image.open("assets/remove_icon-dark.png"), size=(16, 16))
+        change_icon = CTkImage(light_image=Image.open("assets/icons/change_icon-dark.png"), dark_image=Image.open("assets/icons/change_icon-dark.png"), size=(16, 16))
+        remove_icon = CTkImage(light_image=Image.open("assets/icons/remove_icon-dark.png"), dark_image=Image.open("assets/icons/remove_icon-dark.png"), size=(16, 16))
 
         CTkButton(btn_frame, fg_color=c["green"], hover_color=c["green_hover"], text="Change Photo", image=change_icon, compound="left",
                   command=self.change_picture).pack(side="left", padx=5)
@@ -74,7 +74,7 @@ class ProfilePage(CTkFrame):
         try:
             target_size = (100, 100)
 
-            image = Image.open(img_path or "assets/profile.png").convert("RGBA")
+            image = Image.open(img_path or "assets/user/profile.png").convert("RGBA")
 
             # Center horizontally, shift up vertically to preserve heads/faces
             image = ImageOps.fit(image, target_size, method=Image.LANCZOS, centering=(0.5, 0.3))
@@ -106,7 +106,7 @@ class ProfilePage(CTkFrame):
         entry_widget.grid(row=row, column=1, padx=(5, 5), sticky="w")
         entry_widget.grid_remove()
 
-        edit_icon = CTkImage(light_image=Image.open("assets/edit_icon-dark.png"), dark_image=Image.open("assets/edit_icon-dark.png"), size=(16, 16))
+        edit_icon = CTkImage(light_image=Image.open("assets/icons/edit_icon-dark.png"), dark_image=Image.open("assets/icons/edit_icon-dark.png"), size=(16, 16))
         edit_btn = CTkButton(self.card, fg_color=c["green"], hover_color=c["green_hover"], text="Edit", text_color="white", width=80, image=edit_icon, compound="left",
                              command=lambda: self.toggle_field(attr))
         edit_btn.grid(row=row, column=2, padx=(5, 0), sticky="w")
@@ -153,7 +153,7 @@ class ProfilePage(CTkFrame):
         c = self.app.styles.colors
         CTkLabel(self.card, text="Password:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(0, 5), pady=4)
         CTkLabel(self.card, text="********", text_color="white", anchor="w").grid(row=row, column=1, padx=(5, 5), sticky="w")
-        CTkButton(self.card, width=100, fg_color=c["green"], hover_color=c["green_hover"], text="Change", image=CTkImage(light_image=Image.open("assets/password_icon-dark.png"), dark_image=Image.open("assets/password_icon-dark.png"), size=(16, 16)),
+        CTkButton(self.card, width=100, fg_color=c["green"], hover_color=c["green_hover"], text="Change", image=CTkImage(light_image=Image.open("assets/icons/password_icon-dark.png"), dark_image=Image.open("assets/icons/password_icon-dark.png"), size=(16, 16)),
                   compound="left", command=self.show_password_popup).grid(row=row, column=2, padx=(5, 50), sticky="w")
 
     def show_password_popup(self):
@@ -223,7 +223,7 @@ class ProfilePage(CTkFrame):
     def remove_picture(self):
         self.new_profile_path = None
         self.reset_picture_flag = True
-        self.display_profile_image("assets/profile.png")
+        self.display_profile_image("assets/user/profile.png")
         self.check_changes()
 
     def change_picture(self):
@@ -349,7 +349,7 @@ class ProfilePage(CTkFrame):
                 self.user[attr] = new_val
 
         if self.new_profile_path:
-            dest_path = os.path.join("assets", f"user_{self.user['user_id']}_profile.png")
+            dest_path = os.path.join("assets", "icons", f"user_{self.user['user_id']}_profile.png")
             if hasattr(self, "cropped_profile_image"):
                 self.cropped_profile_image.save(dest_path)
             else:
@@ -357,8 +357,9 @@ class ProfilePage(CTkFrame):
             updated_data["profile_pic"] = dest_path
             self.user["profile_pic"] = dest_path
         elif self.reset_picture_flag:
-            updated_data["profile_pic"] = "assets/profile.png"
-            self.user["profile_pic"] = "assets/profile.png"
+            default_path = os.path.join("assets", "icons", "user", "profile.png")
+            updated_data["profile_pic"] = default_path
+            self.user["profile_pic"] = default_path
 
         if updated_data:
             sql = ", ".join(f"{k}=?" for k in updated_data)

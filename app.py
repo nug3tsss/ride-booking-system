@@ -44,9 +44,9 @@ class App(CTk):
 
         current_appearance_mode = get_appearance_mode()
         if current_appearance_mode == "dark":
-            self.iconbitmap("assets/Logo-Dark-Transparent.ico")
+            self.iconbitmap("assets/icons/Logo-Dark-Transparent.ico")
         else:
-            self.iconbitmap("assets/Logo-Light-Transparent.ico")
+            self.iconbitmap("assets/icons/Logo-Light-Transparent.ico")
 
         self.current_user = None
         # === Database & Session ===

@@ -21,18 +21,18 @@ class ContactForm(CTkFrame):
         self.prefilled_name = session_user["name"] if session_user and "name" in session_user else ""
 
         # Load send icon
-        self.send_icon = CTkImage(light_image=Image.open("assets/send_icon-dark.png"), dark_image=Image.open("assets/send_icon-dark.png"), size=(20, 20))
+        self.send_icon = CTkImage(light_image=Image.open("assets/icons/send_icon-dark.png"), dark_image=Image.open("assets/icons/send_icon-dark.png"), size=(20, 20))
 
         # Heading
         self.heading_label = CTkLabel(self, text="Send us a message", font=f.font_h2)
         self.heading_label.pack(pady=(20, 10))
 
         # Card
-        self.card = CTkFrame(self, fg_color=c["card"], corner_radius=10)
+        self.card = CTkFrame(self, fg_color=c["contact_card"], corner_radius=10)
         self.card.pack(padx=20, pady=10, fill="x")
 
         # Name Entry
-        self.name_entry = CTkEntry(self.card, fg_color=c["entry"], border_width=2, border_color=c["entry_border"])
+        self.name_entry = CTkEntry(self.card, fg_color=c["contact_field"], border_width=0, border_color=c["entry_border"])
         self.name_entry.insert(0, self.prefilled_name if self.prefilled_name else "Name")
         self.name_entry.bind("<FocusIn>", lambda e: self.clear_placeholder(self.name_entry, "Name"))
         self.name_entry.bind("<FocusOut>", lambda e: self.restore_placeholder(self.name_entry, "Name"))
@@ -40,7 +40,7 @@ class ContactForm(CTkFrame):
         self.name_entry.pack(padx=20, pady=(20, 10), fill="x")
 
         # Email Entry
-        self.email_entry = CTkEntry(self.card, fg_color=c["entry"], border_width=2, border_color=c["entry_border"])
+        self.email_entry = CTkEntry(self.card, fg_color=c["contact_field"], border_width=0, border_color=c["entry_border"])
         self.email_entry.insert(0, "Email")
         self.email_entry.bind("<FocusIn>", lambda e: self.clear_placeholder(self.email_entry, "Email"))
         self.email_entry.bind("<FocusOut>", lambda e: self.restore_placeholder(self.email_entry, "Email"))
@@ -48,7 +48,7 @@ class ContactForm(CTkFrame):
         self.email_entry.pack(padx=20, pady=10, fill="x")
 
         # Message Entry
-        self.message_entry = CTkTextbox(self.card, height=150, fg_color=c["entry"], border_width=2, border_color=c["entry_border"])
+        self.message_entry = CTkTextbox(self.card, height=150, fg_color=c["contact_field"], border_width=0, border_color=c["entry_border"])
         self.message_entry.insert("1.0", "Your message...")
         self.message_entry.bind("<FocusIn>", lambda e: self.clear_textbox_placeholder(self.message_entry, "Your message..."))
         self.message_entry.bind("<FocusOut>", lambda e: self.restore_textbox_placeholder(self.message_entry, "Your message..."))

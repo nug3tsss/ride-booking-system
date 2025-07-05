@@ -15,7 +15,7 @@ class DashboardPage(CTkFrame):
         self.columnconfigure(0, weight=1)
 
         # Load original image once
-        self.original_image = Image.open("assets/dashboard_image.jpg").convert("RGB")
+        self.original_image = Image.open("assets/banners/dashboard_image.jpg").convert("RGB")
 
         # Create Canvas for image background
         self.canvas = Canvas(self, highlightthickness=0, bd=0)
@@ -29,17 +29,17 @@ class DashboardPage(CTkFrame):
         self.card_container = CTkFrame(
             self,
             corner_radius=0,
-            fg_color=c["card"],
+            fg_color=c["home_card"],
             border_width=2,
-            border_color=c["border"],
+            border_color=c["home_card_border"],
             width=400
         )
         self.card_container.place(relx=0.22, rely=0.5, anchor="center")
 
         # Logo
         logo_image = CTkImage(
-            light_image=Image.open("assets/logo-dark--transparent.png"),
-            dark_image=Image.open("assets/logo-dark--transparent.png"),
+            light_image=Image.open("assets/icons/logo-dark--transparent.png"),
+            dark_image=Image.open("assets/icons/logo-dark--transparent.png"),
             size=(150, 150)
         )
         self.logo_label = CTkLabel(
@@ -73,8 +73,8 @@ class DashboardPage(CTkFrame):
 
         # Ride Icon
         ride_icon = CTkImage(
-            light_image=Image.open("assets/ride_icon-dark.png"),
-            dark_image=Image.open("assets/ride_icon-dark.png"),
+            light_image=Image.open("assets/icons/ride_icon-dark.png"),
+            dark_image=Image.open("assets/icons/ride_icon-dark.png"),
             size=(24, 24)
         )
 

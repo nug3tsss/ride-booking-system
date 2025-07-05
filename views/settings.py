@@ -2,6 +2,7 @@ from customtkinter import *
 from components.restart_popup import RestartPopup
 from config.settings_manager import save_settings, reset_settings
 from tkinter import messagebox
+from utils.pycache_cleaner import PycacheCleaner
 
 class SettingsPage(CTkFrame):
     def __init__(self, master, app):
@@ -14,17 +15,23 @@ class SettingsPage(CTkFrame):
         CTkLabel(self, text="Settings", font=t.font_h2).pack(pady=(20, 10))
 
         # Theme Mode Dropdown
-        CTkLabel(self, text="Theme Mode", font=t.font_p).pack(pady=(10, 5))
+        CTkLabel(self, text="Theme Mode", font=t.font_h5).pack(pady=(10, 5))
         self.mode_menu = CTkOptionMenu(
             self,
+            fg_color=c["card_light"],
+            button_color=c["card"],
+            button_hover_color=c["card_light_hover"],
             values=t.theme_modes,
-            command=self.on_theme_change,  # updated here
+            command=self.on_theme_change,
             variable=StringVar(value=t.theme.capitalize())
         )
         self.mode_menu.pack(pady=(0, 15))
 
-        # Reset Button
-        CTkButton(self, text="Restore Defaults", command=self.restore_defaults).pack(pady=5)
+        # Restore Defaults
+        CTkButton(self, text="Restore Defaults", fg_color=c["green"], hover_color=c["green_hover"], command=self.restore_defaults).pack(pady=5)
+
+        # Clear Cache
+        CTkButton(self, text="Clear Cache", fg_color=c["green"], hover_color=c["green_hover"], command=self.clear_cache).pack(pady=5)
 
     def on_theme_change(self, selected):
         c = self.app.styles.colors
@@ -40,9 +47,17 @@ class SettingsPage(CTkFrame):
         self.app.sidebar.configure(fg_color=c["sidebar"])
         self.app.show_page("Settings")
 
-        RestartPopup(self.app)  # shows the restart notification popup
+        RestartPopup(self.app)
 
     def restore_defaults(self):
         reset_settings()
         messagebox.showinfo("Reset", "Settings restored to default.")
         self.on_theme_change("System")
+
+    def clear_cache(self):
+        pyc_count, folder_count = PycacheCleaner.clear_pycache(".")
+        messagebox.showinfo(
+            "Cache Cleared",
+            f"Deleted {pyc_count} .pyc file(s) and {folder_count} __pycache__ folder(s)."
+        )
+

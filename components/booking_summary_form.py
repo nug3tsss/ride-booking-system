@@ -67,8 +67,8 @@ class BookingSummaryForm(CTkScrollableFrame):
         pickup_frame.grid(row=1, column=0, columnspan=3, sticky="ew", padx=20, pady=10)
         pickup_frame.grid_columnconfigure(1, weight=1)
 
-        CTkLabel(pickup_frame, text="Pickup Location:", font=f.font_h4, text_color=c["text"]).grid(row=0, column=0, sticky="w", padx=15, pady=15)
-        CTkLabel(pickup_frame, text=self.__pickup_address, font=f.font_p, wraplength=350).grid(row=0, column=1, sticky="w", padx=(10, 15), pady=15)
+        CTkLabel(pickup_frame, text="Pickup Location:", font=f.font_h4, text_color="white").grid(row=0, column=0, sticky="w", padx=15, pady=15)
+        CTkLabel(pickup_frame, text=self.__pickup_address, text_color="white", font=f.font_p, wraplength=350).grid(row=0, column=1, sticky="w", padx=(10, 15), pady=15)
 
     def __create_dropoff_section(self):
         c = self.__app.styles.colors
@@ -78,8 +78,8 @@ class BookingSummaryForm(CTkScrollableFrame):
         dropoff_frame.grid(row=2, column=0, columnspan=3, sticky="ew", padx=20, pady=10)
         dropoff_frame.grid_columnconfigure(1, weight=1)
 
-        CTkLabel(dropoff_frame, text="Dropoff Location:", font=f.font_h4, text_color=c["text"]).grid(row=0, column=0, sticky="w", padx=15, pady=15)
-        CTkLabel(dropoff_frame, text=self.__dropoff_address, font=f.font_p, wraplength=350).grid(row=0, column=1, sticky="w", padx=(10, 15), pady=15)
+        CTkLabel(dropoff_frame, text="Dropoff Location:", font=f.font_h4, text_color="white").grid(row=0, column=0, sticky="w", padx=15, pady=15)
+        CTkLabel(dropoff_frame, text=self.__dropoff_address, text_color="white", font=f.font_p, wraplength=350).grid(row=0, column=1, sticky="w", padx=(10, 15), pady=15)
 
     def __create_ride_details_section(self):
         c = self.__app.styles.colors
@@ -91,20 +91,20 @@ class BookingSummaryForm(CTkScrollableFrame):
         self.__vehicle_frame.grid_columnconfigure(2, weight=1)
         self.__vehicle_frame.grid_columnconfigure(3, weight=1)
 
-        CTkLabel(self.__vehicle_frame, text="Ride Information:", font=f.font_h4, text_color=c["text"]).grid(row=0, column=0, columnspan=4, sticky="w", padx=15, pady=(15, 10))
+        CTkLabel(self.__vehicle_frame, text="Ride Information:", font=f.font_h4, text_color="white").grid(row=0, column=0, columnspan=4, sticky="w", padx=15, pady=(15, 10))
 
         if self.__vehicle_details:
-            CTkLabel(self.__vehicle_frame, text="Type:", font=f.font_h5).grid(row=1, column=0, sticky="w", padx=(30, 10), pady=2)
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.type, font=("Arial", 14)).grid(row=1, column=1, sticky="w", padx=(0, 20), pady=2)
+            CTkLabel(self.__vehicle_frame, text="Type:", text_color="white", font=f.font_h5).grid(row=1, column=0, sticky="w", padx=(30, 10), pady=2)
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.type, text_color="white", font=("Arial", 14)).grid(row=1, column=1, sticky="w", padx=(0, 20), pady=2)
 
-            CTkLabel(self.__vehicle_frame, text="Model:", font=f.font_h5).grid(row=1, column=2, sticky="w", padx=(20, 10), pady=2)
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.model, font=("Arial", 14)).grid(row=1, column=3, sticky="w", pady=2)
+            CTkLabel(self.__vehicle_frame, text="Model:", text_color="white", font=f.font_h5).grid(row=1, column=2, sticky="w", padx=(20, 10), pady=2)
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.model, text_color="white", font=("Arial", 14)).grid(row=1, column=3, sticky="w", pady=2)
 
-            CTkLabel(self.__vehicle_frame, text="License Plate:", font=f.font_h5).grid(row=2, column=0, sticky="w", padx=(30, 10), pady=2)
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.license_plate, font=("Arial", 14)).grid(row=2, column=1, sticky="w", padx=(0, 20), pady=2)
+            CTkLabel(self.__vehicle_frame, text="License Plate:", text_color="white", font=f.font_h5).grid(row=2, column=0, sticky="w", padx=(30, 10), pady=2)
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.license_plate, text_color="white", font=("Arial", 14)).grid(row=2, column=1, sticky="w", padx=(0, 20), pady=2)
 
-            CTkLabel(self.__vehicle_frame, text="Driver:", font=f.font_h5).grid(row=2, column=2, sticky="w", padx=(20, 10), pady=(2, 15))
-            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.driver_name, font=("Arial", 14)).grid(row=2, column=3, sticky="w", pady=(2, 15))
+            CTkLabel(self.__vehicle_frame, text="Driver:", text_color="white", font=f.font_h5).grid(row=2, column=2, sticky="w", padx=(20, 10), pady=(2, 15))
+            CTkLabel(self.__vehicle_frame, text=self.__vehicle_details.driver_name, text_color="white", font=("Arial", 14)).grid(row=2, column=3, sticky="w", pady=(2, 15))
 
     def __create_trip_details_section(self):
         c = self.__app.styles.colors
@@ -114,15 +114,15 @@ class BookingSummaryForm(CTkScrollableFrame):
         distance_frame.grid(row=3, column=0, sticky="nsew", padx=20, pady=15)
         distance_frame.grid_columnconfigure(0, weight=1)
 
-        CTkLabel(distance_frame, text="Distance", font=f.font_h4, text_color=c["text"], anchor="center").grid(row=0, column=0, pady=(15, 5), padx=10, sticky="ew")
-        CTkLabel(distance_frame, text=f"{self.__distance_km:.2f} km", font=f.font_h5, anchor="center").grid(row=1, column=0, pady=(5, 15), padx=10, sticky="ew")
+        CTkLabel(distance_frame, text="Distance", font=f.font_h4, text_color="white", anchor="center").grid(row=0, column=0, pady=(15, 5), padx=10, sticky="ew")
+        CTkLabel(distance_frame, text=f"{self.__distance_km:.2f} km", text_color="white", font=f.font_h5, anchor="center").grid(row=1, column=0, pady=(5, 15), padx=10, sticky="ew")
 
         eta_frame = CTkFrame(self, corner_radius=10, fg_color=c["card_light"])
         eta_frame.grid(row=3, column=1, sticky="nsew", padx=20, pady=15)
         eta_frame.grid_columnconfigure(0, weight=1)
 
-        CTkLabel(eta_frame, text="ETA", font=f.font_h4, text_color=c["text"], anchor="center").grid(row=0, column=0, pady=(15, 5), padx=10, sticky="ew")
-        CTkLabel(eta_frame, text=f"{self.__estimated_time_minutes} min", font=f.font_h5, anchor="center").grid(row=1, column=0, pady=(5, 15), padx=10, sticky="ew")
+        CTkLabel(eta_frame, text="ETA", font=f.font_h4, text_color="white", anchor="center").grid(row=0, column=0, pady=(15, 5), padx=10, sticky="ew")
+        CTkLabel(eta_frame, text=f"{self.__estimated_time_minutes} min", text_color="white", font=f.font_h5, anchor="center").grid(row=1, column=0, pady=(5, 15), padx=10, sticky="ew")
 
     def __create_costs_section(self):
         c = self.__app.styles.colors
@@ -132,8 +132,8 @@ class BookingSummaryForm(CTkScrollableFrame):
         cost_frame.grid(row=3, column=2, sticky="nsew", padx=20, pady=15)
         cost_frame.grid_columnconfigure(0, weight=1)
 
-        CTkLabel(cost_frame, text="Total Estimated Cost", font=f.font_h4, text_color=c["text"], anchor="center").grid(row=0, column=0, pady=(15, 5), sticky="ew")
-        CTkLabel(cost_frame, text=f"₱ {self.__estimated_cost_pesos:.2f}", font=f.font_h1, text_color=c["text"], anchor="center").grid(row=1, column=0, pady=(0, 15), sticky="ew")
+        CTkLabel(cost_frame, text="Total Estimated Cost", font=f.font_h4, text_color="white", anchor="center").grid(row=0, column=0, pady=(15, 5), sticky="ew")
+        CTkLabel(cost_frame, text=f"₱ {self.__estimated_cost_pesos:.2f}", font=f.font_h1, text_color="white", anchor="center").grid(row=1, column=0, pady=(0, 15), sticky="ew")
 
     def __create_confirm_button(self):
         c = self.__app.styles.colors

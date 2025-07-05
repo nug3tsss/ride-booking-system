@@ -1,1 +1,13 @@
-{"user": {"user_id": 7, "username": "Pogi", "first_name": "Renier", "last_name": "Dela Cruz", "profile_pic": "assets/profile.png", "password": "Kahitano123?", "role": "user"}, "timestamp": 0}
+{
+    "user": {
+        "user_id": 8,
+        "username": "Test",
+        "first_name": "Test",
+        "last_name": "Test",
+        "profile_pic": "assets\\icons\\user_8_profile.png",
+        "password": "Test123?",
+        "role": "user"
+    },
+    "timestamp": 1751672914.2927372,
+    "theme_mode": "System"
+}

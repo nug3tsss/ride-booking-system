@@ -29,7 +29,7 @@ class Styles:
             "brown": {
                 "base": "#633C22",
                 "hover": "#994F24",
-                "accent": "#B96E52"
+                "accent": "#815C32"
             },
             "monochrome": {
                 "base": "#CFD8DC",
@@ -38,26 +38,38 @@ class Styles:
             },
             "background": "#E0C097",
             "card": "#795322",
-            "card_light": "#A38849",
+            "card_light": "#815C32",
+            "card_light_hover": "#A1794B",
             "card_accent": "#62B956",
             "card_hover": "#578053",
             "navbar": "#39743B",
             "sidebar": "#815C32",
+            "sidebar_hover": "#A1794B",
             "scrollbar": "#BDBDBD",
             "scrollbar_hover": "#9E9E9E",
             "button": "#487C4C",
             "button_hover": "#4DAF7E",
             "button_disable": "#595E63",
             "button_danger": "#702121",
-            "button_danger_hover": "#944242",
+            "button_danger_hover": "#8A4D31",
+            "book_button": "#287E2B",
+            "book_button_hover": "#186D1C",
             "entry": "#FFFFFF",
             "text": "#212121",
             "border": "#553914",
-            "entry_border": "#795322",
-            "table_header": "#E0E0E0",
+            "entry_border": "#815C32",
+            "table_header": "#39743B",
             "table_row_even": "#916731",
             "table_row_odd": "#BE8C49",
-            "divider": "#BDBDBD"
+            "divider": "#BDBDBD",
+            "signup": "#946937",
+            "signup_hover": "#C08D53",
+            "about_card": "#815C32",
+            "contact_card": "#815C32",
+            "contact_field": "#E0C097",
+            "home_card": "#815C32",
+            "home_card_border": "#694821",
+            "profile_card": "#815C32"
         }
 
         # === Dark Mode Palette ===
@@ -80,10 +92,12 @@ class Styles:
             "background": "#111613",
             "card": "#1F2521",
             "card_light": "#2D3A32",
+            "card_light_hover": "#3A4A3D",
             "card_accent": "#1C2720",
             "card_hover": "#2A352D",
             "navbar": "#191D1A",
             "sidebar": "#302A27",
+            "sidebar_hover": "#52403A",
             "scrollbar": "#444444",
             "scrollbar_hover": "#555555",
             "button": "#362222",
@@ -91,14 +105,24 @@ class Styles:
             "button_hover": "#444444",
             "button_danger": "#9b1b1b",
             "button_danger_hover": "#7f1515",
+            "book_button": "#2E7D32",
+            "book_button_hover": "#1B5E20",
             "entry": "#1E1E1E",
             "entry_border": "#333333",
             "text": "#FFFFFF",
             "border": "#444444",
-            "table_header": "#1E1E1E",
+            "table_header": "#191D1A",
             "table_row_even": "#242424",
             "table_row_odd": "#303030",
-            "divider": "#444444"
+            "divider": "#444444",
+            "signup": "#2E7D32",
+            "signup_hover": "#1B5E20",
+            "about_card": "#1F2521",
+            "contact_card": "#1F2521",
+            "contact_field": "#2D3A32",
+            "home_card": "#191D1A",
+            "home_card_border": "#1F2B22",
+            "profile_card": "#191D1A"
         }
 
         # Active color map
@@ -142,7 +166,7 @@ class Styles:
             "button_hover": palette["button_hover"],
             "entry": palette["entry"],
             "text": palette["text"],
-            "border": palette["border"],
+            "border": palette["border"]
         })
 
     def reset_to_defaults(self):

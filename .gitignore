@@ -180,5 +180,5 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
-# Testing file (Remove when project is done)
-test.py
+# Session file to prevent reloading the same session
+session.json

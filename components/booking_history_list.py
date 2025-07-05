@@ -4,8 +4,6 @@ from datetime import datetime
 from tkinter import messagebox, filedialog
 from PIL import Image
 import json
-from config.styles import Styles
-
 
 class BookingHistoryList(CTkFrame):
     """Displays booking history of specific user in table format"""
@@ -21,8 +19,8 @@ class BookingHistoryList(CTkFrame):
 
         try:
             self.download_icon = CTkImage(
-                light_image=Image.open("assets/download_icon-dark.png"), 
-                dark_image=Image.open("assets/download_icon-dark.png")
+                light_image=Image.open("assets/icons/download_icon-dark.png"), 
+                dark_image=Image.open("assets/icons/download_icon-dark.png")
             )
         except Exception as e:
             print(f"[UI WARNING] Could not load download icon: {e}")
@@ -56,13 +54,13 @@ class BookingHistoryList(CTkFrame):
         if self.app.current_user:
             user_id = self.app.current_user.get('user_id')
             user_role = self.app.current_user.get('role')
-            print(f"[UI DEBUG] Extracted user_id: {user_id}, role: {user_role}")
+            # print(f"[UI DEBUG] Extracted user_id: {user_id}, role: {user_role}")
         else:
-            print("[UI DEBUG] No current_user found")
+            print("[UI DEBUG] No user is currently logged in.")
 
         # If no user is logged in, display a message and return
         if user_id is None:
-            print("[UI DEBUG] user_id is None, showing login message")
+            print("[UI DEBUG] user_id is None, showing login message.")
             no_user_label = CTkLabel(
                 self.table_scroll_frame, 
                 text="Please log in to view your booking history.",
@@ -74,17 +72,17 @@ class BookingHistoryList(CTkFrame):
 
         bookings = []
         if user_role == 'admin':
-            print("[UI DEBUG] Fetching all bookings for admin")
+            # print("[UI DEBUG] Fetching all bookings for admin")
             bookings = self.db_handler.get_all_bookings()
         else:
-            print(f"[UI DEBUG] Fetching bookings for user_id: {user_id}")
+            # print(f"[UI DEBUG] Fetching bookings for user_id: {user_id}")
             bookings = self.db_handler.get_bookings_by_user(user_id)
 
-        print(f"[UI DEBUG] Retrieved {len(bookings)} bookings")
-        print(f"[UI DEBUG] First few bookings: {bookings[:2] if bookings else 'None'}")
+        print(f"[UI DEBUG] Retrieved {len(bookings)} booking(s).")
+        # print(f"[UI DEBUG] First few bookings: {bookings[:2] if bookings else 'None'}")
 
         if not bookings or len(bookings) == 0:
-            print("[UI DEBUG] No bookings found, showing no bookings message")
+            print("[UI DEBUG] No bookings found, showing no bookings message.")
 
             no_bookings_label = CTkLabel(
                 self.table_scroll_frame, 
@@ -95,23 +93,23 @@ class BookingHistoryList(CTkFrame):
             no_bookings_label.pack(pady=20)
             return
         
-        print("[UI DEBUG] Creating table with bookings...")
+        # print("[UI DEBUG] Creating table with bookings...")
         # Create table header
         self.create_table_header()
 
         # Create table rows
         for i, booking in enumerate(bookings):
-            print(f"[UI DEBUG] Creating row {i} for booking ID: {booking.get('id', 'Unknown')}")
+            # print(f"[UI DEBUG] Creating row {i} for booking ID: {booking.get('id', 'Unknown')}")
             self.create_table_row(booking, i)
-        print("[UI DEBUG] Table creation completed")
+        # print("[UI DEBUG] Table creation completed")
 
     def create_table_header(self):
         f = self.app.styles
         c = self.app.styles.colors
 
         """Create the table header with column titles"""
-        header_frame = CTkFrame(self.table_scroll_frame, fg_color=c["card_light"])
-        header_frame.grid(row=0, column=0, sticky="ew", padx=10, pady=(10, 5))
+        header_frame = CTkFrame(self.table_scroll_frame, fg_color=c["table_header"])
+        header_frame.grid(row=0, column=0, sticky="ew", padx=5, pady=(10, 5), ipadx=5)
 
         columns_config = [
             (1, 80),    # Booking ID
@@ -136,10 +134,10 @@ class BookingHistoryList(CTkFrame):
                 header_frame, 
                 text=header_text, 
                 font=f.font_h3, 
-                text_color=c["text"]
+                text_color="White"
             )
             label.grid(row=0, column=col, padx=5, pady=10, sticky="ew")
-        print("[UI DEBUG] Header created successfully")
+        # print("[UI DEBUG] Header created successfully")
 
     def create_table_row(self, booking, row_index):
         """Create a table row for each booking"""
@@ -147,10 +145,10 @@ class BookingHistoryList(CTkFrame):
         c = self.app.styles.colors
         f = self.app.styles
 
-        print(f"[UI DEBUG] Creating row {row_index} with booking data: {booking}")
+        # print(f"[UI DEBUG] Creating row {row_index} with booking data: {booking}")
         row_color = c["table_row_even"] if row_index % 2 == 0 else c["table_row_odd"]
         row_frame = CTkFrame(self.table_scroll_frame, fg_color=row_color, corner_radius=5)
-        row_frame.grid(row=row_index + 1, column=0, sticky="ew", padx=5, pady=2)
+        row_frame.grid(row=row_index + 1, column=0, sticky="ew", padx=5, pady=2, ipadx=5)
         # Configure grid columns for the row_frame (same as header)
 
         columns_config = [
@@ -191,8 +189,8 @@ class BookingHistoryList(CTkFrame):
             label = CTkLabel(
                 row_frame, 
                 text=str(data), 
-                font=f.font_p, 
-                text_color=c["text"]
+                font=f.font_h6, 
+                text_color="white"
             )
             label.grid(row=0, column=col, padx=5, pady=8, sticky="ew")
 

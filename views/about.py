@@ -12,12 +12,12 @@ class AboutPage(CTkFrame):
         self.scrollable_frame = CTkScrollableFrame(self, corner_radius=15, fg_color="transparent")
         self.scrollable_frame.pack(fill="both", expand=True)
 
-        self.original_image = Image.open("assets/about_image.jpg")
+        self.original_image = Image.open("assets/banners/about_image.jpg")
         self.about_image = CTkImage(self.original_image, size=(100, 100))
 
         self.logo_image = CTkImage(
-            light_image=Image.open("assets/logo-light--transparent.png"),
-            dark_image=Image.open("assets/logo-dark--transparent.png"),
+            light_image=Image.open("assets/icons/logo-light--transparent.png"),
+            dark_image=Image.open("assets/icons/logo-dark--transparent.png"),
             size=(64, 64)
         )
 
@@ -25,7 +25,7 @@ class AboutPage(CTkFrame):
         self.bind("<Configure>", self.adjust_wraplength, add="+")
 
         self.__about_label = CTkLabel(
-            self.scrollable_frame, text="About Us", font=f.font_h1,
+            self.scrollable_frame, text="About Us", text_color="white", font=f.font_h1,
             image=self.about_image, compound="center"
         )
         self.__about_label.pack()
@@ -44,7 +44,7 @@ class AboutPage(CTkFrame):
         self.__what_label.pack(pady=(0, 10))
 
         # About Text Card
-        about_card = CTkFrame(self.scrollable_frame, fg_color=c["card"], corner_radius=10)
+        about_card = CTkFrame(self.scrollable_frame, fg_color=c["about_card"], corner_radius=10)
         about_card.pack(padx=40, pady=(0, 40), fill="x")
 
         self.__text = (
@@ -79,7 +79,7 @@ class AboutPage(CTkFrame):
         self.__meet_the_team_label.pack(pady=(10, 20))
 
         # Team Card
-        self.__team_card = CTkFrame(self.scrollable_frame, fg_color=c["card"], corner_radius=10)
+        self.__team_card = CTkFrame(self.scrollable_frame, fg_color=c["about_card"], corner_radius=10)
         self.__team_card.pack(padx=40, pady=(0, 40), fill="x")
 
         self.__members_frame = CTkFrame(self.__team_card, fg_color="transparent")
@@ -109,7 +109,7 @@ class AboutPage(CTkFrame):
                          "assets/members_profile/luke_profile.jpg"]
 
         # Main card background
-        card_frame = CTkFrame(self.__members_frame, fg_color=c["card"], corner_radius=10)
+        card_frame = CTkFrame(self.__members_frame, fg_color=c["about_card"], corner_radius=10)
         card_frame.pack(fill="x", padx=40, pady=(10, 40))
 
         # Top container: 4 members
@@ -142,8 +142,8 @@ class AboutPage(CTkFrame):
             circular_profile = CTkImage(circular_profile, size=(100, 100))
 
             CTkLabel(frame, image=circular_profile, text="").pack()
-            CTkLabel(frame, text=member["name"], font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
-            CTkLabel(frame, text=member["role"], font=f.font_p, wraplength=150, justify="center").pack()
+            CTkLabel(frame, text=member["name"], text_color="white", font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
+            CTkLabel(frame, text=member["role"], text_color="white", font=f.font_p, wraplength=150, justify="center").pack()
 
         # Add bottom 3 members
         for i in range(3):
@@ -161,8 +161,8 @@ class AboutPage(CTkFrame):
             circular_profile = CTkImage(circular_profile, size=(100, 100))
 
             CTkLabel(frame, image=circular_profile, text="").pack()
-            CTkLabel(frame, text=member["name"], font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
-            CTkLabel(frame, text=member["role"], font=f.font_p, wraplength=150, justify="center").pack()
+            CTkLabel(frame, text=member["name"], text_color="white", font=f.font_h5, wraplength=150, justify="center").pack(pady=(5, 0))
+            CTkLabel(frame, text=member["role"], text_color="white", font=f.font_p, wraplength=150, justify="center").pack()
 
 
     def adjust_wraplength(self, event):

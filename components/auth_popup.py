@@ -3,7 +3,6 @@ from tkinter import messagebox
 from database.db_handler import get_connection
 from utils.session_manager import save_session
 import re
-from PIL import Image
 
 class AuthPopup(CTkToplevel):
     """Authentication Popup for user Sign Up or Login"""
@@ -171,7 +170,7 @@ class AuthPopup(CTkToplevel):
                 "username": user[1],
                 "first_name": user[2],
                 "last_name": user[3],
-                "profile_pic": user[4] if user[4] else "assets/profile.jpg",
+                "profile_pic": user[4] if user[4] else "assets/user/profile.jpg",
                 "password": user[5],
                 "role": user[6] # Assign the role directly from the database
             }

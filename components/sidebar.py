@@ -28,7 +28,7 @@ class Sidebar(CTkFrame):
             text="Settings",
             font=f.font_h5,
             fg_color="transparent",
-            hover_color=c["brown_accent"],
+            hover_color=c["sidebar_hover"],
             corner_radius=0,
             command=lambda: self.app.show_page("Settings")
         ).pack(fill="x")
@@ -41,7 +41,7 @@ class Sidebar(CTkFrame):
                 text="About Us",
                 font=f.font_h5,
                 fg_color="transparent",
-                hover_color=c["brown_accent"],
+                hover_color=c["sidebar_hover"],
                 corner_radius=0,
                 command=lambda: self.app.show_page("About")
             ).pack(fill="x")

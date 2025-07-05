@@ -15,7 +15,7 @@ class ContactPage(CTkFrame):
         self.scrollable_frame.pack(fill="both", expand=True, pady=0, padx=0)
 
         # Top banner image
-        self.original_image = Image.open("assets/contact_image.jpg")
+        self.original_image = Image.open("assets/banners/contact_image.jpg")
         self.contact_image = CTkImage(self.original_image, size=(100, 100))
 
         self.bind("<Configure>", self.resize_image)
@@ -82,9 +82,9 @@ class ContactPage(CTkFrame):
             return frame
 
         # Info columns
-        address_col = create_info_column("assets/location_icon-light.png", "assets/location_icon-dark.png", "Address", "Sta. Mesa, Manila, PH")
-        phone_col = create_info_column("assets/phone_icon-light.png", "assets/phone_icon-dark.png", "Phone", "+63 912 345 6789")
-        email_col = create_info_column("assets/email_icon-light.png", "assets/email_icon-dark.png", "Email", "gethub@catgroup.uk")
+        address_col = create_info_column("assets/icons/location_icon-light.png", "assets/icons/location_icon-dark.png", "Address", "Sta. Mesa, Manila, PH")
+        phone_col = create_info_column("assets/icons/phone_icon-light.png", "assets/icons/phone_icon-dark.png", "Phone", "+63 912 345 6789")
+        email_col = create_info_column("assets/icons/email_icon-light.png", "assets/icons/email_icon-dark.png", "Email", "gethub@catgroup.uk")
 
         # Layout with dividers
         address_col.grid(row=0, column=0, padx=40, pady=10)

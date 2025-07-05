@@ -47,8 +47,8 @@ class Navbar(CTkFrame):
                 text="Sign Up",
                 font=f.font_h5,
                 command=self.open_signup_popup,
-                fg_color=c["green"],
-                hover_color=c["green_hover"],
+                fg_color=c["signup"],
+                hover_color=c["signup_hover"],
                 text_color="white",
                 corner_radius=20,
                 width=100,
@@ -62,7 +62,7 @@ class Navbar(CTkFrame):
             self.create_nav_button("History", "History", 4)
 
             first_name = user['username'].split()[0].capitalize()
-            image_path = user.get("profile_pic", "assets/profile.png")
+            image_path = user.get("profile_pic", "assets/user/profile.png")
 
             self.profile_button = ProfileButton(
                 self, self.app,
