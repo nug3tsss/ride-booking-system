@@ -19,6 +19,7 @@ class ProfilePage(CTkFrame):
         self.editing_field_active = False
         self.has_unsaved_changes = False
 
+
         self.grid_columnconfigure(0, weight=1)
         CTkLabel(self, text="My Profile", font=f.font_h2).pack(pady=(20, 10))
 
@@ -50,11 +51,11 @@ class ProfilePage(CTkFrame):
         self.cancel_btn.pack(side="left", padx=10)
 
         self.delete_icon = CTkImage(light_image=Image.open("assets/icons/delete_icon-dark.png"), dark_image=Image.open("assets/icons/delete_icon-dark.png"), size=(16, 16))
-        CTkButton(self.card, text="Delete Account", fg_color=c["button_danger"], hover_color=c["button_danger_hover"],
+        CTkButton(self.card, text="Delete Account", fg_color="#9b1b1b", hover_color="#7f1515",
                   image=self.delete_icon, compound="left", command=self.confirm_delete
                   ).grid(row=7, column=0, columnspan=3, pady=10)
 
-    # Confirms if the user wants to delete their account
+    # Create a profile image section with buttons to change or remove the profile picture
     def create_profile_image_section(self):
         c = self.app.styles.colors
         self.img_label = CTkLabel(self.card, text="")
@@ -67,10 +68,10 @@ class ProfilePage(CTkFrame):
         change_icon = CTkImage(light_image=Image.open("assets/icons/change_icon-dark.png"), dark_image=Image.open("assets/icons/change_icon-dark.png"), size=(16, 16))
         remove_icon = CTkImage(light_image=Image.open("assets/icons/remove_icon-dark.png"), dark_image=Image.open("assets/icons/remove_icon-dark.png"), size=(16, 16))
 
-        CTkButton(btn_frame, fg_color=c["green"], hover_color=c["green_hover"], text="Change Photo", image=change_icon, compound="left",
+        CTkButton(btn_frame, text="Change Photo", fg_color=c["green"], hover_color=c["green_hover"], image=change_icon, compound="left",
                   command=self.change_picture).pack(side="left", padx=5)
 
-        CTkButton(btn_frame, fg_color=c["green"], hover_color=c["green_hover"], text="Remove Photo", image=remove_icon, compound="left",
+        CTkButton(btn_frame, text="Remove Photo", fg_color=c["green"], hover_color=c["green_hover"], image=remove_icon, compound="left",
                   command=self.remove_picture).pack(side="left", padx=5)
 
     # Displays the profile image in the profile section
@@ -95,14 +96,13 @@ class ProfilePage(CTkFrame):
         except:
             self.img_label.configure(text="[No Image]", image=None)
 
-
-    # Creates a field for user profile attributes like first name, last name, and username
+    # Creates a field in the profile card for displaying and editing user information
     def create_field(self, label, attr, row):
         c = self.app.styles.colors
         CTkLabel(self.card, text=f"{label}:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(25, 5), pady=2)
 
         var = StringVar(value=self.user.get(attr, ""))
-        label_widget = CTkLabel(self.card, width=140, text_color="white" ,textvariable=var, anchor="w")
+        label_widget = CTkLabel(self.card, width=140, text_color="white", textvariable=var, anchor="w")
         label_widget.grid(row=row, column=1, padx=(5, 5), sticky="w")
 
         entry_widget = CTkEntry(self.card)
@@ -158,6 +158,7 @@ class ProfilePage(CTkFrame):
     # Creates the password button and its functionality
     def create_password_button(self, row):
         c = self.app.styles.colors
+
         CTkLabel(self.card, text="Password:", text_color="white", width=90, anchor="e").grid(row=row, column=0, sticky="e", padx=(0, 5), pady=4)
         CTkLabel(self.card, text="********", text_color="white", anchor="w").grid(row=row, column=1, padx=(5, 5), sticky="w")
         CTkButton(self.card, width=100, fg_color=c["green"], hover_color=c["green_hover"], text="Change", image=CTkImage(light_image=Image.open("assets/icons/password_icon-dark.png"), dark_image=Image.open("assets/icons/password_icon-dark.png"), size=(16, 16)),
@@ -166,6 +167,7 @@ class ProfilePage(CTkFrame):
     # Opens a popup to change the user's password
     def show_password_popup(self):
         c = self.app.styles.colors
+
         popup = CTkToplevel(self)
         popup.title("Change Password")
         popup.geometry("300x350")
@@ -265,7 +267,7 @@ class ProfilePage(CTkFrame):
         canvas_img = canvas.create_image(0, 0, anchor="nw", image=tk_img)
 
         crop_box = [50, 50, 250, 250]
-        rect = canvas.create_rectangle(*crop_box, outline="cyan", width=2)
+        rect = canvas.create_rectangle(*crop_box, outline="green", width=2)
 
         # Function to handle mouse drag for cropping
         def on_drag(event):
@@ -282,6 +284,7 @@ class ProfilePage(CTkFrame):
 
         # Function to apply the crop and update the profile image
         def apply_crop():
+            # Scale crop box back to original image dimensions
             scale_x = original.width / img.width
             scale_y = original.height / img.height
             left = int(crop_box[0] * scale_x)
@@ -321,6 +324,7 @@ class ProfilePage(CTkFrame):
     # Checks if any changes have been made to the profile fields
     def check_changes(self):
         c = self.app.styles.colors
+
         changed = False
         for attr in ["first_name", "last_name", "username"]:
             entry = getattr(self, f"entry_{attr}")
@@ -362,7 +366,7 @@ class ProfilePage(CTkFrame):
                 self.user[attr] = new_val
 
         if self.new_profile_path:
-            dest_path = os.path.join("assets", "icons", f"user_{self.user['user_id']}_profile.png")
+            dest_path = os.path.join("assets", f"user_{self.user['user_id']}_profile.png")
             if hasattr(self, "cropped_profile_image"):
                 self.cropped_profile_image.save(dest_path)
             else:
@@ -370,9 +374,8 @@ class ProfilePage(CTkFrame):
             updated_data["profile_pic"] = dest_path
             self.user["profile_pic"] = dest_path
         elif self.reset_picture_flag:
-            default_path = os.path.join("assets", "icons", "user", "profile.png")
-            updated_data["profile_pic"] = default_path
-            self.user["profile_pic"] = default_path
+            updated_data["profile_pic"] = "assets/user/profile.png"
+            self.user["profile_pic"] = "assets/user/profile.png"
 
         if updated_data:
             sql = ", ".join(f"{k}=?" for k in updated_data)
@@ -388,6 +391,7 @@ class ProfilePage(CTkFrame):
     # Refreshes the labels and entries to reflect the current user data
     def refresh_labels(self):
         c = self.app.styles.colors
+        
         for attr in ["first_name", "last_name", "username"]:
             var = getattr(self, f"var_{attr}")
             var.set(self.user.get(attr, ""))
@@ -412,6 +416,7 @@ class ProfilePage(CTkFrame):
     # Confirms account deletion with the user
     def confirm_delete(self):
         c = self.app.styles.colors
+        
         confirm = CTkToplevel(self)
         confirm.title("Confirm Delete")
         confirm.geometry("400x140")

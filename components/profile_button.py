@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageOps
 class ProfileButton(CTkButton):
     """Displays the circular profile image of user"""
 
-    def __init__(self, master, app, text="John Doe", image_path="assets/user/profile.jpg", **kwargs):
+    def __init__(self, master, app, text="John Doe", image_path="assets/user/profile.png", **kwargs):
         self.app = app
         f = self.app.styles
         c = self.app.styles.colors
@@ -29,7 +29,7 @@ class ProfileButton(CTkButton):
         try:
             profile_raw = Image.open(path).resize((40, 40))
         except Exception:
-            profile_raw = Image.open("assets/user/profile.jpg").resize((40, 40))  # fallback if missing
+            profile_raw = Image.open("assets/user/profile.png").resize((40, 40))  # fallback if missing
 
         mask = Image.new("L", profile_raw.size, 0)
         draw = ImageDraw.Draw(mask)
